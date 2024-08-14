@@ -9,9 +9,8 @@ import (
 	"github.com/gogf/gf/v2/os/gctx"
 
 	_ "dzhgo/internal/controller"
-	_ "dzhgo/internal/middleware"
-
 	_ "dzhgo/internal/funcs"
+	_ "dzhgo/internal/middleware"
 
 	_ "dzhgo/internal/packed"
 )
@@ -32,7 +31,6 @@ func NewInit() {
 	dzhcore.FillInitData(ctx, "base", &model.BaseSysRoleMenu{})
 	dzhcore.FillInitData(ctx, "base", &model.BaseSysDepartment{})
 	dzhcore.FillInitData(ctx, "base", &model.BaseSysRoleDepartment{})
-	dzhcore.FillInitData(ctx, "base", &model.BaseSysParam{})
 	dzhcore.FillInitData(ctx, "base", &model.BaseSysSetting{})
 	dzhcore.FillInitData(ctx, "base", &model.BaseSysAddons{})
 	dzhcore.FillInitData(ctx, "base", &model.BaseSysAddonsType{})

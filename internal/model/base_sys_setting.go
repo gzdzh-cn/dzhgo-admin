@@ -45,8 +45,8 @@ type BaseSysSetting struct {
 	BaiduTranSecretKey *string `gorm:"column:baiduTranSecretKey;comment:百度翻译Secretkey" json:"baiduTranSecretKey"`
 	CdnProxyUrl        *string `gorm:"column:cdn_proxy_url;comment:图片代理地址" json:"cdn_proxy_url"`
 	Phrase             *string `gorm:"column:phrase;comment:过滤词" json:"phrase"`
-	Appid              *string `gorm:"column:appid;comment:普通商户appid" json:"appid"`
-	MchId              *string `gorm:"column:mchId;comment:普通商户号" json:"mchId"`
+	WxPayAppid         *string `gorm:"column:wxPayAppid;comment:普通商户appid" json:"wxPayAppid"`
+	WxPayMchId         *string `gorm:"column:wxPayMchId;comment:普通商户号" json:"wxPayMchId"`
 	CAPIv3Key          *string `gorm:"column:cAPIv3Key;comment:收款商户v3密钥" json:"cAPIv3Key"`
 	CSerialNo          *string `gorm:"column:cSerialNo;comment:序列号" json:"cSerialNo"`
 	CNotifyUrl         *string `gorm:"column:cNotifyUrl;comment:支付回调地址" json:"cNotifyUrl"`
@@ -57,6 +57,11 @@ type BaseSysSetting struct {
 	SerialNo           *string `gorm:"column:serialNo;comment:序列号" json:"serialNo"`
 	NotifyUrl          *string `gorm:"column:notifyUrl;comment:支付回调地址" json:"notifyUrl"`
 	PayType            *int    `gorm:"column:payType;comment:支付模式;not null;default:1;index" json:"payType"`
+
+	MpName     string `gorm:"column:mpName;comment:公众号名称" json:"mpName"`
+	WxAppID    string `gorm:"column:wxAppId;comment:公众号appId;" json:"wxAppId"`
+	WxSecret   string `gorm:"column:wxSecret;comment:微信secret;" json:"wxSecret"`
+	IsWpNotice int    `gorm:"column:isWpNotice;comment:公众号通知;" json:"isWpNotice"`
 }
 
 // TableName BaseSysSetting's table name

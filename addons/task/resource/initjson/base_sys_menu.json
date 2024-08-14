@@ -1,6 +1,6 @@
 [
   {
-    "id": "42",
+    "id": "1152921504606847032",
     "createTime": "2024-3-19 09:41:41.301",
     "updateTime": "2024-3-19 09:41:41.301",
     "deleted_at": null,
@@ -18,11 +18,11 @@
     "menuType": "addon"
   },
   {
-    "id": "43",
+    "id": "1152921504606847033",
     "createTime": "2024-3-19 09:41:41.301",
     "updateTime": "2024-3-19 09:41:41.301",
     "deleted_at": null,
-    "parentId": "42",
+    "parentId": "1152921504606847032",
     "name": "任务列表",
     "router": "/task",
     "perms": null,
@@ -36,11 +36,11 @@
     "menuType": "addon"
   },
   {
-    "id": "44",
+    "id": "1152921504606847034",
     "createTime": "2024-3-19 09:41:41.301",
     "updateTime": "2024-3-19 09:41:41.301",
     "deleted_at": null,
-    "parentId": "43",
+    "parentId": "1152921504606847033",
     "name": "权限",
     "router": null,
     "perms": "task:info:page,task:info:list,task:info:info,task:info:add,task:info:delete,task:info:update,task:info:stop,task:info:start,task:info:once,task:info:log",

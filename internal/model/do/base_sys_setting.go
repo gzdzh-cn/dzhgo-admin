@@ -50,8 +50,8 @@ type BaseSysSetting struct {
 	BaiduTranSecretKey interface{} // 百度翻译Secretkey
 	CdnProxyUrl        interface{} // 图片代理地址
 	Phrase             interface{} // 过滤词
-	Appid              interface{} // 普通商户appid
-	MchId              interface{} // 普通商户号
+	WxPayAppid         interface{} // 普通商户appid
+	WxPayMchId         interface{} // 普通商户号
 	CAPIv3Key          interface{} // 收款商户v3密钥
 	CSerialNo          interface{} // 序列号
 	CNotifyUrl         interface{} // 支付回调地址
@@ -62,4 +62,8 @@ type BaseSysSetting struct {
 	SerialNo           interface{} // 序列号
 	NotifyUrl          interface{} // 支付回调地址
 	PayType            interface{} // 支付模式
+	MpName             interface{} // 公众号名称
+	WxAppId            interface{} // 公众号appId
+	WxSecret           interface{} // 微信secret
+	IsWpNotice         interface{} // 公众号通知
 }

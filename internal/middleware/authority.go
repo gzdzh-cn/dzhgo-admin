@@ -14,6 +14,7 @@ import (
 // 本类接口无需权限验证
 func BaseAuthorityMiddlewareOpen(r *ghttp.Request) {
 	r.SetCtxVar("AuthOpen", true)
+	//g.Log().Debug(ctx, "AuthOpen")
 	r.Middleware.Next()
 }
 
@@ -42,7 +43,6 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 
 	tokenString := r.GetHeader("Authorization")
 	token, err := jwt.ParseWithClaims(tokenString, &dzhcore.Claims{}, func(token *jwt.Token) (interface{}, error) {
-
 		return []byte(config.Config.Jwt.Secret), nil
 	})
 	if err != nil {
@@ -62,6 +62,7 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 		})
 	}
 	admin := token.Claims.(*dzhcore.Claims)
+	//logger.Debugf(ctx, "admin %v", gconv.String(admin))
 	// 将用户信息放入上下文
 	r.SetCtxVar("admin", admin)
 

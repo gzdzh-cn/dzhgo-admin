@@ -1,6 +1,6 @@
 [
   {
-    "id": "34",
+    "id": "1152921504606847024",
     "createTime": "2024-3-19 09:41:41.301",
     "updateTime": "2024-3-19 09:41:41.301",
     "deleted_at": null,
@@ -18,11 +18,11 @@
     "menuType": "addon"
   },
   {
-    "id": "35",
+    "id": "1152921504606847025",
     "createTime": "2024-3-19 09:41:41.301",
     "updateTime": "2024-3-19 09:41:41.301",
     "deleted_at": null,
-    "parentId": "34",
+    "parentId": "1152921504606847024",
     "name": "字典列表",
     "router": "/dict/list",
     "perms": null,
@@ -36,11 +36,11 @@
     "menuType": "addon"
   },
   {
-    "id": "36",
+    "id": "1152921504606847026",
     "createTime": "2024-3-19 09:41:41.301",
     "updateTime": "2024-3-19 09:41:41.301",
     "deleted_at": null,
-    "parentId": "35",
+    "parentId": "1152921504606847025",
     "name": "新增",
     "router": null,
     "perms": "dict:info:add",
@@ -54,11 +54,11 @@
     "menuType": "addon"
   },
   {
-    "id": "37",
+    "id": "1152921504606847027",
     "createTime": "2024-3-19 09:41:41.301",
     "updateTime": "2024-3-19 09:41:41.301",
     "deleted_at": null,
-    "parentId": "35",
+    "parentId": "1152921504606847025",
     "name": "删除",
     "router": null,
     "perms": "dict:info:delete",
@@ -72,11 +72,11 @@
     "menuType": "addon"
   },
   {
-    "id": "38",
+    "id": "1152921504606847028",
     "createTime": "2024-3-19 09:41:41.301",
     "updateTime": "2024-3-19 09:41:41.301",
     "deleted_at": null,
-    "parentId": "35",
+    "parentId": "1152921504606847025",
     "name": "修改",
     "router": null,
     "perms": "dict:info:update,dict:info:info",
@@ -90,11 +90,11 @@
     "menuType": "addon"
   },
   {
-    "id": "39",
+    "id": "1152921504606847029",
     "createTime": "2024-3-19 09:41:41.301",
     "updateTime": "2024-3-19 09:41:41.301",
     "deleted_at": null,
-    "parentId": "35",
+    "parentId": "1152921504606847025",
     "name": "获得字典数据",
     "router": null,
     "perms": "dict:info:data",
@@ -108,11 +108,11 @@
     "menuType": "addon"
   },
   {
-    "id": "40",
+    "id": "1152921504606847030",
     "createTime": "2024-3-19 09:41:41.301",
     "updateTime": "2024-3-19 09:41:41.301",
     "deleted_at": null,
-    "parentId": "35",
+    "parentId": "1152921504606847025",
     "name": "查询",
     "router": null,
     "perms": "dict:info:page,dict:info:list,dict:info:info",
@@ -126,11 +126,11 @@
     "menuType": "addon"
   },
   {
-    "id": "41",
+    "id": "1152921504606847031",
     "createTime": "2024-3-19 09:41:41.301",
     "updateTime": "2024-3-19 09:41:41.301",
     "deleted_at": null,
-    "parentId": "35",
+    "parentId": "1152921504606847025",
     "name": "组权限",
     "router": null,
     "perms": "dict:type:list,dict:type:update,dict:type:delete,dict:type:add",

@@ -2,15 +2,21 @@
 # CLI tool, only in development environment.
 # https://goframe.org/pages/viewpage.action?pageId=3673173
 gfcli:
+  docker:
+    build: "-a amd64 -s linux -p temp -ew"
+    tagPrefixes:
+      - registry.cn-heyuan.aliyuncs.com # 阿里云
   # 工具编译配置
   build:
-    name: "dzhgo"
+#    name: "main" # 用gf docker的时候,一定要写main,或者不要name参数
     arch: "amd64"
     system: "linux"
     mod: "none"
     cgo: 0
     path: "./bin"
-    version: "v1.0.5"
+#    packSrc: "public,resource" #默认打包到internal/packed
+#    version: "v1.1.5" #用gf docker的时候，不能写版本号
+
 
   gen:
     dao:

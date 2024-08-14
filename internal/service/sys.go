@@ -7,11 +7,12 @@ package service
 
 import (
 	"context"
-	"github.com/gzdzh-cn/dzhcore"
 	v1 "dzhgo/internal/api/admin_v1"
+	"dzhgo/internal/model"
 
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gzdzh-cn/dzhcore"
 )
 
 type (
@@ -22,6 +23,8 @@ type (
 		AppEPS(ctx g.Ctx) (result *g.Var, err error)
 		// 获取全部版本
 		Versions(ctx context.Context, req *v1.VersionsReq) (data interface{}, err error)
+		// 站点配置
+		GetSetting(ctx context.Context, req *v1.GetSettingReq) (data interface{}, err error)
 	}
 	IBaseSysAddonsService interface {
 		// 安装卸载插件
@@ -57,12 +60,11 @@ type (
 		Logout(ctx context.Context) (err error)
 		// RefreshToken 刷新token
 		RefreshToken(ctx context.Context, token string) (result *v1.TokenRes, err error)
+		// 根据用户生成前端需要的Token信息
+		GenerateTokenByUser(ctx context.Context, user *model.BaseSysUser) (result *v1.TokenRes, err error)
 	}
-	IBaseSysMemberService      interface{}
 	IBaseSysMemberLoginService interface {
 		Login(ctx g.Ctx, req *v1.LoginReq) (result *v1.TokenRes, err error)
-		// MemberInfo 会员信息
-		MemberInfo(ctx g.Ctx) (data interface{}, err error)
 		// MpLoginReq 微信公众号登录
 		MpLoginReq(ctx g.Ctx, req *v1.MpLoginReq) (result *v1.TokenRes, err error)
 		// MiniLogin 小程序登录
@@ -71,8 +73,6 @@ type (
 		AutoPhone(ctx g.Ctx, req *v1.AutoPhoneReq) (result *v1.TokenRes, err error)
 		// VerifyCount 验证游客次数
 		VerifyCount(ctx g.Ctx, req *v1.VerifyCountReq) (data interface{}, err error)
-		// AccountLogin 账号登录
-		AccountLogin(ctx g.Ctx, req *v1.AccountLoginReq) (result *v1.TokenRes, err error)
 		// AccountRegister 账号注册
 		AccountRegister(ctx g.Ctx, req *v1.AccountRegisterReq) (result *v1.TokenRes, err error)
 	}
@@ -133,7 +133,6 @@ var (
 	localBaseSysDepartmentService  IBaseSysDepartmentService
 	localBaseSysLogService         IBaseSysLogService
 	localBaseSysLoginService       IBaseSysLoginService
-	localBaseSysMemberService      IBaseSysMemberService
 	localBaseSysMemberLoginService IBaseSysMemberLoginService
 	localBaseSysMenuService        IBaseSysMenuService
 	localBaseSysParamService       IBaseSysParamService
@@ -218,17 +217,6 @@ func BaseSysLoginService() IBaseSysLoginService {
 
 func RegisterBaseSysLoginService(i IBaseSysLoginService) {
 	localBaseSysLoginService = i
-}
-
-func BaseSysMemberService() IBaseSysMemberService {
-	if localBaseSysMemberService == nil {
-		panic("implement not found for interface IBaseSysMemberService, forgot register?")
-	}
-	return localBaseSysMemberService
-}
-
-func RegisterBaseSysMemberService(i IBaseSysMemberService) {
-	localBaseSysMemberService = i
 }
 
 func BaseSysMemberLoginService() IBaseSysMemberLoginService {

@@ -25,7 +25,7 @@ func init() {
 	dzhcore.RegisterControllerSimple(baseCommController)
 }
 
-// 个人中心
+// 会员数据
 func (c *BaseCommController) Person(ctx context.Context, req *v1.BaseCommPersonReq) (res *dzhcore.BaseRes, err error) {
 	admin := common.GetAdmin(ctx)
 	data, err := service.BaseSysUserService().Person(admin.UserId)

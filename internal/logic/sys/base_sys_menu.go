@@ -7,7 +7,6 @@ import (
 	"dzhgo/internal/model"
 	"dzhgo/internal/service"
 	"dzhgo/internal/types"
-	"github.com/bwmarrin/snowflake"
 	"github.com/gogf/gf/v2/container/garray"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/frame/g"
@@ -138,18 +137,12 @@ func (s *sBaseSysMenuService) ServiceAdd(ctx context.Context, req *dzhcore.AddRe
 	rmap := gconv.Map(rjson)
 	m := s.Dao.Ctx(ctx)
 
-	// 创建雪花算法节点
-	node, err := snowflake.NewNode(1) // 1 是节点的ID
-	if err != nil {
-		g.Log().Error(ctx, err)
-	}
-
+	id := dzhcore.NodeSnowflake.Generate().String()
 	switch gconv.Int(rmap["type"]) {
 	case 0:
 
 		insertData := gconv.Map(rmap["data"])
-		id := node.Generate()
-		insertData["id"] = node.Generate()
+		insertData["id"] = id
 		insertData["isInstall"] = true
 		_, _ = m.Data(insertData).Insert()
 		data = g.Map{"id": id}
@@ -158,7 +151,6 @@ func (s *sBaseSysMenuService) ServiceAdd(ctx context.Context, req *dzhcore.AddRe
 	case 1:
 
 		insertData := gconv.Map(rmap["data"])
-		id := node.Generate()
 		insertData["id"] = id
 		insertData["isInstall"] = true
 		_, _ = m.Data(insertData).Insert()
@@ -170,7 +162,7 @@ func (s *sBaseSysMenuService) ServiceAdd(ctx context.Context, req *dzhcore.AddRe
 		var permsList []*types.Perms
 		_ = gconv.Scan(rmap["data"], &permsList)
 		for _, v := range permsList {
-			id := node.Generate()
+			id = dzhcore.NodeSnowflake.Generate().String()
 			v.Id = gconv.String(id)
 			v.IsInstall = true
 		}

@@ -2,17 +2,18 @@ server:
   address:     ":8200"
   openapiPath: "/api.json"
   swaggerPath: "/swagger"
+  #  dumpRouterMap: false #关闭路由打印
   serverRoot: "resource/public"
   clientMaxBodySize: 104857600  # 100MB in bytes 100*1024*1024
-  paths: ["template", "/var/www/template"]
+  paths: ["template"]
   defaultFile: "index.html"
   delimiters: ["{{", "}}"]
 
 logger:
   path: "./data/logs/"
   file: "{Y-m-d}.log"
-  level : "WARN"
-  stdout: true
+  level : "all"
+  stdout: true,
 
 
 database:
@@ -20,20 +21,20 @@ database:
     path: "./data/logs/sql"
     level: "all"
     stdout: true
-    # ctxKeys: [ "RequestId" ]
+
   default:
     type: "mysql"
-    host: "127.0.0.1"
+    host: "127.0.0.1" # mac本地docker运行写host.docker.internal，可以读取宿主机mysql
     port: "3306"
-    user: "dzhcrm_go"
-    pass: "tWN5fWJTe7jeYtmz"
-    name: "dzhcrm_go"
+    user: "root"
+    pass: "dzh123456"
+    name: "dzhgo_go"
     charset: "utf8mb4"
     timezone: "Asia/Shanghai"
     createdAt: "createTime"
     updatedAt: "updateTime"
-    deletedAt: "deleteTime"
-    debug: false #开启调试模式,启用后将在控制台打印相关sql语句
+    deletedAt: "deletedAt"  # 填deleteTime，关闭软删除，填deletedAt开启软删除
+    debug: true #开启调试模式,启用后将在控制台打印相关sql语句
   # default:
   #   type: "sqlite" # 数据库类型
   #   name: "./data/cool.sqlite" # 数据库名称,对于sqlite来说就是数据库文件名
@@ -46,16 +47,16 @@ database:
 # Redis 配置示例
 redis:
   core:
-    address: "127.0.0.1:6379"
+    address: "127.0.0.1:6379"  # mac本地docker运行写host.docker.internal，可以读取宿主机mysql
     db: 0
 
 core:
-  autoMigrate: true  #自动建表
+  autoMigrate: true #自动建表
   eps: true
   file:
     #oss local
-    mode: "oss"
-    domain: "/dzhimg"
+    mode: "local"
+    domain: "/dzhimg" #mode参数为local 上传图片文件目录映射，如果不传，会默认录入 http://域名+图片相对路径，如果填写，就会录入 /dzhimg + 图片相对地址
     # oss配置项兼容 minio oss 需要配置bucket公开读
     oss:
       endpoint: ""
@@ -76,12 +77,14 @@ modules:
     middleware:
       authority:
         enable: 1
+        ignorePath: "/admin/base/sys/log/getKeep"
+        ignoreReg: "/(page|list)$" #page和list结尾的链接忽略
       log:
         enable: 1
     # 客户端请求代理
     http:
       proxy_open: false  # 代理开关
-      proxy_url: ""  # 代理地
+      proxy_url: ""  # 代理地址
 
     img:
       cdn_url: ""

@@ -14,13 +14,15 @@ func init() {
 		g.Server().BindMiddleware("/admin/*/comm/*", BaseAuthorityMiddlewareComm)
 
 		g.Server().BindMiddleware("/admin/*", BaseAuthorityMiddleware)
-		//g.Server().BindMiddleware("/app/*", BaseAuthorityMiddleware)
+		g.Server().BindMiddleware("/app/*", BaseAuthorityMiddleware)
 		g.Server().BindMiddleware("/*", AutoI18n)
 		g.Server().BindMiddleware("/*", Exception)
 
 	}
 	if config.Config.Middleware.Log.Enable {
-		//g.Server().BindMiddleware("/admin/*", BaseLog)
+
+		g.Server().BindMiddleware("/admin/*", BaseLog)
+
 	}
 
 }

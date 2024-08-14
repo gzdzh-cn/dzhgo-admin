@@ -1,11 +1,9 @@
 package sys
 
 import (
-	"context"
 	"dzhgo/internal/dao"
 	"dzhgo/internal/model"
 	"dzhgo/internal/service"
-	"github.com/bwmarrin/snowflake"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gzdzh-cn/dzhcore"
 )
@@ -37,14 +35,10 @@ func (s *sBaseSysConfService) UpdateValue(cKey, cValue string) error {
 	if err != nil {
 		return err
 	}
-	// 创建雪花算法节点
-	node, err := snowflake.NewNode(1) // 1 是节点的ID
-	if err != nil {
-		g.Log().Error(context.Background(), err)
-	}
+
 	if record == nil {
 		_, err = s.Dao.Ctx(ctx).Insert(g.Map{
-			"id":     node.Generate(),
+			"id":     dzhcore.NodeSnowflake.Generate().String(),
 			"cKey":   cKey,
 			"cValue": cValue,
 		})

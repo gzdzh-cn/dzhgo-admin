@@ -55,3 +55,9 @@ type MemberAttr struct {
 	CommentLikeJson string  `json:"commentLikeJson"`
 	NoticeJson      string  `json:"noticeJson"`
 }
+
+// 公共站点配置
+type CommonSetting struct {
+	Logo     string `json:"logo"`
+	SiteName string `json:"siteName"`
+}

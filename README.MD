@@ -1,11 +1,11 @@
 # dzhgo
 
 ## 扫码加好友拉群
-<img src="dzh/weixin.jpg" alt="Description of image" width="200" height="280">
+<img src="./dzh/weixin.jpg" alt="Description of image" width="200" height="280">
 
 
 ## dzhgo后台界面
-<img src="dzh/dzhgo.png" alt="Description of image" width="800" height="360">
+<img src="./dzh/dzhgo.png" alt="Description of image" width="800" height="360">
 
 ## 主程序dzhgo
 * 后台项目地址：https://github.com/gzdzh-cn/dzhgo
@@ -53,9 +53,23 @@ setmirror                      设置国内镜像源,用于在开发容器生成
 ```
 
 
+### 计划更新
+* -如果菜单在某个权限组里面增加增加一个方法权限，需要手动去角色再打开编辑保存一次才可以，比如菜单目录：通用，里面有权限page和list，添加多一个add后，需要到角色编辑保存一次
+
 
 
 ## 更新日志
+
+### v1.1.5
+* 更新中间件写入日志
+* 更新菜单权限
+* 日志搜索字段增加ip和action
+* 重新更新id为雪花值
+* 修改会员列表超管不显示删除按钮 （前后端）
+* 修复会员中心不能修改密码（前后端）
+* 修复会员列表编辑没有role-list权限时，不应该显示role选择下拉框，修复报错问题（前后端）
+* 优化删除用户列表逻辑
+* 修复日志写入规则
 
 ### v1.1.4
 - 更新依赖库

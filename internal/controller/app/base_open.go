@@ -133,15 +133,15 @@ func (c *BaseCommController) VerifyCount(ctx g.Ctx, req *v1.VerifyCountReq) (res
 }
 
 // 账号登录
-func (c *BaseCommController) AccountLogin(ctx g.Ctx, req *v1.AccountLoginReq) (res *dzhcore.BaseRes, err error) {
-
-	data, err := service.BaseSysMemberLoginService().AccountLogin(ctx, req)
-	if err != nil {
-		return
-	}
-	res = dzhcore.Ok(data)
-	return
-}
+//func (c *BaseCommController) AccountLogin(ctx g.Ctx, req *v1.AccountLoginReq) (res *dzhcore.BaseRes, err error) {
+//
+//	data, err := service.BaseSysMemberLoginService().AccountLogin(ctx, req)
+//	if err != nil {
+//		return
+//	}
+//	res = dzhcore.Ok(data)
+//	return
+//}
 
 // 账号注册
 func (c *BaseCommController) AccountRegister(ctx g.Ctx, req *v1.AccountRegisterReq) (res *dzhcore.BaseRes, err error) {

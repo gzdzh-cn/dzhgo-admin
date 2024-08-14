@@ -48,8 +48,8 @@ type BaseSysSetting struct {
 	BaiduTranSecretKey string      `json:"baiduTranSecretKey" orm:"baiduTranSecretKey" ` // 百度翻译Secretkey
 	CdnProxyUrl        string      `json:"cdnProxyUrl"        orm:"cdn_proxy_url"      ` // 图片代理地址
 	Phrase             string      `json:"phrase"             orm:"phrase"             ` // 过滤词
-	Appid              string      `json:"appid"              orm:"appid"              ` // 普通商户appid
-	MchId              string      `json:"mchId"              orm:"mchId"              ` // 普通商户号
+	WxPayAppid         string      `json:"wxPayAppid"         orm:"wxPayAppid"         ` // 普通商户appid
+	WxPayMchId         string      `json:"wxPayMchId"         orm:"wxPayMchId"         ` // 普通商户号
 	CAPIv3Key          string      `json:"cAPIv3Key"          orm:"cAPIv3Key"          ` // 收款商户v3密钥
 	CSerialNo          string      `json:"cSerialNo"          orm:"cSerialNo"          ` // 序列号
 	CNotifyUrl         string      `json:"cNotifyUrl"         orm:"cNotifyUrl"         ` // 支付回调地址
@@ -60,4 +60,8 @@ type BaseSysSetting struct {
 	SerialNo           string      `json:"serialNo"           orm:"serialNo"           ` // 序列号
 	NotifyUrl          string      `json:"notifyUrl"          orm:"notifyUrl"          ` // 支付回调地址
 	PayType            int64       `json:"payType"            orm:"payType"            ` // 支付模式
+	MpName             string      `json:"mpName"             orm:"mpName"             ` // 公众号名称
+	WxAppId            string      `json:"wxAppId"            orm:"wxAppId"            ` // 公众号appId
+	WxSecret           string      `json:"wxSecret"           orm:"wxSecret"           ` // 微信secret
+	IsWpNotice         int64       `json:"isWpNotice"         orm:"isWpNotice"         ` // 公众号通知
 }

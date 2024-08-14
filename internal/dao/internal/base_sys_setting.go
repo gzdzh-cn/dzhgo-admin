@@ -58,8 +58,8 @@ type BaseSysSettingColumns struct {
 	BaiduTranSecretKey string // 百度翻译Secretkey
 	CdnProxyUrl        string // 图片代理地址
 	Phrase             string // 过滤词
-	Appid              string // 普通商户appid
-	MchId              string // 普通商户号
+	WxPayAppid         string // 普通商户appid
+	WxPayMchId         string // 普通商户号
 	CAPIv3Key          string // 收款商户v3密钥
 	CSerialNo          string // 序列号
 	CNotifyUrl         string // 支付回调地址
@@ -70,6 +70,10 @@ type BaseSysSettingColumns struct {
 	SerialNo           string // 序列号
 	NotifyUrl          string // 支付回调地址
 	PayType            string // 支付模式
+	MpName             string // 公众号名称
+	WxAppId            string // 公众号appId
+	WxSecret           string // 微信secret
+	IsWpNotice         string // 公众号通知
 }
 
 // baseSysSettingColumns holds the columns for table base_sys_setting.
@@ -112,8 +116,8 @@ var baseSysSettingColumns = BaseSysSettingColumns{
 	BaiduTranSecretKey: "baiduTranSecretKey",
 	CdnProxyUrl:        "cdn_proxy_url",
 	Phrase:             "phrase",
-	Appid:              "appid",
-	MchId:              "mchId",
+	WxPayAppid:         "wxPayAppid",
+	WxPayMchId:         "wxPayMchId",
 	CAPIv3Key:          "cAPIv3Key",
 	CSerialNo:          "cSerialNo",
 	CNotifyUrl:         "cNotifyUrl",
@@ -124,6 +128,10 @@ var baseSysSettingColumns = BaseSysSettingColumns{
 	SerialNo:           "serialNo",
 	NotifyUrl:          "notifyUrl",
 	PayType:            "payType",
+	MpName:             "mpName",
+	WxAppId:            "wxAppId",
+	WxSecret:           "wxSecret",
+	IsWpNotice:         "isWpNotice",
 }
 
 // NewBaseSysSettingDao creates and returns a new DAO object for table data access.

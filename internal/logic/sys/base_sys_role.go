@@ -6,7 +6,6 @@ import (
 	"dzhgo/internal/dao"
 	"dzhgo/internal/model"
 	"dzhgo/internal/service"
-	"github.com/bwmarrin/snowflake"
 	"github.com/gogf/gf/v2/container/garray"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/frame/g"
@@ -83,41 +82,47 @@ func (s *sBaseSysRoleService) ModifyAfter(ctx context.Context, method string, pa
 // updatePerms(roleId, menuIdList?, departmentIds = [])
 func (s *sBaseSysRoleService) updatePerms(ctx context.Context, roleId string, menuIdList, departmentIds []string) (err error) {
 
-	// 创建雪花算法节点
-	node, err := snowflake.NewNode(1) // 1 是节点的ID
-	if err != nil {
-		g.Log().Error(ctx, err)
-	}
-
 	// 更新菜单权限
-	s.Dao.Ctx(ctx).Where("roleId = ?", roleId).Delete()
+	_, err = dao.BaseSysRoleMenu.Ctx(ctx).Where("roleId = ?", roleId).Delete()
+	if err != nil {
+		return err
+	}
 
 	if len(menuIdList) > 0 {
 
 		roleMenuList := make([]g.MapStrAny, len(menuIdList))
 		for i, menuId := range menuIdList {
 			roleMenuList[i] = g.MapStrAny{
-				"id":     node.Generate(),
+				"id":     dzhcore.NodeSnowflake.Generate().String(),
 				"roleId": roleId,
 				"menuId": menuId,
 			}
 		}
-		dao.BaseSysRoleMenu.Ctx(ctx).Data(roleMenuList).Insert()
+		_, err = dao.BaseSysRoleMenu.Ctx(ctx).Data(roleMenuList).Insert()
+		if err != nil {
+			return err
+		}
 	}
 
 	// 更新部门权限
-	dao.BaseSysRoleDepartment.Ctx(ctx).Where("roleId = ?", roleId).Delete()
+	_, err = dao.BaseSysRoleDepartment.Ctx(ctx).Where("roleId = ?", roleId).Delete()
+	if err != nil {
+		return err
+	}
 	if len(departmentIds) > 0 {
 
 		roleDepartmentList := make([]g.MapStrAny, len(departmentIds))
 		for i, departmentId := range departmentIds {
 			roleDepartmentList[i] = g.MapStrAny{
-				"id":           node.Generate(),
+				"id":           dzhcore.NodeSnowflake.Generate().String(),
 				"roleId":       roleId,
 				"departmentId": departmentId,
 			}
 		}
-		dao.BaseSysRoleDepartment.Ctx(ctx).Data(roleDepartmentList).Insert()
+		_, err = dao.BaseSysRoleDepartment.Ctx(ctx).Data(roleDepartmentList).Insert()
+		if err != nil {
+			return err
+		}
 	}
 
 	// 刷新权限
@@ -126,9 +131,12 @@ func (s *sBaseSysRoleService) updatePerms(ctx context.Context, roleId string, me
 		return
 	}
 	for _, v := range userRoles {
-		vmap := v.Map()
-		if vmap["userId"] != nil {
-			service.BaseSysPermsService().RefreshPerms(ctx, gconv.String(vmap["userId"]))
+		vMap := v.Map()
+		if vMap["userId"] != nil {
+			err = service.BaseSysPermsService().RefreshPerms(ctx, gconv.String(vMap["userId"]))
+			if err != nil {
+				return err
+			}
 		}
 	}
 

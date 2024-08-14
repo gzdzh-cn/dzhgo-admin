@@ -5,7 +5,6 @@ import (
 	"dzhgo/internal/dao"
 	"dzhgo/internal/model"
 	"dzhgo/internal/service"
-	"github.com/bwmarrin/snowflake"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/gogf/gf/v2/util/gconv"
@@ -14,6 +13,7 @@ import (
 
 func init() {
 	service.RegisterBaseSysLogService(NewsBaseSysLogService())
+
 }
 
 type sBaseSysLogService struct {
@@ -26,7 +26,7 @@ func NewsBaseSysLogService() *sBaseSysLogService {
 			Dao:   &dao.BaseSysLog,
 			Model: model.NewBaseSysLog(),
 			PageQueryOp: &dzhcore.QueryOp{
-				KeyWordField: []string{"name", "params", "ipAddr"},
+				KeyWordField: []string{"name", "action", "params", "ip"},
 				Select:       "base_sys_log.*,user.name ",
 				Join: []*dzhcore.JoinOp{
 					{
@@ -47,11 +47,6 @@ func (s *sBaseSysLogService) Record(ctx g.Ctx) {
 		admin = common.GetAdmin(ctx)
 		r     = g.RequestFromCtx(ctx)
 	)
-	// 创建雪花算法节点
-	node, err := snowflake.NewNode(1) // 1 是节点的ID
-	if err != nil {
-		g.Log().Error(ctx, err)
-	}
 
 	baseSysLog := model.NewBaseSysLog()
 	baseSysLog.UserID = admin.UserId
@@ -60,14 +55,18 @@ func (s *sBaseSysLogService) Record(ctx g.Ctx) {
 	baseSysLog.IPAddr = r.GetClientIp()
 	baseSysLog.Params = r.GetBodyString()
 	m := s.Dao.Ctx(ctx)
-	m.Insert(g.Map{
-		"id":     node.Generate(),
+
+	_, err := m.Insert(g.Map{
+		"id":     dzhcore.NodeSnowflake.Generate().String(),
 		"userId": baseSysLog.UserID,
 		"action": baseSysLog.Action,
 		"ip":     baseSysLog.IP,
 		"ipAddr": baseSysLog.IPAddr,
 		"params": baseSysLog.Params,
 	})
+	if err != nil {
+		return
+	}
 }
 
 // Clear 清除日志

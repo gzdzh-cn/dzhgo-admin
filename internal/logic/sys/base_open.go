@@ -5,13 +5,13 @@ import (
 	v1 "dzhgo/internal/api/admin_v1"
 	"dzhgo/internal/dao"
 	"dzhgo/internal/service"
-	"github.com/bwmarrin/snowflake"
+	"dzhgo/internal/types"
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/text/gstr"
-	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/gzdzh-cn/dzhcore"
+	"github.com/gzdzh-cn/dzhcore/utility/util/logger"
 )
 
 func init() {
@@ -60,15 +60,12 @@ func (s *sBaseOpenService) creatAdminEPS(ctx g.Ctx) (adminEPS interface{}, err e
 		Prefix  string                `json:"prefix"`
 	}
 
-	// 创建雪花算法节点
-	node, err := snowflake.NewNode(1) // 1 是节点的ID
-	if err != nil {
-		g.Log().Error(ctx, err)
-	}
-
 	admineps := make(map[string][]*Module)
 	// 获取所有路由并更新到数据库表 base_eps_admin
-	dao.BaseEpsAdmin.Ctx(ctx).Where("1=1").Delete()
+	_, err = dao.BaseEpsAdmin.Ctx(ctx).Where("1=1").Delete()
+	if err != nil {
+		return nil, err
+	}
 
 	routers := g.Server().GetRoutes()
 	for _, router := range routers {
@@ -93,8 +90,8 @@ func (s *sBaseOpenService) creatAdminEPS(ctx g.Ctx) (adminEPS interface{}, err e
 		prefix := gstr.Join(routeSplite[0:len(routeSplite)-1], "/")
 		// 获取最后一个元素为summary
 		summary := routeSplite[len(routeSplite)-1]
-		dao.BaseEpsAdmin.Ctx(ctx).Insert(&Api{
-			Id:      gconv.String(node.Generate()),
+		_, err = dao.BaseEpsAdmin.Ctx(ctx).Insert(&Api{
+			Id:      dzhcore.NodeSnowflake.Generate().String(),
 			Module:  module,
 			Method:  method,
 			Path:    path,
@@ -103,6 +100,9 @@ func (s *sBaseOpenService) creatAdminEPS(ctx g.Ctx) (adminEPS interface{}, err e
 			Tag:     "",
 			Dts:     "",
 		})
+		if err != nil {
+			return nil, err
+		}
 	}
 	// 读取数据库表生成eps
 	// var modules []*Module
@@ -172,12 +172,7 @@ func (s *sBaseOpenService) creatAppEPS(ctx g.Ctx) (appEPS interface{}, err error
 	// 获取所有路由并更新到数据库表 base_eps_admin
 	dao.BaseEpsApp.Ctx(ctx).Where("1=1").Delete()
 
-	// 创建雪花算法节点
-	node, err := snowflake.NewNode(1) // 1 是节点的ID
-	if err != nil {
-		g.Log().Error(ctx, err)
-	}
-
+	//node := utility.CreateSnowflake(ctx)
 	routers := g.Server().GetRoutes()
 	for _, router := range routers {
 		if router.Type == ghttp.HandlerTypeMiddleware || router.Type == ghttp.HandlerTypeHook {
@@ -201,8 +196,8 @@ func (s *sBaseOpenService) creatAppEPS(ctx g.Ctx) (appEPS interface{}, err error
 		prefix := gstr.Join(routeSplite[0:len(routeSplite)-1], "/")
 		// 获取最后一个元素为summary
 		summary := routeSplite[len(routeSplite)-1]
-		dao.BaseEpsApp.Ctx(ctx).Insert(&Api{
-			Id:      gconv.String(node.Generate()),
+		_, err = dao.BaseEpsApp.Ctx(ctx).Insert(&Api{
+			Id:      dzhcore.NodeSnowflake.Generate().String(),
 			Module:  module,
 			Method:  method,
 			Path:    path,
@@ -211,6 +206,9 @@ func (s *sBaseOpenService) creatAppEPS(ctx g.Ctx) (appEPS interface{}, err error
 			Tag:     "",
 			Dts:     "",
 		})
+		if err != nil {
+			return nil, err
+		}
 	}
 	// 读取数据库表生成eps
 	// var modules []*Module
@@ -250,5 +248,18 @@ func (s *sBaseOpenService) Versions(ctx context.Context, req *v1.VersionsReq) (d
 	versions := dzhcore.GetVersions(req.Addons)
 	data = versions
 
+	return
+}
+
+// 站点配置
+func (s *sBaseOpenService) GetSetting(ctx context.Context, req *v1.GetSettingReq) (data interface{}, err error) {
+
+	var setting *types.CommonSetting
+	err = dao.BaseSysSetting.Ctx(ctx).Where("id", 1).Fields("siteName,logo").Scan(&setting)
+	if err != nil {
+		logger.Error(ctx, err.Error())
+		return nil, err
+	}
+	data = setting
 	return
 }

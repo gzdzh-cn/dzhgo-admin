@@ -60,6 +60,16 @@ func (c *BaseOpen) Login(ctx context.Context, req *v1.BaseOpenLoginReq) (res *dz
 	return
 }
 
+// 站点配置
+func (c *BaseOpen) GetSetting(ctx context.Context, req *v1.GetSettingReq) (res *dzhcore.BaseRes, err error) {
+	data, err := service.BaseOpenService().GetSetting(ctx, req)
+	if err != nil {
+		return
+	}
+	res = dzhcore.Ok(data)
+	return
+}
+
 // RefreshToken 刷新token
 func (c *BaseOpen) RefreshToken(ctx context.Context, req *v1.RefreshTokenReq) (res *dzhcore.BaseRes, err error) {
 	data, err := c.baseSysLoginService.RefreshToken(ctx, req.RefreshToken)

@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	//_ "dzhgo/packed"
+
 	"context"
 	"dzhgo/addons"
 	"github.com/gogf/gf/v2/frame/g"
@@ -10,7 +12,6 @@ import (
 	"github.com/gzdzh-cn/dzhcore"
 
 	_ "dzhgo/internal/logic"
-	_ "dzhgo/packed"
 
 	_ "github.com/gzdzh-cn/dzhcore/contrib/files/local"
 	_ "github.com/gzdzh-cn/dzhcore/contrib/files/oss"
@@ -33,6 +34,9 @@ var (
 			addons.NewInit()
 
 			s := g.Server()
+
+			s.AddStaticPath("/dzhimg/public", "/public")
+
 			s.Run()
 			return nil
 		},

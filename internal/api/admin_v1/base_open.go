@@ -24,6 +24,12 @@ type VersionsReq struct {
 	Addons string `json:"addons" default:"all"`
 }
 
+// 站点配置
+type GetSettingReq struct {
+	g.Meta `path:"/getSetting" method:"POST"`
+	Addons string `json:"addons" default:"all"`
+}
+
 // login 接口请求
 type LoginReq struct {
 	g.Meta    `path:"/login" method:"POST"`
@@ -68,11 +74,11 @@ type VerifyCountReq struct {
 }
 
 // 账号登录
-type AccountLoginReq struct {
-	g.Meta   `path:"/account" method:"POST"`
-	UserName string `json:"userName" p:"username" v:"required"`
-	PassWord string `json:"passWord" p:"password" v:"required"`
-}
+//type AccountLoginReq struct {
+//	g.Meta   `path:"/account" method:"POST"`
+//	UserName string `json:"userName" p:"username" v:"required"`
+//	PassWord string `json:"passWord" p:"password" v:"required"`
+//}
 
 // 账号注册
 type AccountRegisterReq struct {

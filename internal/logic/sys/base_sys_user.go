@@ -4,18 +4,17 @@ import (
 	"context"
 	"dzhgo/internal/common"
 	"dzhgo/internal/dao"
+	"dzhgo/internal/model"
+	baseEntity "dzhgo/internal/model/entity"
 	"dzhgo/internal/service"
 	"fmt"
-	"github.com/bwmarrin/snowflake"
-	"github.com/gogf/gf/v2/text/gstr"
-
-	"dzhgo/internal/model"
 	"github.com/gogf/gf/v2/container/garray"
 	"github.com/gogf/gf/v2/container/gset"
 	"github.com/gogf/gf/v2/crypto/gmd5"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/gzdzh-cn/dzhcore"
 )
@@ -39,7 +38,8 @@ func NewsBaseSysUserService() *sBaseSysUserService {
 				"username": "用户名不能重复",
 			},
 			PageQueryOp: &dzhcore.QueryOp{
-				Select: "base_sys_user.*,dept.`name` as departmentName,GROUP_CONCAT( role.`name` ) AS `roleName`",
+				Select:  "base_sys_user.*,dept.`name` as departmentName,GROUP_CONCAT( role.`name` ) AS `roleName`",
+				FieldEQ: []string{"password"},
 				Join: []*dzhcore.JoinOp{
 					{
 						Model:     model.NewBaseSysDepartment(),
@@ -78,6 +78,53 @@ func NewsBaseSysUserService() *sBaseSysUserService {
 					return m.Group("`base_sys_user`.`id`")
 				},
 				KeyWordField: []string{"name", "username", "nickName"},
+				ModifyResult: func(ctx g.Ctx, data interface{}) interface{} {
+					type List struct {
+						*baseEntity.BaseSysUser
+						DepartmentName string   `json:"departmentName"`
+						RoleName       string   `json:"roleName"`
+						RoleIdList     []string `json:"roleIdList"`
+					}
+
+					type Pagination struct {
+						Page  int `json:"page"`
+						Size  int `json:"size"`
+						Total int `json:"total"`
+					}
+					type PageData struct {
+						List       []*List     `json:"list"`
+						Pagination *Pagination `json:"pagination"`
+					}
+
+					var (
+						userRoleList []*baseEntity.BaseSysUserRole
+						userMap      = make(map[string][]string)
+					)
+					err := dao.BaseSysUserRole.Ctx(ctx).Scan(&userRoleList)
+					if err != nil {
+						return err
+					}
+
+					//会员id为key，会员roleid数组为value
+					for _, userRoleRow := range userRoleList {
+						userMap[userRoleRow.UserId] = append(userMap[userRoleRow.UserId], userRoleRow.RoleId)
+					}
+
+					list := gconv.Map(data)["list"]
+					if len(gconv.SliceAny(list)) > 0 {
+						pageData := &PageData{}
+						_ = gconv.Struct(data, pageData)
+
+						if pageData != nil && len(pageData.List) > 0 {
+							for _, row := range pageData.List {
+								row.RoleIdList = userMap[row.Id]
+							}
+						}
+						data = pageData
+					}
+
+					return data
+				},
 			},
 		},
 	}
@@ -94,17 +141,67 @@ func (s *sBaseSysUserService) ModifyBefore(ctx context.Context, method string, p
 	if method == "Delete" {
 		// 禁止删除超级管理员
 		userIds := garray.NewStrArrayFrom(gconv.Strings(param["ids"]))
-		currentId, found := userIds.Get(0)
-		superAdminId := "1"
 
-		if userIds.Len() == 1 && found && gstr.Equal(currentId, superAdminId) {
-			err = gerror.New("超级管理员不能删除")
-			return
+		//superAdminId := "1"
+
+		//if userIds.Len() == 1 && found && gstr.Equal(currentId, superAdminId) {
+		//	err = gerror.New("超级管理员不能删除")
+		//	return
+		//}
+
+		if userIds.Len() == 1 {
+			currentId, found := userIds.Get(0)
+			if found == false {
+				err = gerror.New("没有找到会员")
+				return err
+			}
+			roleIdArray, err := dao.BaseSysUserRole.Ctx(ctx).Where("userId", currentId).Fields("roleId").Array()
+			if err != nil {
+				return err
+			}
+
+			if len(roleIdArray) > 0 {
+				roleIdGarray := garray.NewStrArrayFrom(gconv.SliceStr(roleIdArray))
+				if roleIdGarray.Contains("1") {
+					err = gerror.New("超级管理员不能删除")
+					return err
+				}
+			}
+		}
+		if userIds.Len() > 0 {
+			var (
+				userRoleList []*baseEntity.BaseSysUserRole
+				userMap      = make(map[string][]string)
+			)
+			err := dao.BaseSysUserRole.Ctx(ctx).Scan(&userRoleList)
+			if err != nil {
+				return err
+			}
+
+			//会员id为key，会员roleid数组为value
+			for _, userRoleRow := range userRoleList {
+				userMap[userRoleRow.UserId] = append(userMap[userRoleRow.UserId], userRoleRow.RoleId)
+			}
+
+			for _, userId := range userIds.Slice() {
+				if len(userMap[userId]) == 1 {
+					if garray.NewStrArrayFrom(userMap[userId]).Contains("1") {
+						err = gerror.New("超级管理员不能删除")
+						return err
+					}
+				}
+			}
 		}
 
-		// 删除超级管理员
-		userIds.RemoveValue("1")
+		userId, err := dao.BaseSysUserRole.Ctx(ctx).Where("roleId", "1").Value("userId")
+		if err != nil {
+			return err
+		}
+
+		// 排除掉超级管理员
+		userIds.RemoveValue(userId.String())
 		g.RequestFromCtx(ctx).SetParam("ids", userIds.Slice())
+
 	}
 	return
 }
@@ -114,7 +211,10 @@ func (s *sBaseSysUserService) ModifyAfter(ctx context.Context, method string, pa
 		userIds := garray.NewIntArrayFrom(gconv.Ints(param["ids"]))
 		userIds.RemoveValue(1)
 		// 删除用户时删除相关数据
-		dao.BaseSysUserRole.Ctx(ctx).WhereIn("userId", userIds.Slice()).Delete()
+		_, err = dao.BaseSysUserRole.Ctx(ctx).WhereIn("userId", userIds.Slice()).Delete()
+		if err != nil {
+			return err
+		}
 
 	}
 	return
@@ -128,12 +228,6 @@ func (s *sBaseSysUserService) ServiceAdd(ctx context.Context, req *dzhcore.AddRe
 		reqmap = r.GetMap()
 	)
 
-	// 创建雪花算法节点
-	node, err := snowflake.NewNode(1) // 1 是节点的ID
-	if err != nil {
-		g.Log().Error(ctx, err)
-	}
-
 	// 如果reqmap["password"]不为空，则对密码进行md5加密
 	if !r.Get("password").IsNil() {
 		reqmap["password"] = gmd5.MustEncryptString(r.Get("password").String())
@@ -141,7 +235,7 @@ func (s *sBaseSysUserService) ServiceAdd(ctx context.Context, req *dzhcore.AddRe
 
 	err = g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) (err error) {
 
-		reqmap["id"] = node.Generate()
+		reqmap["id"] = dzhcore.NodeSnowflake.Generate().String()
 		_, err = m.TX(tx).Data(reqmap).Insert()
 		if err != nil {
 			return err
@@ -154,7 +248,7 @@ func (s *sBaseSysUserService) ServiceAdd(ctx context.Context, req *dzhcore.AddRe
 			inRoleIdSet := gset.NewFrom(r.Get("roleIdList").Ints())
 			inRoleIdSet.Iterator(func(v interface{}) bool {
 				roleArray.PushRight(g.Map{
-					"id":     node.Generate(),
+					"id":     dzhcore.NodeSnowflake.Generate().String(),
 					"userId": gconv.Uint(reqmap["id"]),
 					"roleId": gconv.Uint(v),
 				})
@@ -212,6 +306,7 @@ func (s *sBaseSysUserService) ServiceUpdate(ctx context.Context, req *dzhcore.Up
 
 	// 如果不传入ID代表更新当前用户
 	userId := r.Get("id", admin.UserId).Uint()
+	userRoles := garray.NewStrArrayFrom(admin.RoleIds)
 	userInfo, err := m.Where("id = ?", userId).One()
 
 	if err != nil {
@@ -223,7 +318,7 @@ func (s *sBaseSysUserService) ServiceUpdate(ctx context.Context, req *dzhcore.Up
 	}
 
 	// 禁止禁用超级管理员
-	if userId == 1 && (!r.Get("status").IsNil() && r.Get("status").Int() == 0) {
+	if userRoles.Contains("1") && (!r.Get("status").IsNil() && r.Get("status").Int() == 0) {
 		err = gerror.New("禁止禁用超级管理员")
 		return
 	}
@@ -233,7 +328,10 @@ func (s *sBaseSysUserService) ServiceUpdate(ctx context.Context, req *dzhcore.Up
 	if rPassword != "" && rPassword != userInfo["password"].String() {
 		rMap["password"], _ = gmd5.Encrypt(rPassword)
 		rMap["passwordV"] = userInfo["passwordV"].Int() + 1
-		dzhcore.CacheManager.Set(ctx, fmt.Sprintf("admin:passwordVersion:%d", userId), rMap["passwordV"], 0)
+		err = dzhcore.CacheManager.Set(ctx, fmt.Sprintf("admin:passwordVersion:%d", userId), rMap["passwordV"], 0)
+		if err != nil {
+			return nil, err
+		}
 	} else {
 		delete(rMap, "password")
 	}
@@ -252,16 +350,11 @@ func (s *sBaseSysUserService) ServiceUpdate(ctx context.Context, req *dzhcore.Up
 
 			// 如果请求的角色信息未发生变化则跳过更新逻辑
 			if roleIdsSet.Diff(inRoleIdSet).Size() != 0 || inRoleIdSet.Diff(roleIdsSet).Size() != 0 {
-				// 创建雪花算法节点
-				node, err := snowflake.NewNode(1) // 1 是节点的ID
-				if err != nil {
-					g.Log().Error(ctx, err)
-				}
 
 				roleArray := garray.NewArray()
 				inRoleIdSet.Iterator(func(v interface{}) bool {
 					roleArray.PushRight(g.Map{
-						"id":     node.Generate(),
+						"id":     dzhcore.NodeSnowflake.Generate().String(),
 						"userId": gconv.String(userId),
 						"roleId": gconv.String(v),
 					})
@@ -280,7 +373,7 @@ func (s *sBaseSysUserService) ServiceUpdate(ctx context.Context, req *dzhcore.Up
 			}
 		}
 
-		_, err = m.TX(tx).Update(rMap)
+		_, err = m.TX(tx).Where("id", userId).Update(rMap)
 
 		if err != nil {
 			return err

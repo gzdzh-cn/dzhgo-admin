@@ -2,7 +2,6 @@ package service
 
 import (
 	"dzhgo/addons/task/dao"
-	"github.com/bwmarrin/snowflake"
 	"time"
 
 	"dzhgo/addons/task/model"
@@ -61,15 +60,9 @@ func (s *TaskInfoService) ModifyAfter(ctx g.Ctx, method string, param g.MapStrAn
 // Record 保存任务记录,成功任务每个任务保留最新20条日志,失败日志不会删除
 func (s *TaskInfoService) Record(ctx g.Ctx, id string, status int, detail string) error {
 
-	// 创建雪花算法节点
-	node, err := snowflake.NewNode(1) // 1 是节点的ID
-	if err != nil {
-		g.Log().Error(ctx, err)
-	}
-
 	taskLog := model.NewTaskLog()
-	_, err = dzhcore.DBM(taskLog).Data(g.Map{
-		"id":     node.Generate(),
+	_, err := dzhcore.DBM(taskLog).Data(g.Map{
+		"id":     dzhcore.NodeSnowflake.Generate().String(),
 		"taskId": id,
 		"status": status,
 		"detail": detail,
@@ -86,9 +79,6 @@ func (s *TaskInfoService) Record(ctx g.Ctx, id string, status int, detail string
 			return nil
 		}
 		minId := record["id"].Int()
-		if err != nil {
-			return err
-		}
 		_, err = dzhcore.DBM(taskLog).Where("taskId = ?", id).Where("status", 1).Where("id < ?", minId).Delete()
 		if err != nil {
 			return err

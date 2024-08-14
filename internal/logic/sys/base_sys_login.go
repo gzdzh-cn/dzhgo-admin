@@ -59,7 +59,7 @@ func (s *sBaseSysLoginService) Login(ctx context.Context, req *v1.BaseOpenLoginR
 		return
 	}
 
-	result, err = s.generateTokenByUser(ctx, user)
+	result, err = s.GenerateTokenByUser(ctx, user)
 	if err != nil {
 		return
 	}
@@ -137,7 +137,7 @@ func (s *sBaseSysLoginService) RefreshToken(ctx context.Context, token string) (
 		return
 	}
 
-	result, err = s.generateTokenByUser(ctx, user)
+	result, err = s.GenerateTokenByUser(ctx, user)
 	return
 }
 
@@ -169,7 +169,7 @@ func (*sBaseSysLoginService) generateToken(ctx context.Context, user *model.Base
 }
 
 // 根据用户生成前端需要的Token信息
-func (s *sBaseSysLoginService) generateTokenByUser(ctx context.Context, user *model.BaseSysUser) (result *v1.TokenRes, err error) {
+func (s *sBaseSysLoginService) GenerateTokenByUser(ctx context.Context, user *model.BaseSysUser) (result *v1.TokenRes, err error) {
 
 	// 获取用户角色
 	roleIds := service.BaseSysRoleService().GetByUser(user.ID)
