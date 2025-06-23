@@ -6,7 +6,7 @@ import (
 
 const TableNameBaseSysAddons = "base_sys_addons"
 
-// BaseSysAddons mapped from table <member_open>
+// BaseSysAddons mapped from table <base_sys_addons>
 type BaseSysAddons struct {
 	*dzhcore.Model
 	Name     string  `gorm:"column:name;not null;comment:标题" json:"name"`
@@ -38,8 +38,7 @@ func NewBaseSysAddons() *BaseSysAddons {
 
 // init 创建表
 func init() {
-	err := dzhcore.CreateTable(&BaseSysAddons{})
-	if err != nil {
-		return
-	}
+	// dzhcore.CreateTable(&BaseSysAddons{})
+	dzhcore.AddModel(&BaseSysAddons{})
+
 }

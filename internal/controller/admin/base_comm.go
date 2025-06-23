@@ -22,7 +22,7 @@ func init() {
 		},
 	}
 	// 注册路由
-	dzhcore.RegisterControllerSimple(baseCommController)
+	dzhcore.AddControllerSimple(baseCommController)
 }
 
 // 会员数据
@@ -37,7 +37,8 @@ func (c *BaseCommController) Person(ctx context.Context, req *v1.BaseCommPersonR
 func (c *BaseCommController) Permmenu(ctx context.Context, req *v1.BaseCommPermmenuReq) (res *dzhcore.BaseRes, err error) {
 
 	admin := common.GetAdmin(ctx)
-	res = dzhcore.Ok(service.BaseSysPermsService().Permmenu(ctx, admin.RoleIds))
+	data := service.BaseSysPermsService().Permmenu(ctx, admin.RoleIds)
+	res = dzhcore.Ok(data)
 	return
 }
 

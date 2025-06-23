@@ -11,14 +11,15 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 )
 
-// BaseSysSettingDao is the data access object for table base_sys_setting.
+// BaseSysSettingDao is the data access object for the table base_sys_setting.
 type BaseSysSettingDao struct {
-	table   string                // table is the underlying table name of the DAO.
-	group   string                // group is the database configuration group name of current DAO.
-	columns BaseSysSettingColumns // columns contains all the column names of Table for convenient usage.
+	table    string                // table is the underlying table name of the DAO.
+	group    string                // group is the database configuration group name of the current DAO.
+	columns  BaseSysSettingColumns // columns contains all the column names of Table for convenient usage.
+	handlers []gdb.ModelHandler    // handlers for customized model modification.
 }
 
-// BaseSysSettingColumns defines and stores column names for table base_sys_setting.
+// BaseSysSettingColumns defines and stores column names for the table base_sys_setting.
 type BaseSysSettingColumns struct {
 	Id                 string //
 	CreateTime         string // 创建时间
@@ -27,6 +28,7 @@ type BaseSysSettingColumns struct {
 	SiteName           string // 站点名称
 	SiteDescribe       string // 站点介绍
 	DomainName         string // 网站域名
+	Copyright          string // 版权所有
 	Logo               string // logo
 	WxCode             string // 二维码
 	Company            string // 公司名称
@@ -76,7 +78,7 @@ type BaseSysSettingColumns struct {
 	IsWpNotice         string // 公众号通知
 }
 
-// baseSysSettingColumns holds the columns for table base_sys_setting.
+// baseSysSettingColumns holds the columns for the table base_sys_setting.
 var baseSysSettingColumns = BaseSysSettingColumns{
 	Id:                 "id",
 	CreateTime:         "createTime",
@@ -85,6 +87,7 @@ var baseSysSettingColumns = BaseSysSettingColumns{
 	SiteName:           "siteName",
 	SiteDescribe:       "siteDescribe",
 	DomainName:         "domainName",
+	Copyright:          "copyright",
 	Logo:               "logo",
 	WxCode:             "wxCode",
 	Company:            "company",
@@ -135,44 +138,49 @@ var baseSysSettingColumns = BaseSysSettingColumns{
 }
 
 // NewBaseSysSettingDao creates and returns a new DAO object for table data access.
-func NewBaseSysSettingDao() *BaseSysSettingDao {
+func NewBaseSysSettingDao(handlers ...gdb.ModelHandler) *BaseSysSettingDao {
 	return &BaseSysSettingDao{
-		group:   "default",
-		table:   "base_sys_setting",
-		columns: baseSysSettingColumns,
+		group:    "default",
+		table:    "base_sys_setting",
+		columns:  baseSysSettingColumns,
+		handlers: handlers,
 	}
 }
 
-// DB retrieves and returns the underlying raw database management object of current DAO.
+// DB retrieves and returns the underlying raw database management object of the current DAO.
 func (dao *BaseSysSettingDao) DB() gdb.DB {
 	return g.DB(dao.group)
 }
 
-// Table returns the table name of current dao.
+// Table returns the table name of the current DAO.
 func (dao *BaseSysSettingDao) Table() string {
 	return dao.table
 }
 
-// Columns returns all column names of current dao.
+// Columns returns all column names of the current DAO.
 func (dao *BaseSysSettingDao) Columns() BaseSysSettingColumns {
 	return dao.columns
 }
 
-// Group returns the configuration group name of database of current dao.
+// Group returns the database configuration group name of the current DAO.
 func (dao *BaseSysSettingDao) Group() string {
 	return dao.group
 }
 
-// Ctx creates and returns the Model for current DAO, It automatically sets the context for current operation.
+// Ctx creates and returns a Model for the current DAO. It automatically sets the context for the current operation.
 func (dao *BaseSysSettingDao) Ctx(ctx context.Context) *gdb.Model {
-	return dao.DB().Model(dao.table).Safe().Ctx(ctx)
+	model := dao.DB().Model(dao.table)
+	for _, handler := range dao.handlers {
+		model = handler(model)
+	}
+	return model.Safe().Ctx(ctx)
 }
 
 // Transaction wraps the transaction logic using function f.
-// It rollbacks the transaction and returns the error from function f if it returns non-nil error.
+// It rolls back the transaction and returns the error if function f returns a non-nil error.
 // It commits the transaction and returns nil if function f returns nil.
 //
-// Note that, you should not Commit or Rollback the transaction in function f
+// Note: Do not commit or roll back the transaction in function f,
 // as it is automatically handled by this function.
 func (dao *BaseSysSettingDao) Transaction(ctx context.Context, f func(ctx context.Context, tx gdb.TX) error) (err error) {
 	return dao.Ctx(ctx).Transaction(ctx, f)

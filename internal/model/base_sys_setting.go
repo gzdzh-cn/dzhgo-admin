@@ -6,21 +6,24 @@ import (
 
 const TableNameBaseSysSetting = "base_sys_setting"
 
-// BaseSysSetting mapped from table <member_open>
+// BaseSysSetting mapped from table <base_sys_setting>
 type BaseSysSetting struct {
 	*dzhcore.Model
-	SiteName        string  `gorm:"column:siteName;comment:站点名称" json:"siteName"`
-	SiteDescribe    string  `gorm:"column:siteDescribe;comment:站点介绍" json:"siteDescribe"`
-	DomainName      *string `gorm:"column:domainName;comment:网站域名;type:varchar(50)" json:"domainName"`
-	Logo            *string `gorm:"column:logo;comment:logo" json:"logo"`
-	WxCode          *string `gorm:"column:wxCode;comment:二维码" json:"wxCode"`
-	Company         *string `gorm:"column:company;comment:公司名称;type:varchar(50)" json:"company"`
-	Contact         *string `gorm:"column:contact;comment:联系人;type:varchar(50)" json:"contact"`
-	ContactWay      *string `gorm:"column:contactWay;comment:座机;type:varchar(50)" json:"contactWay"`
-	Mobile          *string `gorm:"column:mobile;comment:手机;type:varchar(50)" json:"mobile"`
-	Address         *string `gorm:"column:Address;comment:地址;type:varchar(50)" json:"address"`
-	Keyword         *string `gorm:"column:keyword;comment:关键词;type:varchar(50)" json:"keyword"`
-	Description     *string `gorm:"column:description;comment:描述;type:varchar(50)" json:"description"`
+	SiteName     string  `gorm:"column:siteName;comment:站点名称" json:"siteName"`
+	SiteDescribe string  `gorm:"column:siteDescribe;comment:站点介绍" json:"siteDescribe"`
+	DomainName   *string `gorm:"column:domainName;comment:网站域名;type:varchar(50)" json:"domainName"`
+	Copyright    *string `gorm:"column:copyright;comment:版权所有;type:varchar(255)" json:"copyright"`
+
+	Logo        *string `gorm:"column:logo;comment:logo" json:"logo"`
+	WxCode      *string `gorm:"column:wxCode;comment:二维码" json:"wxCode"`
+	Company     *string `gorm:"column:company;comment:公司名称;type:varchar(50)" json:"company"`
+	Contact     *string `gorm:"column:contact;comment:联系人;type:varchar(50)" json:"contact"`
+	ContactWay  *string `gorm:"column:contactWay;comment:座机;type:varchar(50)" json:"contactWay"`
+	Mobile      *string `gorm:"column:mobile;comment:手机;type:varchar(50)" json:"mobile"`
+	Address     *string `gorm:"column:Address;comment:地址;type:varchar(50)" json:"address"`
+	Keyword     *string `gorm:"column:keyword;comment:关键词;type:varchar(50)" json:"keyword"`
+	Description *string `gorm:"column:description;comment:描述;type:varchar(50)" json:"description"`
+
 	Smtp            *string `gorm:"column:smtp;comment:smtp;type:varchar(50)" json:"smtp"`
 	SmtpEmail       *string `gorm:"column:smtpEmail;comment:发送邮箱;type:varchar(50)" json:"smtpEmail"`
 	SmtpPass        *string `gorm:"column:smtpPass;comment:邮箱授权码;type:varchar(50)" json:"smtpPass"`
@@ -29,12 +32,13 @@ type BaseSysSetting struct {
 	IsRemindSms     *int    `gorm:"column:isRemindSms;comment:到期短信开启 0关闭 1开启;default:0;type:int(11)" json:"isRemindSms"`
 	AccessKeyId     *string `gorm:"column:accessKeyId;comment:accessKeyId;type:varchar(100)" json:"accessKeyId"`
 	AccessKeySecret *string `gorm:"column:accessKeySecret;comment:accessKeySecret;type:varchar(100)" json:"accessKeySecret"`
-	SignName        *string `gorm:"column:signName;comment:签名;type:varchar(50)" json:"signName"`
-	TemplateCode    *string `gorm:"column:templateCode;comment:模板;type:varchar(50)" json:"templateCode"`
-	Endpoint        *string `gorm:"column:endpoint;comment:endpoint;type:varchar(50)" json:"endpoint"`
-	RemindMobile    *string `gorm:"column:remindMobile;comment:通知手机号码;type:varchar(50)" json:"remindMobile"`
-	RemindDay       *string `gorm:"column:remindDay;comment:到期提醒提前天数;type:varchar(50)" json:"remindDay"`
-	FieldJson       *string `gorm:"column:fieldJson;comment:自定义字段" json:"fieldJson"`
+
+	SignName     *string `gorm:"column:signName;comment:签名;type:varchar(50)" json:"signName"`
+	TemplateCode *string `gorm:"column:templateCode;comment:模板;type:varchar(50)" json:"templateCode"`
+	Endpoint     *string `gorm:"column:endpoint;comment:endpoint;type:varchar(50)" json:"endpoint"`
+	RemindMobile *string `gorm:"column:remindMobile;comment:通知手机号码;type:varchar(50)" json:"remindMobile"`
+	RemindDay    *string `gorm:"column:remindDay;comment:到期提醒提前天数;type:varchar(50)" json:"remindDay"`
+	FieldJson    *string `gorm:"column:fieldJson;comment:自定义字段" json:"fieldJson"`
 
 	Notice      *string `gorm:"column:notice;comment:公告" json:"notice"`
 	Policy      *string `gorm:"column:policy;comment:隐私政策;" json:"policy"`
@@ -83,8 +87,6 @@ func NewBaseSysSetting() *BaseSysSetting {
 
 // init 创建表
 func init() {
-	err := dzhcore.CreateTable(&BaseSysSetting{})
-	if err != nil {
-		return
-	}
+	// dzhcore.CreateTable(&BaseSysSetting{})
+	dzhcore.AddModel(&BaseSysSetting{})
 }

@@ -30,5 +30,5 @@ func NewSpaceType() *SpaceType {
 
 // init 创建表
 func init() {
-	dzhcore.CreateTable(&SpaceType{})
+	dzhcore.AddModel(&SpaceType{})
 }

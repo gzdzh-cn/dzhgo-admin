@@ -31,5 +31,5 @@ func NewSpaceInfo() *SpaceInfo {
 
 // init 创建表
 func init() {
-	dzhcore.CreateTable(&SpaceInfo{})
+	dzhcore.AddModel(&SpaceInfo{})
 }

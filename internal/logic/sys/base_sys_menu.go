@@ -40,7 +40,8 @@ func NewsBaseSysMenuService() *sBaseSysMenuService {
 					)
 
 					//不是超管只看上架的
-					if !gstr.Equal(admin.UserId, "1") {
+					roldsGarray := garray.NewStrArrayFrom(admin.RoleIds)
+					if !roldsGarray.Contains("1") {
 						condition = []g.Array{{"isShow=?", true}}
 						condition = []g.Array{{"isInstall=?", true}}
 					}

@@ -28,5 +28,6 @@ func NewBaseSysParam() *BaseSysParam {
 
 // init 创建表
 func init() {
-	dzhcore.CreateTable(&BaseSysParam{})
+	// dzhcore.CreateTable(&BaseSysParam{})
+	dzhcore.AddModel(&BaseSysParam{})
 }

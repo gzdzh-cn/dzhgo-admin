@@ -1,7 +1,8 @@
 package admin
 
 import (
-	"dzhgo/addons/dict/service"
+	logic "dzhgo/addons/dict/logic/sys"
+
 	"github.com/gzdzh-cn/dzhcore"
 )
 
@@ -14,9 +15,9 @@ func init() {
 		&dzhcore.Controller{
 			Prefix:  "/admin/dict/type",
 			Api:     []string{"Add", "Delete", "Update", "Info", "List", "Page"},
-			Service: service.NewDictTypeService(),
+			Service: logic.NewsDictTypeService(),
 		},
 	}
 	// 注册路由
-	dzhcore.RegisterController(dictTypeController)
+	dzhcore.AddController(dictTypeController)
 }

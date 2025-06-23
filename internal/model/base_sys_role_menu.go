@@ -25,5 +25,6 @@ func NewBaseSysRoleMenu() *BaseSysRoleMenu {
 
 // init 创建表
 func init() {
-	dzhcore.CreateTable(&BaseSysRoleMenu{})
+	// dzhcore.CreateTable(&BaseSysRoleMenu{})
+	dzhcore.AddModel(&BaseSysRoleMenu{})
 }

@@ -25,5 +25,6 @@ func NewBaseSysRoleDepartment() *BaseSysRoleDepartment {
 
 // init 创建表
 func init() {
-	dzhcore.CreateTable(&BaseSysRoleDepartment{})
+	// dzhcore.CreateTable(&BaseSysRoleDepartment{})
+	dzhcore.AddModel(&BaseSysRoleDepartment{})
 }

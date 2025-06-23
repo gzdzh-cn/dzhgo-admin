@@ -14,6 +14,7 @@ import (
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/gzdzh-cn/dzhcore"
@@ -67,9 +68,12 @@ func NewsBaseSysUserService() *sBaseSysUserService {
 
 					var condition = []g.Array{{"(departmentId IN (?))", gconv.SliceStr(r["departmentIds"])}}
 
-					if !gstr.Equal(admin.UserId, "1") {
+					if gstr.Equal(admin.UserId, "1152921504606846975") {
+						condition = append(condition, g.Slice{"id NOT IN (?)", g.Slice{"1152921504606846976"}})
+					}
 
-						condition = append(condition, g.Slice{"id !=?", 1})
+					if !gstr.Equal(admin.UserId, "1152921504606846975") && !gstr.Equal(admin.UserId, "1152921504606846976") {
+						condition = append(condition, g.Slice{"id NOT IN (?)", g.Slice{"1152921504606846975", "1152921504606846976"}})
 					}
 
 					return condition
@@ -131,23 +135,65 @@ func NewsBaseSysUserService() *sBaseSysUserService {
 }
 
 // Person 方法 返回不带密码的用户信息
-func (s *sBaseSysUserService) Person(userId string) (res gdb.Record, err error) {
-	m := s.Dao.Ctx(ctx)
-	res, err = m.Where("id = ?", userId).FieldsEx("password").One()
-	return
+func (s *sBaseSysUserService) Person(userId string) (res interface{}, err error) {
+
+	type Person struct {
+		Id           string      `json:"id"           orm:"id"           ` //
+		CreateTime   *gtime.Time `json:"createTime"   orm:"createTime"   ` // 创建时间
+		UpdateTime   *gtime.Time `json:"updateTime"   orm:"updateTime"   ` // 更新时间
+		DepartmentId string      `json:"departmentId" orm:"departmentId" ` //
+		Name         string      `json:"name"         orm:"name"         ` //
+		Username     string      `json:"username"     orm:"username"     ` //
+		NickName     string      `json:"nickName"     orm:"nickName"     ` //
+		HeadImg      string      `json:"headImg"      orm:"headImg"      ` //
+		Phone        string      `json:"phone"        orm:"phone"        ` //
+		Email        string      `json:"email"        orm:"email"        ` //
+		Status       int         `json:"status"       orm:"status"       ` //
+		Remark       string      `json:"remark"       orm:"remark"       ` //
+		SocketId     string      `json:"socketId"     orm:"socketId"     ` //
+		RoleIds      string      `json:"roleIds"`
+	}
+	var personData *Person
+	m := s.Dao.Ctx(ctx).As("user").Fields("user.*,GROUP_CONCAT(r.id) AS roleIds")
+	m = m.LeftJoin("base_sys_user_role u_r", "user.id = u_r.userId")
+	m = m.LeftJoin("base_sys_role r", "r.id = u_r.roleId")
+	m = m.Where("user.id = ?", userId).Group("user.id")
+	err = m.Scan(&personData)
+	if err != nil {
+		g.Log().Error(ctx, err.Error())
+		return nil, err
+	}
+
+	//if personData != nil {
+	//	roleIds := baseCommon.GetAdmin(ctx).RoleIds
+	//	roleIdsGarray := garray.NewStrArrayFrom(roleIds)
+	//	if roleIdsGarray.Contains("1") {
+	//		personData.RoleIds = "1"
+	//	}
+	//}
+
+	return personData, nil
 }
 
 func (s *sBaseSysUserService) ModifyBefore(ctx context.Context, method string, param g.MapStrAny) (err error) {
+
+	if method == "Update" || method == "Add" {
+		count, err := dao.BaseSysUser.Ctx(ctx).WhereNot("id", gconv.String(param["id"])).Where("username", gconv.String(param["username"])).Count()
+		if err != nil {
+			g.Log().Error(ctx, err.Error())
+			return err
+		}
+		if count > 0 {
+			err = gerror.New("用户名不能重复，请重新填写")
+			g.Log().Error(ctx, err)
+			return err
+		}
+		return nil
+	}
+
 	if method == "Delete" {
 		// 禁止删除超级管理员
 		userIds := garray.NewStrArrayFrom(gconv.Strings(param["ids"]))
-
-		//superAdminId := "1"
-
-		//if userIds.Len() == 1 && found && gstr.Equal(currentId, superAdminId) {
-		//	err = gerror.New("超级管理员不能删除")
-		//	return
-		//}
 
 		if userIds.Len() == 1 {
 			currentId, found := userIds.Get(0)
@@ -305,11 +351,10 @@ func (s *sBaseSysUserService) ServiceUpdate(ctx context.Context, req *dzhcore.Up
 	rMap := r.GetMap()
 
 	// 如果不传入ID代表更新当前用户
-	userId := r.Get("id", admin.UserId).Uint()
-	userRoles := garray.NewStrArrayFrom(admin.RoleIds)
+	userId := r.Get("id", admin.UserId).String()
 	userInfo, err := m.Where("id = ?", userId).One()
-
 	if err != nil {
+		g.Log().Error(ctx, err)
 		return
 	}
 	if userInfo.IsEmpty() {
@@ -317,8 +362,14 @@ func (s *sBaseSysUserService) ServiceUpdate(ctx context.Context, req *dzhcore.Up
 		return
 	}
 
+	roleIds, err := dao.BaseSysUserRole.Ctx(ctx).Where("userId = ?", userId).Fields("roleId").Array()
+	if err != nil {
+		return
+	}
+
 	// 禁止禁用超级管理员
-	if userRoles.Contains("1") && (!r.Get("status").IsNil() && r.Get("status").Int() == 0) {
+	userRoles := garray.NewStrArrayFrom(gconv.SliceStr(roleIds))
+	if userRoles.Contains("1") && userId == "1" && !r.Get("status").IsNil() && r.Get("status").Int() == 0 {
 		err = gerror.New("禁止禁用超级管理员")
 		return
 	}
@@ -328,29 +379,18 @@ func (s *sBaseSysUserService) ServiceUpdate(ctx context.Context, req *dzhcore.Up
 	if rPassword != "" && rPassword != userInfo["password"].String() {
 		rMap["password"], _ = gmd5.Encrypt(rPassword)
 		rMap["passwordV"] = userInfo["passwordV"].Int() + 1
-		err = dzhcore.CacheManager.Set(ctx, fmt.Sprintf("admin:passwordVersion:%d", userId), rMap["passwordV"], 0)
-		if err != nil {
-			return nil, err
-		}
 	} else {
 		delete(rMap, "password")
 	}
 
 	err = g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) (err error) {
-		roleModel := dao.BaseSysUserRole.Ctx(ctx).TX(tx).Where("userId = ?", userId)
-		roleIds, err := roleModel.Fields("roleId").Array()
-		if err != nil {
-			return
-		}
-
+		roleModel := dao.BaseSysUserRole.Ctx(ctx).Where("userId = ?", userId)
 		// 如果请求参数中不包含roleIdList说明不修改角色信息
 		if !r.Get("roleIdList").IsNil() {
 			inRoleIdSet := gset.NewFrom(r.Get("roleIdList").Strings())
 			roleIdsSet := gset.NewFrom(gconv.Strings(roleIds))
-
 			// 如果请求的角色信息未发生变化则跳过更新逻辑
 			if roleIdsSet.Diff(inRoleIdSet).Size() != 0 || inRoleIdSet.Diff(roleIdsSet).Size() != 0 {
-
 				roleArray := garray.NewArray()
 				inRoleIdSet.Iterator(func(v interface{}) bool {
 					roleArray.PushRight(g.Map{
@@ -361,11 +401,12 @@ func (s *sBaseSysUserService) ServiceUpdate(ctx context.Context, req *dzhcore.Up
 					return true
 				})
 
+				//删除角色数据
 				_, err = roleModel.Delete()
 				if err != nil {
 					return err
 				}
-
+				//重新写入新的角色关系
 				_, err = roleModel.Fields("id,userId,roleId").Insert(roleArray)
 				if err != nil {
 					return err
@@ -373,14 +414,54 @@ func (s *sBaseSysUserService) ServiceUpdate(ctx context.Context, req *dzhcore.Up
 			}
 		}
 
-		_, err = m.TX(tx).Where("id", userId).Update(rMap)
+		_, err = dao.BaseSysUser.Ctx(ctx).Where("id", userId).Update(rMap)
 
 		if err != nil {
 			return err
 		}
 		return
 	})
+	if err != nil {
+		g.Log().Error(ctx, err)
+		return nil, err
+	}
+
+	//禁止用户后 或者 修改了密码  删除用户登录缓存数据，用户需要重新登录
+	if !r.Get("status").IsNil() && r.Get("status").Int() == 0 || rPassword != "" && rPassword != userInfo["password"].String() {
+		err := service.BaseSysUserService().DeleteCache(ctx, userId)
+		if err != nil {
+			g.Log().Error(ctx, err)
+			return nil, err
+		}
+	}
+
 	return
+}
+
+// 删除用户缓存
+func (s *sBaseSysUserService) DeleteCache(ctx context.Context, userId string) (err error) {
+	_, err = dzhcore.CacheManager.Remove(ctx, fmt.Sprintf("admin:token:%v", userId))
+	if err != nil {
+		return err
+	}
+	_, err = dzhcore.CacheManager.Remove(ctx, fmt.Sprintf("admin:token:refresh:%v", userId))
+	if err != nil {
+		return err
+	}
+	_, err = dzhcore.CacheManager.Remove(ctx, fmt.Sprintf("admin:department:%v", userId))
+	if err != nil {
+		return err
+	}
+	_, err = dzhcore.CacheManager.Remove(ctx, fmt.Sprintf("admin:passwordVersion:%v", userId))
+	if err != nil {
+		return err
+	}
+	_, err = dzhcore.CacheManager.Remove(ctx, fmt.Sprintf("admin:perms:%v", userId))
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Move 移动用户部门

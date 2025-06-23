@@ -10,7 +10,7 @@ gf pack addons/dict/resource addons/dict/packed/packed.go -p addons/dict/resourc
 
 gf gen dao -p=addons/dict -t=addons_dict_info,addons_dict_type
 
-gf gen service -s=addons/dzhCrm/logic -d=addons/dzhCrm/service
+gf gen service -s=addons/dict/logic -d=addons/dict/service
 
 ```
 

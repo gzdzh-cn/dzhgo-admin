@@ -9,5 +9,5 @@ gf pack addons/task/resource addons/task/packed/packed.go -p addons/task/resourc
 
 gf gen dao -p=addons/task -t=addons_task_info,addons_task_log
 
-gf gen service -s=addons/dzhCrm/logic -d=addons/dzhCrm/service
+gf gen service -s=addons/task/logic -d=addons/task/service
 ```

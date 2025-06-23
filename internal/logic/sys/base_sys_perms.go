@@ -4,6 +4,7 @@ import (
 	"context"
 	"dzhgo/internal/common"
 	"dzhgo/internal/service"
+	"github.com/gogf/gf/v2/container/garray"
 	"github.com/gogf/gf/v2/text/gstr"
 
 	"github.com/gogf/gf/v2/database/gdb"
@@ -33,9 +34,10 @@ func (c *sBaseSysPermsService) Permmenu(ctx context.Context, roleIds []string) (
 		admin              = common.GetAdmin(ctx)
 	)
 
+	roleIdsGarray := garray.NewStrArrayFrom(admin.RoleIds)
 	res = &permMenu{
 		Perms: baseSysMenuService.GetPerms(roleIds),
-		Menus: baseSysMenuService.GetMenus(admin.RoleIds, gstr.Equal(admin.UserId, "1")),
+		Menus: baseSysMenuService.GetMenus(admin.RoleIds, roleIdsGarray.Contains("1")),
 	}
 
 	return

@@ -3,7 +3,8 @@ package admin
 import (
 	"context"
 	v1 "dzhgo/addons/dict/api/v1"
-	"dzhgo/addons/dict/service"
+	logic "dzhgo/addons/dict/logic/sys"
+
 	"github.com/gzdzh-cn/dzhcore"
 )
 
@@ -16,18 +17,18 @@ func init() {
 		&dzhcore.Controller{
 			Prefix:  "/admin/dict/info",
 			Api:     []string{"Add", "Delete", "Update", "Info", "List", "Page"},
-			Service: service.NewDictInfoService(),
+			Service: logic.NewsDictInfoService(),
 		},
 	}
 
 	// 注册路由
-	dzhcore.RegisterController(dictInfoController)
+	dzhcore.AddController(dictInfoController)
 }
 
 // Data 方法 获得字典数据
 func (c *DictInfoController) Data(ctx context.Context, req *v1.DictInfoDataReq) (res *dzhcore.BaseRes, err error) {
 
-	data, err := service.NewDictInfoService().Data(ctx, req.Types)
+	data, err := logic.NewsDictInfoService().Data(ctx, req.Types)
 	res = dzhcore.Ok(data)
 	return
 }

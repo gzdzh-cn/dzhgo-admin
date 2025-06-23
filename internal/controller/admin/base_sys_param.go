@@ -4,6 +4,7 @@ import (
 	v1 "dzhgo/internal/api/admin_v1"
 	logic "dzhgo/internal/logic/sys"
 	"dzhgo/internal/service"
+
 	"github.com/gzdzh-cn/dzhcore"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -23,7 +24,7 @@ func init() {
 		},
 	}
 	// 注册路由
-	dzhcore.RegisterController(baseSysParamController)
+	dzhcore.AddController(baseSysParamController)
 }
 
 // Html 根据配置参数key获取网页内容(富文本)

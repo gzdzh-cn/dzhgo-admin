@@ -19,14 +19,15 @@ func (*BaseSysLog) TableName() string {
 	return TableNameBaseSysLog
 }
 
-// init 创建表
-func init() {
-	dzhcore.CreateTable(&BaseSysLog{})
-}
-
 // NewBaseSysLog 创建实例
 func NewBaseSysLog() *BaseSysLog {
 	return &BaseSysLog{
 		Model: dzhcore.NewModel(),
 	}
+}
+
+// init 创建表
+func init() {
+	// dzhcore.CreateTable(&BaseSysLog{})
+	dzhcore.AddModel(&BaseSysLog{})
 }

@@ -22,7 +22,7 @@ func init() {
 		},
 	}
 	// 注册路由
-	dzhcore.RegisterController(baseSysDepartmentController)
+	dzhcore.AddController(baseSysDepartmentController)
 }
 
 // Order 排序部门

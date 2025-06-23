@@ -1,11 +1,26 @@
 
 # CLI tool, only in development environment.
 # https://goframe.org/pages/viewpage.action?pageId=3673173
+
+database:
+  logger:
+    path: "./data/logs/sql"
+    level: "all"
+    stdout: true
+  default:
+    link: "mysql:root:dzh123456@tcp(127.0.0.1:13306)/dzhgo_go?loc=Local&parseTime=true"
+  oi:
+    link: "mysql:root:dzh123456@tcp(127.0.0.1:3306)/3136_php?loc=Local&parseTime=true"
+
+
+
 gfcli:
   docker:
     build: "-a amd64 -s linux -p temp -ew"
-    tagPrefixes:
-      - registry.cn-heyuan.aliyuncs.com # 阿里云
+#    file: "Dockerfile"
+    push: "registry.cn-heyuan.aliyuncs.com/gzdzh"
+    tagPrefixes: "registry.cn-heyuan.aliyuncs.com/gzdzh"  # 阿里云
+    TagName: "customer_pro:v1.0.856"
   # 工具编译配置
   build:
 #    name: "main" # 用gf docker的时候,一定要写main,或者不要name参数
@@ -14,11 +29,16 @@ gfcli:
     mod: "none"
     cgo: 0
     path: "./bin"
-#    packSrc: "public,resource" #默认打包到internal/packed
+#    packSrc: "manifest" # 需要打包的目录 打包后在internal/packed生成二进制文件
 #    version: "v1.1.5" #用gf docker的时候，不能写版本号
 
+#使用gen.dao，多个link情况下，命令行的参数会失效
+#  gen:
+#    dao:
+#      - link: "mysql:root:dzh123456@tcp(127.0.0.1:3306)/dzhgo_go?loc=Local&parseTime=true"
+#        path: "addons/customer_pro"
+#        tables: "addons_customer_pro_config"  # 指定当前数据库中需要执行代码生成的数据表。如果为空，表示数据库的所有表都会生成。
 
-  gen:
-    dao:
-      - link: "mysql:root:dzh123456@tcp(127.0.0.1:3306)/dzhgo_go?loc=Local&parseTime=true"
-#        tables:          "base_member_table"                                    # 指定当前数据库中需要执行代码生成的数据表。如果为空，表示数据库的所有表都会生成。
+#      - link: "mysql:root:dzh123456@tcp(127.0.0.1:3306)/3136_php?loc=Local&parseTime=true"
+#        group: "oi"
+#        tables: "oi_clues,oi_clues_order"

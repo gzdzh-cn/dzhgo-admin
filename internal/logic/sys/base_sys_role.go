@@ -32,7 +32,7 @@ func NewsBaseSysRoleService() *sBaseSysRoleService {
 					var (
 						admin   = common.GetAdmin(ctx)
 						userId  = admin.UserId
-						roleIds = garray.NewStrArrayFromCopy(gconv.Strings(admin.RoleIds))
+						roleIds = garray.NewStrArrayFromCopy(admin.RoleIds)
 					)
 					return [][]interface{}{
 						// 超级管理员的角色不展示
@@ -49,7 +49,7 @@ func NewsBaseSysRoleService() *sBaseSysRoleService {
 					var (
 						admin   = common.GetAdmin(ctx)
 						userId  = admin.UserId
-						roleIds = garray.NewStrArrayFromCopy(gconv.Strings(admin.RoleIds))
+						roleIds = garray.NewStrArrayFromCopy(admin.RoleIds)
 					)
 					return [][]interface{}{
 						// 超级管理员的角色不展示

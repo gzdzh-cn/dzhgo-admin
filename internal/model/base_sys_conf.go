@@ -16,14 +16,15 @@ func (*BaseSysConf) TableName() string {
 	return TableNameBaseSysConf
 }
 
-// init 创建表
-func init() {
-	dzhcore.CreateTable(&BaseSysConf{})
-}
-
 // NewBaseSysConf 创建实例
 func NewBaseSysConf() *BaseSysConf {
 	return &BaseSysConf{
 		Model: dzhcore.NewModel(),
 	}
+}
+
+// init 创建表
+func init() {
+	// dzhcore.CreateTable(&BaseSysConf{})
+	dzhcore.AddModel(&BaseSysConf{})
 }

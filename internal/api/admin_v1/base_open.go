@@ -21,13 +21,23 @@ type BaseOpenCaptchaReq struct {
 // 插件版本
 type VersionsReq struct {
 	g.Meta `path:"/versions" method:"POST"`
-	Addons string `json:"addons" default:"all"`
+	Addons string `json:"addons" p:"addons" default:"all"`
+}
+
+// 支付回调通知
+type NotifyUrlReq struct {
+	g.Meta `path:"/notifyUrl" method:"POST"`
 }
 
 // 站点配置
 type GetSettingReq struct {
 	g.Meta `path:"/getSetting" method:"POST"`
-	Addons string `json:"addons" default:"all"`
+	Addons string `json:"addons" p:"addons" default:"all"`
+}
+
+// 服务器信息
+type ServerInfoReq struct {
+	g.Meta `path:"/serverInfo" method:"POST"`
 }
 
 // login 接口请求
@@ -88,7 +98,7 @@ type AccountRegisterReq struct {
 	RePassWord string `json:"rePassWord" p:"rePassWord" v:"required"`
 }
 
-// 自定义方法
-type GetMemberReq struct {
-	g.Meta `path:"/getMember" method:"POST"`
-}
+// 会员
+//type GetMemberReq struct {
+//	g.Meta `path:"/getMember" method:"POST"`
+//}

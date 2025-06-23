@@ -25,5 +25,6 @@ func NewBaseSysUserRole() *BaseSysUserRole {
 
 // init 创建表
 func init() {
-	dzhcore.CreateTable(&BaseSysUserRole{})
+	// dzhcore.CreateTable(&BaseSysUserRole{})
+	dzhcore.AddModel(&BaseSysUserRole{})
 }

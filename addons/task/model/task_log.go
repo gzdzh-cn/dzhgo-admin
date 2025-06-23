@@ -31,5 +31,5 @@ func NewTaskLog() *TaskLog {
 
 // init 创建表
 func init() {
-	dzhcore.CreateTable(&TaskLog{})
+	dzhcore.AddModel(&TaskLog{})
 }

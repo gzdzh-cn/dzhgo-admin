@@ -1,19 +1,20 @@
 package addons
 
 import (
-	"dzhgo/addons/customer_pro"
-	"dzhgo/addons/dict"
-	"dzhgo/addons/member"
-	"dzhgo/addons/task"
+	// _ "dzhgo/addons/crm"
+	// _ "dzhgo/addons/customer_pro"
+	_ "dzhgo/addons/dict"
+	// _ "dzhgo/addons/file_upload"
+	_ "dzhgo/addons/member"
+	_ "dzhgo/addons/space"
+	_ "dzhgo/addons/task"
+
+	"github.com/gzdzh-cn/dzhcore"
 )
 
 func NewInit() {
 
-	dict.NewInit()
-	//space.NewInit()
-	task.NewInit()
-	member.NewInit()
-	//crm.NewInit()
-	//fileUpload.NewInit()
-	customer_pro.NewInit()
+	// 初始化所有addons
+	dzhcore.InitAddons()
+
 }

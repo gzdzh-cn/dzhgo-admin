@@ -2,8 +2,8 @@ package app
 
 import (
 	"context"
+	logic "dzhgo/addons/dict/logic/sys"
 
-	"dzhgo/addons/dict/service"
 	"github.com/gzdzh-cn/dzhcore"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -18,11 +18,11 @@ func init() {
 		&dzhcore.Controller{
 			Prefix:  "/app/dict/info",
 			Api:     []string{"Add", "Delete", "Update", "Info", "List", "Page"},
-			Service: service.NewDictInfoService(),
+			Service: logic.NewsDictInfoService(),
 		},
 	}
 	// 注册路由
-	dzhcore.RegisterController(dictInfoController)
+	dzhcore.AddController(dictInfoController)
 }
 
 // DictInfoDataReq Data 方法请求
@@ -34,7 +34,7 @@ type DictInfoDataReq struct {
 // Data 方法 获得字典数据
 func (c *DictInfoController) Data(ctx context.Context, req *DictInfoDataReq) (res *dzhcore.BaseRes, err error) {
 
-	data, err := service.NewDictInfoService().Data(ctx, req.Types)
+	data, err := logic.NewsDictInfoService().Data(ctx, req.Types)
 	res = dzhcore.Ok(data)
 	return
 }
