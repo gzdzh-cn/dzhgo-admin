@@ -68,7 +68,7 @@ func NewConfig() *sConfig {
 				Enable: dzhcore.GetCfgWithDefault(ctx, "modules.base.middleware.log.enable", g.NewVar(true)).Bool(),
 			},
 			RunLogger: &RunLogger{
-				Enable: dzhcore.GetCfgWithDefault(ctx, "modules.base.middleware.rung.Log().enable", g.NewVar(true)).Bool(),
+				Enable: dzhcore.GetCfgWithDefault(ctx, "modules.base.middleware.runLogger.enable", g.NewVar(false)).Bool(),
 			},
 		},
 		Setting: &g.Map{
