@@ -26,7 +26,6 @@ lock.json
 go.work
 data/logs
 other
-resource/
 node_modules/
 *.zip
 .DS_Store

@@ -1,0 +1,26 @@
+[
+	{
+		"id" : "1769989517017616384",
+		"createTime" : "2024-03-19 15:29:20.330",
+		"updateTime" : "2024-03-19 15:29:20.330",
+		"deleted_at" : null,
+		"name" : "行业应用",
+		"image" : null,
+		"link" : null,
+		"remark" : null,
+		"status" : 1,
+		"orderNum" : 99
+	},
+	{
+		"id" : "1769997287548784640",
+		"createTime" : "2024-03-19 16:00:12.969",
+		"updateTime" : "2024-03-19 16:00:12.969",
+		"deleted_at" : null,
+		"name" : "云存储",
+		"image" : null,
+		"link" : null,
+		"remark" : null,
+		"status" : 1,
+		"orderNum" : 99
+	}
+]

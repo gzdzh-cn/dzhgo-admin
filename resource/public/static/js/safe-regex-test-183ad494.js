@@ -1,0 +1,1 @@
+import{r}from"./call-bind-cfba7623.js";import{g as e}from"./get-intrinsic-cff09dfa.js";import{r as t}from"./is-regex-74a42cfc.js";var n,i;function o(){if(i)return n;i=1;var o=r(),s=e,p=t(),u=o("RegExp.prototype.exec"),a=s("%TypeError%");return n=function(r){if(!p(r))throw new a("`regex` must be a RegExp");return function(e){return null!==u(r,e)}}}export{o as r};

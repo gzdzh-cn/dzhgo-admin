@@ -1,0 +1,1 @@
+import{g as r}from"./get-intrinsic-cff09dfa.js";var t,n;function e(){if(n)return t;n=1;var e=r("%Object.getOwnPropertyDescriptor%",!0);if(e)try{e([],"length")}catch(i){e=null}return t=e}export{e as r};
