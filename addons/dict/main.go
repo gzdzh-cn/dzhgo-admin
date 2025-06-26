@@ -1,6 +1,7 @@
 package dict
 
 import (
+	"dzhgo/internal"
 	baseModel "dzhgo/internal/model"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -15,7 +16,7 @@ import (
 )
 
 func init() {
-	dzhcore.AddAddon(&dictAddon{Version: Version, Name: "dict"})
+	dzhcore.AddAddon(&dictAddon{Version: internal.Version, Name: "dict"})
 }
 
 type dictAddon struct {

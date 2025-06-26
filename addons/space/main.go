@@ -1,6 +1,8 @@
 package space
 
 import (
+	"dzhgo/internal"
+
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gzdzh-cn/dzhcore"
@@ -9,7 +11,7 @@ import (
 )
 
 func init() {
-	dzhcore.AddAddon(&spaceAddon{Version: Version, Name: "space"})
+	dzhcore.AddAddon(&spaceAddon{Version: internal.Version, Name: "space"})
 }
 
 type spaceAddon struct {

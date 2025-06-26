@@ -1,6 +1,7 @@
 package task
 
 import (
+	"dzhgo/internal"
 	baseModel "dzhgo/internal/model"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -17,7 +18,7 @@ import (
 )
 
 func init() {
-	dzhcore.AddAddon(&taskAddon{Version: Version, Name: "task"})
+	dzhcore.AddAddon(&taskAddon{Version: internal.Version, Name: "task"})
 }
 
 type taskAddon struct {

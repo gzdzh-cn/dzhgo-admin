@@ -2,6 +2,7 @@ package member
 
 import (
 	"dzhgo/addons/member/model"
+	"dzhgo/internal"
 	baseModel "dzhgo/internal/model"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -19,7 +20,7 @@ var (
 )
 
 func init() {
-	dzhcore.AddAddon(&memberAddon{Version: Version, Name: "member"})
+	dzhcore.AddAddon(&memberAddon{Version: internal.Version, Name: "member"})
 }
 
 type memberAddon struct {
