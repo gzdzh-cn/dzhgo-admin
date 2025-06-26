@@ -21,10 +21,12 @@ type (
 		AdminEPS(ctx g.Ctx) (result *g.Var, err error)
 		// AdminEPS 获取eps
 		AppEPS(ctx g.Ctx) (result *g.Var, err error)
-		// 获取全部版本
+		// 版本
 		Versions(ctx context.Context, req *v1.VersionsReq) (data interface{}, err error)
 		// 站点配置
 		GetSetting(ctx context.Context, req *v1.GetSettingReq) (data interface{}, err error)
+		// 服务器信息
+		ServerInfo(ctx context.Context) (data interface{}, err error)
 	}
 	IBaseSysAddonsService interface {
 		// 安装卸载插件
@@ -32,10 +34,12 @@ type (
 		// 上下架插件
 		LineUpdateStatus(ctx context.Context, req *v1.LineUpdateStatusReq) (data interface{}, err error)
 	}
-	IBaseSysAddonsTypeService interface{}
-	IBaseSysConfService       interface {
+	IBaseSysAddonsTypesService interface {
+		Show(ctx context.Context) (data interface{}, err error)
+	}
+	IBaseSysConfService interface {
 		// UpdateValue 更新配置值
-		UpdateValue(cKey, cValue string) error
+		UpdateValue(cKey string, cValue string) error
 		// GetValue 获取配置值
 		GetValue(cKey string) string
 	}
@@ -62,19 +66,6 @@ type (
 		RefreshToken(ctx context.Context, token string) (result *v1.TokenRes, err error)
 		// 根据用户生成前端需要的Token信息
 		GenerateTokenByUser(ctx context.Context, user *model.BaseSysUser) (result *v1.TokenRes, err error)
-	}
-	IBaseSysMemberLoginService interface {
-		Login(ctx g.Ctx, req *v1.LoginReq) (result *v1.TokenRes, err error)
-		// MpLoginReq 微信公众号登录
-		MpLoginReq(ctx g.Ctx, req *v1.MpLoginReq) (result *v1.TokenRes, err error)
-		// MiniLogin 小程序登录
-		MiniLogin(ctx g.Ctx, req *v1.MiniLoginReq) (result *v1.TokenRes, err error)
-		// AutoPhone 手机授权登录
-		AutoPhone(ctx g.Ctx, req *v1.AutoPhoneReq) (result *v1.TokenRes, err error)
-		// VerifyCount 验证游客次数
-		VerifyCount(ctx g.Ctx, req *v1.VerifyCountReq) (data interface{}, err error)
-		// AccountRegister 账号注册
-		AccountRegister(ctx g.Ctx, req *v1.AccountRegisterReq) (result *v1.TokenRes, err error)
 	}
 	IBaseSysMenuService interface {
 		// GetPerms 获取菜单的权限
@@ -108,10 +99,9 @@ type (
 		// ServiceInfo 方法重构
 		ServiceInfo(ctx context.Context, req *dzhcore.InfoReq) (data interface{}, err error)
 	}
-	IBaseSysSettingService interface{}
-	IBaseSysUserService    interface {
+	IBaseSysUserService interface {
 		// Person 方法 返回不带密码的用户信息
-		Person(userId string) (res gdb.Record, err error)
+		Person(userId string) (res interface{}, err error)
 		ModifyBefore(ctx context.Context, method string, param g.MapStrAny) (err error)
 		ModifyAfter(ctx context.Context, method string, param g.MapStrAny) (err error)
 		// ServiceAdd 方法 添加用户
@@ -120,26 +110,26 @@ type (
 		ServiceInfo(ctx g.Ctx, req *dzhcore.InfoReq) (data interface{}, err error)
 		// ServiceUpdate 方法 更新用户信息
 		ServiceUpdate(ctx context.Context, req *dzhcore.UpdateReq) (data interface{}, err error)
+		// 删除用户缓存
+		DeleteCache(ctx context.Context, userId string) (err error)
 		// Move 移动用户部门
 		Move(ctx g.Ctx) (err error)
 	}
 )
 
 var (
-	localBaseOpenService           IBaseOpenService
-	localBaseSysAddonsService      IBaseSysAddonsService
-	localBaseSysAddonsTypeService  IBaseSysAddonsTypeService
-	localBaseSysConfService        IBaseSysConfService
-	localBaseSysDepartmentService  IBaseSysDepartmentService
-	localBaseSysLogService         IBaseSysLogService
-	localBaseSysLoginService       IBaseSysLoginService
-	localBaseSysMemberLoginService IBaseSysMemberLoginService
-	localBaseSysMenuService        IBaseSysMenuService
-	localBaseSysParamService       IBaseSysParamService
-	localBaseSysPermsService       IBaseSysPermsService
-	localBaseSysRoleService        IBaseSysRoleService
-	localBaseSysSettingService     IBaseSysSettingService
-	localBaseSysUserService        IBaseSysUserService
+	localBaseOpenService          IBaseOpenService
+	localBaseSysAddonsService     IBaseSysAddonsService
+	localBaseSysAddonsTypesService IBaseSysAddonsTypesService
+	localBaseSysConfService       IBaseSysConfService
+	localBaseSysDepartmentService IBaseSysDepartmentService
+	localBaseSysLogService        IBaseSysLogService
+	localBaseSysLoginService      IBaseSysLoginService
+	localBaseSysMenuService       IBaseSysMenuService
+	localBaseSysParamService      IBaseSysParamService
+	localBaseSysPermsService      IBaseSysPermsService
+	localBaseSysRoleService       IBaseSysRoleService
+	localBaseSysUserService       IBaseSysUserService
 )
 
 func BaseOpenService() IBaseOpenService {
@@ -164,15 +154,15 @@ func RegisterBaseSysAddonsService(i IBaseSysAddonsService) {
 	localBaseSysAddonsService = i
 }
 
-func BaseSysAddonsTypeService() IBaseSysAddonsTypeService {
-	if localBaseSysAddonsTypeService == nil {
-		panic("implement not found for interface IBaseSysAddonsTypeService, forgot register?")
+func BaseSysAddonsTypesService() IBaseSysAddonsTypesService {
+	if localBaseSysAddonsTypesService == nil {
+		panic("implement not found for interface IBaseSysAddonsTypesService, forgot register?")
 	}
-	return localBaseSysAddonsTypeService
+	return localBaseSysAddonsTypesService
 }
 
-func RegisterBaseSysAddonsTypeService(i IBaseSysAddonsTypeService) {
-	localBaseSysAddonsTypeService = i
+func RegisterBaseSysAddonsTypesService(i IBaseSysAddonsTypesService) {
+	localBaseSysAddonsTypesService = i
 }
 
 func BaseSysConfService() IBaseSysConfService {
@@ -219,17 +209,6 @@ func RegisterBaseSysLoginService(i IBaseSysLoginService) {
 	localBaseSysLoginService = i
 }
 
-func BaseSysMemberLoginService() IBaseSysMemberLoginService {
-	if localBaseSysMemberLoginService == nil {
-		panic("implement not found for interface IBaseSysMemberLoginService, forgot register?")
-	}
-	return localBaseSysMemberLoginService
-}
-
-func RegisterBaseSysMemberLoginService(i IBaseSysMemberLoginService) {
-	localBaseSysMemberLoginService = i
-}
-
 func BaseSysMenuService() IBaseSysMenuService {
 	if localBaseSysMenuService == nil {
 		panic("implement not found for interface IBaseSysMenuService, forgot register?")
@@ -272,17 +251,6 @@ func BaseSysRoleService() IBaseSysRoleService {
 
 func RegisterBaseSysRoleService(i IBaseSysRoleService) {
 	localBaseSysRoleService = i
-}
-
-func BaseSysSettingService() IBaseSysSettingService {
-	if localBaseSysSettingService == nil {
-		panic("implement not found for interface IBaseSysSettingService, forgot register?")
-	}
-	return localBaseSysSettingService
-}
-
-func RegisterBaseSysSettingService(i IBaseSysSettingService) {
-	localBaseSysSettingService = i
 }
 
 func BaseSysUserService() IBaseSysUserService {

@@ -2,6 +2,7 @@ package admin
 
 import (
 	"dzhgo/addons/space/service"
+
 	"github.com/gzdzh-cn/dzhcore"
 )
 
@@ -18,5 +19,5 @@ func init() {
 		},
 	}
 	// 注册路由
-	dzhcore.RegisterController(spaceTypeController)
+	dzhcore.AddController(spaceTypeController)
 }

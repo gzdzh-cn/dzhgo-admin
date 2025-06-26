@@ -1,10 +1,10 @@
 package config
 
 import (
-	"dzhgo/addons/fileUpload"
+	"dzhgo/addons/file_upload"
 	"github.com/gzdzh-cn/dzhcore"
 )
 
 func init() {
-	dzhcore.SetVersions("space", fileUpload.Version)
+	dzhcore.SetVersions("space", file_upload.Version)
 }

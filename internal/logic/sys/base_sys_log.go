@@ -44,12 +44,17 @@ func NewsBaseSysLogService() *sBaseSysLogService {
 // Record 记录日志
 func (s *sBaseSysLogService) Record(ctx g.Ctx) {
 	var (
-		admin = common.GetAdmin(ctx)
-		r     = g.RequestFromCtx(ctx)
+		admin  = common.GetAdmin(ctx)
+		r      = g.RequestFromCtx(ctx)
+		userId string
 	)
 
+	if admin != nil {
+		userId = admin.UserId
+	}
+
 	baseSysLog := model.NewBaseSysLog()
-	baseSysLog.UserID = admin.UserId
+	baseSysLog.UserID = userId
 	baseSysLog.Action = r.Method + ":" + r.URL.Path
 	baseSysLog.IP = r.GetClientIp()
 	baseSysLog.IPAddr = r.GetClientIp()

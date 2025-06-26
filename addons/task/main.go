@@ -2,10 +2,12 @@ package task
 
 import (
 	baseModel "dzhgo/internal/model"
+
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
 
 	"dzhgo/addons/task/model"
+
 	"github.com/gzdzh-cn/dzhcore"
 
 	_ "dzhgo/addons/task/controller"
@@ -14,17 +16,33 @@ import (
 	_ "dzhgo/addons/task/packed"
 )
 
-func NewInit() {
+func init() {
+	dzhcore.AddAddon(&taskAddon{Version: Version, Name: "task"})
+}
+
+type taskAddon struct {
+	Version string
+	Name    string
+}
+
+func (a *taskAddon) GetName() string {
+	return a.Name
+}
+
+func (a *taskAddon) GetVersion() string {
+	return a.Version
+}
+
+func (a *taskAddon) NewInit() {
 	var (
 		taskInfo = model.NewTaskInfo()
 		ctx      = gctx.GetInitCtx()
 	)
 
-	g.Log().Debug(ctx, "addon task init start ...")
+	g.Log().Debug(ctx, "------------ addon task init start ...")
 	g.Log().Debugf(ctx, "task version:%v", Version)
 	dzhcore.FillInitData(ctx, "task", &model.TaskInfo{})
 	dzhcore.FillInitData(ctx, "task", &baseModel.BaseSysMenu{})
-	g.Log().Debug(ctx, "addon task init finished ...")
 
 	result, err := dzhcore.DBM(taskInfo).Where("status = ?", 1).All()
 	if err != nil {
@@ -38,6 +56,6 @@ func NewInit() {
 		}
 	}
 
-	g.Log().Debug(ctx, "module task init finished ...")
+	g.Log().Debug(ctx, "------------ addon task init end ...")
 
 }

@@ -2,7 +2,7 @@ server:
   address:     ":8200"
   openapiPath: "/api.json"
   swaggerPath: "/swagger"
-#  dumpRouterMap: false #关闭路由打印
+  #  dumpRouterMap: false #关闭路由打印
   serverRoot: "resource/public"
   clientMaxBodySize: 104857600  # 100MB in bytes 100*1024*1024
   paths: ["template"]
@@ -14,57 +14,74 @@ logger:
   file: "{Y-m-d}.log"
   level : "all"
   stdout: true,
+  flags: 44
 
 
 database:
   logger:
     path: "./data/logs/sql"
+    file: "sql-{Y-m-d}.log"
     level: "all"
-    stdout: true
-
-  default:
-    type: "mysql"
-    host: "127.0.0.1" # mac本地docker运行写host.docker.internal，可以读取宿主机mysql
-    port: "3306"
-    user: "root"
-    pass: "dzh123456"
-    name: "dzhgo_go"
-    charset: "utf8mb4"
-    timezone: "Asia/Shanghai"
-    createdAt: "createTime"
-    updatedAt: "updateTime"
-    deletedAt: "deletedAt"  # 填deleteTime，关闭软删除，填deletedAt开启软删除
-    debug: true #开启调试模式,启用后将在控制台打印相关sql语句
+    stdout: true # 控制台打印sql
   # default:
-  #   type: "sqlite" # 数据库类型
-  #   name: "./data/cool.sqlite" # 数据库名称,对于sqlite来说就是数据库文件名
-  #   extra: busy_timeout=5000 # 扩展参数 如 busy_timeout=5000&journal_mode=ALL
-  #   createdAt: "createTime" # 创建时间字段名称
-  #   updatedAt: "updateTime" # 更新时间字段名称
-  #   debug: true # 开启调试模式,启用后将在控制台打印相关sql语句
+  #   # link: "mysql:root:dzh123456@tcp(127.0.0.1:3306)/dzhgo_go?loc=Local&parseTime=true&charset=utf8mb4"
+  #   type: "mysql"
+  #   host: "127.0.0.1" # mac本地docker运行写host.docker.internal，可以读取宿主机mysql
+  #   port: "13306"
+  #   user: "root"
+  #   pass: "dzh123456"
+  #   name: "dzhgo_go"
+  #   charset: "utf8mb4"
+  #   timezone: "Asia/Shanghai"
+  #   createdAt: "createTime"
+  #   updatedAt: "updateTime"
+  #   deletedAt: "deletedAt"  # 填deleteTime，关闭软删除，填deletedAt开启软删除
+  #   debug: true #开启调试模式,启用后将在控制台打印相关sql语句
+  default:
+    type: "sqlite" # 数据库类型
+    name: "./data/dzhgo_go.sqlite" # 数据库名称,对于sqlite来说就是数据库文件名
+    extra: busy_timeout=5000 # 扩展参数 如 busy_timeout=5000&journal_mode=ALL
+    createdAt: "createTime" # 创建时间字段名称
+    updatedAt: "updateTime" # 更新时间字段名称
+    deletedAt: "deletedAt"  # 填deleteTime，关闭软删除，填deletedAt开启软删除
+    debug: true # 开启调试模式,启用后将在控制台打印相关sql语句
 
 
 # Redis 配置示例
 redis:
+  enable: 1 # 开启 redis 缓存
+  dbRedis:
+    enable: 0 ##开启 sql 查询后缓存到 redis
+    expire: 60000, # 60*1000 
+    db: 9
   core:
-    address: "127.0.0.1:6379"  # mac本地docker运行写host.docker.internal，可以读取宿主机mysql
+    address: "127.0.0.1:16379"  # mac本地docker运行写host.docker.internal，可以读取宿主机mysql
     db: 0
-    
+#     pass: "123456"
+
 core:
   autoMigrate: true #自动建表
   eps: true
+  # 运行日志
+  # runLogger:
+  #   # path: "./data/logs/run/"
+  #   enable: 1 # 开启
+  #   file: "{Y-m-d}.log"
+  #   rotateSize: 3MB #切割大小，要带单位写，例如MB，KB
+  #   stdout: 0 # 开启控制台输出
+
   file:
-    #oss local
-    mode: "local"
-    domain: "/dzhimg" #mode参数为local 上传图片文件目录映射，如果不传，会默认录入 http://域名+图片相对路径，如果填写，就会录入 /dzhimg + 图片相对地址
+    mode: "oss" #oss,local
+    domain: "/dzhimg" #mode参数为local 上传图片文件目录映射，如果不传，会默认录入 http://域名+图片相对路径，如果填写dzhimg，就会录入 /dzhimg + 图片相对地址
     # oss配置项兼容 minio oss 需要配置bucket公开读
     oss:
       endpoint: ""
       accessKeyID: ""
       secretAccessKey: ""
       bucketName: ""
-      useSSL: false #minio用到
-      location: "us-east-1" #minio用到
+      useSSL: false
+      location: ""
+     
 
 modules:
   base:
@@ -75,12 +92,20 @@ modules:
         expire: 604800 # 24 * 3600 * 7
         refreshExpire: 1296000 # 24*3600*15
     middleware:
+      cors: true # 跨域
       authority:
-        enable: 1
-        ignorePath: "/admin/base/sys/log/getKeep"
-        ignoreReg: "/(page|list)$" #page和list结尾的链接忽略
+        enable: 1 # 开启中间件监听
       log:
         enable: 1
+        ignorePath: "/admin/base/sys/log/getKeep" #忽略日志写入的路径
+        ignoreReg: "/(page|list)$" #page和list结尾的链接忽略日志写入
+      # 运行日志
+      runLogger:
+        path: "./data/logs/run/"
+        enable: 1 # 开启
+        file: "run-{Y-m-d}.log"
+        rotateSize: 3MB #切割大小，要带单位写，例如MB，KB
+        stdout: 0 # 开启控制台输出
     # 客户端请求代理
     http:
       proxy_open: false  # 代理开关

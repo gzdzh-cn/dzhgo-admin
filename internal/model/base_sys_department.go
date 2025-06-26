@@ -26,5 +26,6 @@ func NewBaseSysDepartment() *BaseSysDepartment {
 
 // init 创建表
 func init() {
-	dzhcore.CreateTable(&BaseSysDepartment{})
+	// dzhcore.CreateTable(&BaseSysDepartment{})
+	dzhcore.AddModel(&BaseSysDepartment{})
 }

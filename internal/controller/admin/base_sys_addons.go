@@ -5,6 +5,7 @@ import (
 	v1 "dzhgo/internal/api/admin_v1"
 	logic "dzhgo/internal/logic/sys"
 	"dzhgo/internal/service"
+
 	"github.com/gzdzh-cn/dzhcore"
 )
 
@@ -21,7 +22,8 @@ func init() {
 		},
 	}
 	// 注册路由
-	dzhcore.RegisterController(baseSysAddonsController)
+	dzhcore.AddController(baseSysAddonsController)
+
 }
 
 // 安装卸载插件

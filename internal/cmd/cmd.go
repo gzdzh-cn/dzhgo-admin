@@ -1,20 +1,25 @@
 package cmd
 
 import (
-	//_ "dzhgo/packed"
-
 	"context"
-	"dzhgo/addons"
+
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gcmd"
-
-	"dzhgo/internal/base"
 	"github.com/gzdzh-cn/dzhcore"
+
+	// "github.com/gzdzh-cn/dzhcore/contrib/drivers/mysql"
+	"github.com/gzdzh-cn/dzhcore/contrib/drivers/sqlite"
+	"github.com/gzdzh-cn/dzhcore/contrib/files/local"
+	"github.com/gzdzh-cn/dzhcore/contrib/files/oss"
+
+	"dzhgo/addons"
+	"dzhgo/internal"
 
 	_ "dzhgo/internal/logic"
 
-	_ "github.com/gzdzh-cn/dzhcore/contrib/files/local"
-	_ "github.com/gzdzh-cn/dzhcore/contrib/files/oss"
+	_ "dzhgo/internal/packed"
+
+	_ "github.com/gogf/gf/contrib/nosql/redis/v2"
 )
 
 var (
@@ -23,21 +28,30 @@ var (
 		Usage: "main",
 		Brief: "start http server",
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
+
+			//初始化数据库
+			// mysql.NewInit()
+			sqlite.NewInit()
+			// 初始化本地文件上传驱动
+			local.NewInit()
+			// 初始化 oss上传驱动
+			oss.NewInit()
+			//dzhcore 核心加载
+			dzhcore.NewInit()
+
+			// 初始化internale数据
+			internal.NewInit()
+			// 初始化addons
+			addons.NewInit()
+
 			if dzhcore.IsRedisMode {
 				go dzhcore.ListenFunc(ctx)
 			}
 
-			dzhcore.NewInit()
-
-			base.NewInit()
-
-			addons.NewInit()
-
 			s := g.Server()
-
 			s.AddStaticPath("/dzhimg/public", "/public")
-
 			s.Run()
+
 			return nil
 		},
 	}

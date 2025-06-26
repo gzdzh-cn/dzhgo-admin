@@ -8,19 +8,19 @@ import (
 	"dzhgo/internal/dao/internal"
 )
 
-// internalBaseSysAddonsTypeDao is internal type for wrapping internal DAO implements.
-type internalBaseSysAddonsTypeDao = *internal.BaseSysAddonsTypeDao
+// internalBaseSysAddonsTypesDao is internal type for wrapping internal DAO implements.
+type internalBaseSysAddonsTypesDao = *internal.BaseSysAddonsTypesDao
 
-// baseSysAddonsTypeDao is the data access object for table base_sys_addonsType.
+// baseSysAddonsTypesDao is the data access object for table base_sys_addons_types.
 // You can define custom methods on it to extend its functionality as you wish.
-type baseSysAddonsTypeDao struct {
-	internalBaseSysAddonsTypeDao
+type baseSysAddonsTypesDao struct {
+	internalBaseSysAddonsTypesDao
 }
 
 var (
-	// BaseSysAddonsType is globally public accessible object for table base_sys_addonsType operations.
-	BaseSysAddonsType = baseSysAddonsTypeDao{
-		internal.NewBaseSysAddonsTypeDao(),
+	// BaseSysAddonsTypes is globally public accessible object for table base_sys_addons_types operations.
+	BaseSysAddonsTypes = baseSysAddonsTypesDao{
+		internal.NewBaseSysAddonsTypesDao(),
 	}
 )
 

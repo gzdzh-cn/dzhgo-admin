@@ -33,5 +33,6 @@ func NewBaseEpsAdmin() *BaseEpsAdmin {
 
 // init 创建表
 func init() {
-	dzhcore.CreateTable(&BaseEpsAdmin{})
+	// dzhcore.CreateTable(&BaseEpsAdmin{})
+	dzhcore.AddModel(&BaseEpsAdmin{})
 }

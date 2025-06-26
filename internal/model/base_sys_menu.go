@@ -35,5 +35,6 @@ func NewBaseSysMenu() *BaseSysMenu {
 
 // init 创建表
 func init() {
-	dzhcore.CreateTable(&BaseSysMenu{})
+	// dzhcore.CreateTable(&BaseSysMenu{})
+	dzhcore.AddModel(&BaseSysMenu{})
 }

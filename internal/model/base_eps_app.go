@@ -33,5 +33,6 @@ func NewBaseEpsApp() *BaseEpsApp {
 
 // init 创建表
 func init() {
-	dzhcore.CreateTable(&BaseEpsApp{})
+	// dzhcore.CreateTable(&BaseEpsApp{})
+	dzhcore.AddModel(&BaseEpsApp{})
 }

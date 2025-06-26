@@ -33,5 +33,5 @@ func NewDictType() *DictType {
 // init 创建表
 func init() {
 
-	dzhcore.CreateTable(&DictType{})
+	dzhcore.AddModel(&DictType{})
 }

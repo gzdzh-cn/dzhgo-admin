@@ -19,6 +19,7 @@ type BaseSysSetting struct {
 	SiteName           interface{} // 站点名称
 	SiteDescribe       interface{} // 站点介绍
 	DomainName         interface{} // 网站域名
+	Copyright          interface{} // 版权所有
 	Logo               interface{} // logo
 	WxCode             interface{} // 二维码
 	Company            interface{} // 公司名称

@@ -58,6 +58,7 @@ type MemberAttr struct {
 
 // 公共站点配置
 type CommonSetting struct {
-	Logo     string `json:"logo"`
-	SiteName string `json:"siteName"`
+	Logo      string `json:"logo"`
+	SiteName  string `json:"siteName"`
+	Copyright string `json:"copyright"`
 }

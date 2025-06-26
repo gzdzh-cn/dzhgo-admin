@@ -53,7 +53,11 @@ func (s *sBaseSysLoginService) Login(ctx context.Context, req *v1.BaseOpenLoginR
 	md5password, _ := gmd5.Encrypt(password)
 
 	var user *model.BaseSysUser
-	dao.BaseSysUser.Ctx(ctx).Where("username=?", username).Where("password=?", md5password).Where("status=?", 1).Scan(&user)
+	dao.BaseSysUser.Ctx(ctx).Where("username=?", username).Where("password=?", md5password).Scan(&user)
+	if user != nil && gconv.Int(user.Status) == 0 {
+		err = gerror.New("账号已被禁止~")
+		return
+	}
 	if user == nil {
 		err = gerror.New("账户或密码不正确~")
 		return
@@ -103,8 +107,9 @@ func (*sBaseSysLoginService) Logout(ctx context.Context) (err error) {
 // RefreshToken 刷新token
 func (s *sBaseSysLoginService) RefreshToken(ctx context.Context, token string) (result *v1.TokenRes, err error) {
 
+	g.Log().Debugf(ctx, "RefreshToken")
 	tokenClaims, err := jwt.ParseWithClaims(token, &dzhcore.Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(config.Config.Jwt.Secret), nil
+		return []byte(config.Cfg.Jwt.Secret), nil
 	})
 	if err != nil {
 		return
@@ -131,7 +136,11 @@ func (s *sBaseSysLoginService) RefreshToken(ctx context.Context, token string) (
 	var (
 		user *model.BaseSysUser
 	)
-	dao.BaseSysUser.Ctx(ctx).Where("id=?", claims.UserId).Where("status=?", 1).Scan(&user)
+	err = dao.BaseSysUser.Ctx(ctx).Where("id=?", claims.UserId).Where("status=?", 1).Scan(&user)
+	if err != nil {
+		g.Log().Error(ctx, err.Error())
+		return nil, err
+	}
 	if user == nil {
 		err = gerror.New("用户不存在")
 		return
@@ -161,7 +170,7 @@ func (*sBaseSysLoginService) generateToken(ctx context.Context, user *model.Base
 	}
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	token, err = tokenClaims.SignedString([]byte(config.Config.Jwt.Secret))
+	token, err = tokenClaims.SignedString([]byte(config.Cfg.Jwt.Secret))
 	if err != nil {
 		g.Log().Error(ctx, "生成token失败", err)
 	}
@@ -181,8 +190,8 @@ func (s *sBaseSysLoginService) GenerateTokenByUser(ctx context.Context, user *mo
 
 	// 生成token
 	result = &v1.TokenRes{}
-	result.Expire = config.Config.Jwt.Token.Expire
-	result.RefreshExpire = config.Config.Jwt.Token.RefreshExpire
+	result.Expire = config.Cfg.Jwt.Token.Expire
+	result.RefreshExpire = config.Cfg.Jwt.Token.RefreshExpire
 	result.Token = s.generateToken(ctx, user, roleIds, result.Expire, false)
 	result.RefreshToken = s.generateToken(ctx, user, roleIds, result.RefreshExpire, true)
 	// 将用户相关信息保存到缓存

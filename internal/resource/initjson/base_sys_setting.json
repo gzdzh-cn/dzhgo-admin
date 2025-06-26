@@ -1,8 +1,8 @@
 [
 	{
 		"id" : "1",
-		"createTime" : "'2024-03-16 01:54:37'",
-		"updateTime" : "'2024-03-16 19:52:21.868'",
+		"createTime" : "2024-03-16 01:54:37",
+		"updateTime" : "2024-03-16 19:52:21.868",
 		"deleted_at" : null,
 		"siteName" : "管理系统",
 		"siteDescribe" : null,

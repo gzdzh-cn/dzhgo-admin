@@ -2,9 +2,9 @@ package dict
 
 import (
 	baseModel "dzhgo/internal/model"
+
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
-	"github.com/gogf/gf/v2/os/glog"
 
 	"github.com/gzdzh-cn/dzhcore"
 
@@ -14,16 +14,31 @@ import (
 	_ "dzhgo/addons/dict/packed"
 )
 
-func NewInit() {
+func init() {
+	dzhcore.AddAddon(&dictAddon{Version: Version, Name: "dict"})
+}
+
+type dictAddon struct {
+	Version string
+	Name    string
+}
+
+func (a *dictAddon) GetName() string {
+	return a.Name
+}
+
+func (a *dictAddon) GetVersion() string {
+	return a.Version
+}
+
+func (a *dictAddon) NewInit() {
 	var (
 		ctx = gctx.GetInitCtx()
 	)
-	glog.Debug(ctx, "------------ dict")
-
-	g.Log().Debug(ctx, "addon dict init start ...")
+	g.Log().Debug(ctx, "------------ addon dict init start ...")
 	g.Log().Debugf(ctx, "dict version:%v", Version)
 	dzhcore.FillInitData(ctx, "dict", &model.DictInfo{})
 	dzhcore.FillInitData(ctx, "dict", &model.DictType{})
 	dzhcore.FillInitData(ctx, "dict", &baseModel.BaseSysMenu{})
-	g.Log().Debug(ctx, "addon dict init finished ...")
+	g.Log().Debug(ctx, "------------ addon dict init end ...")
 }

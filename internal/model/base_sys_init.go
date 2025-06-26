@@ -2,7 +2,6 @@ package model
 
 import (
 	"github.com/gogf/gf/v2/os/gctx"
-	"github.com/gogf/gf/v2/os/glog"
 	"github.com/gzdzh-cn/dzhcore"
 )
 
@@ -37,6 +36,6 @@ var (
 
 // init 创建表
 func init() {
-	glog.Debug(ctx, "------------ base_sys_init ")
-	dzhcore.CreateTable(&BaseSysInit{})
+	// dzhcore.CreateTable(&BaseSysInit{})
+	dzhcore.AddModel(&BaseSysInit{})
 }

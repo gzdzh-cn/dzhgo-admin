@@ -7,6 +7,7 @@ import (
 	"dzhgo/internal/dao"
 	"dzhgo/internal/model"
 	"dzhgo/internal/service"
+
 	"github.com/gogf/gf/v2/container/garray"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
@@ -47,7 +48,7 @@ func NewsBaseSysAddonsService() *sBaseSysAddonsService {
 				Select: "base_sys_addons.*,b.name as typeName,c.isInstall,c.isShow",
 				Join: []*dzhcore.JoinOp{
 					{
-						Model:     model.NewBaseSysAddonsType(),
+						Model:     model.NewBaseSysAddonsTypes(),
 						Alias:     "b",
 						Type:      "LeftJoin",
 						Condition: "`base_sys_addons`.`typeId` = `b`.`id`",

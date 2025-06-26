@@ -35,5 +35,6 @@ func NewBaseSysUser() *BaseSysUser {
 
 // init 创建表
 func init() {
-	dzhcore.CreateTable(&BaseSysUser{})
+	// dzhcore.CreateTable(&BaseSysUser{})
+	dzhcore.AddModel(&BaseSysUser{})
 }

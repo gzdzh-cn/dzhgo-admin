@@ -46,5 +46,5 @@ func NewTaskInfo() *TaskInfo {
 
 // init 创建表
 func init() {
-	dzhcore.CreateTable(&TaskInfo{})
+	dzhcore.AddModel(&TaskInfo{})
 }

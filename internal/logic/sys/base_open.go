@@ -4,18 +4,25 @@ import (
 	"context"
 	v1 "dzhgo/internal/api/admin_v1"
 	"dzhgo/internal/dao"
+	"dzhgo/internal/model/entity"
 	"dzhgo/internal/service"
 	"dzhgo/internal/types"
+
+	"github.com/gogf/gf/v2"
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/text/gstr"
+	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/gzdzh-cn/dzhcore"
-	"github.com/gzdzh-cn/dzhcore/utility/util/logger"
+	"github.com/gzdzh-cn/dzhcore/utility/util"
+
+	"runtime"
 )
 
 func init() {
 	service.RegisterBaseOpenService(NewsBaseOpenService())
+
 }
 
 type sBaseOpenService struct {
@@ -242,7 +249,7 @@ func (s *sBaseOpenService) creatAppEPS(ctx g.Ctx) (appEPS interface{}, err error
 	return
 }
 
-// 获取全部版本
+// 版本
 func (s *sBaseOpenService) Versions(ctx context.Context, req *v1.VersionsReq) (data interface{}, err error) {
 
 	versions := dzhcore.GetVersions(req.Addons)
@@ -255,11 +262,61 @@ func (s *sBaseOpenService) Versions(ctx context.Context, req *v1.VersionsReq) (d
 func (s *sBaseOpenService) GetSetting(ctx context.Context, req *v1.GetSettingReq) (data interface{}, err error) {
 
 	var setting *types.CommonSetting
-	err = dao.BaseSysSetting.Ctx(ctx).Where("id", 1).Fields("siteName,logo").Scan(&setting)
+	err = dao.BaseSysSetting.Ctx(ctx).Where("id", 1).Fields("siteName,logo,copyright").Scan(&setting)
 	if err != nil {
-		logger.Error(ctx, err.Error())
+		g.Log().Error(ctx, err.Error())
 		return nil, err
 	}
 	data = setting
+	return
+}
+
+// 服务器信息
+func (s *sBaseOpenService) ServerInfo(ctx context.Context) (data interface{}, err error) {
+
+	type ServerInfo struct {
+		GOHOSTOS          string `json:"goHostOs"`          //服务器系统
+		SiteName          string `json:"siteName"`          //网站名称
+		HostUrl           string `json:"hostUrl"`           //来源域名
+		SourceIp          string `json:"sourceIp"`          //来源IP
+		ServerType        string `json:"serverType"`        //服务器环境
+		DzhVersion        string `json:"dzhVersion"`        //dzhgo 版本
+		GoVersion         string `json:"goVersion"`         //go 版本
+		GfVersion         string `json:"gfVersion"`         //gf 版本
+		DBVersion         string `json:"dBVersion"`         //DB版本
+		ClientMaxBodySize string `json:"clientMaxBodySize"` //文件上传限制
+		GOHOSTARCH        string `json:"goHostArch"`        //系统架构
+
+	}
+
+	r := g.RequestFromCtx(ctx)
+
+	//文件上传限制
+	clientMaxBodySize := util.GetConfig("server.clientMaxBodySize")
+	if clientMaxBodySize == "" {
+		clientMaxBodySize = "8M"
+	}
+
+	var setting *entity.BaseSysSetting
+	err = dao.BaseSysSetting.Ctx(ctx).Scan(&setting)
+	if err != nil {
+		g.Log().Error(ctx, err.Error())
+		return nil, err
+	}
+
+	data = &ServerInfo{
+		SiteName:          setting.SiteName,
+		GOHOSTOS:          runtime.GOOS,
+		HostUrl:           r.Host,
+		SourceIp:          r.RemoteAddr,
+		ServerType:        r.GetHeader("Server"),
+		DzhVersion:        gconv.String(dzhcore.GetVersions("dzhgo")),
+		GoVersion:         runtime.Version(),
+		GfVersion:         gf.VERSION,
+		DBVersion:         util.GetDBVersion(),
+		ClientMaxBodySize: clientMaxBodySize,
+		GOHOSTARCH:        runtime.GOARCH,
+	}
+
 	return
 }

@@ -1,10 +1,10 @@
 package config
 
 import (
-	"dzhgo/addons/fileUpload"
+	"dzhgo/addons/file_upload"
 	"github.com/gzdzh-cn/dzhcore"
 )
 
 func init() {
-	dzhcore.SetVersions("task", fileUpload.Version)
+	dzhcore.SetVersions("task", file_upload.Version)
 }

@@ -17,6 +17,7 @@ type BaseSysSetting struct {
 	SiteName           string      `json:"siteName"           orm:"siteName"           ` // 站点名称
 	SiteDescribe       string      `json:"siteDescribe"       orm:"siteDescribe"       ` // 站点介绍
 	DomainName         string      `json:"domainName"         orm:"domainName"         ` // 网站域名
+	Copyright          string      `json:"copyright"          orm:"copyright"          ` // 版权所有
 	Logo               string      `json:"logo"               orm:"logo"               ` // logo
 	WxCode             string      `json:"wxCode"             orm:"wxCode"             ` // 二维码
 	Company            string      `json:"company"            orm:"company"            ` // 公司名称

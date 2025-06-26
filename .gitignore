@@ -18,16 +18,31 @@ core-tools
 output/
 manifest/output/
 temp/
-data/db.sqlite
 logs/
 public/uploads/
 gf
-data/dzhcore.sqlite
 lock.json
 *.sum
 go.work
 data/logs
 other
 resource/
+node_modules/
+*.zip
+.DS_Store
+.env
 
+# 忽略 addons 目录下的所有内容
+addons/*
+manifest/config/config-crm.yaml
 
+# 但不忽略这三个子目录及其内容
+!addons/dict/
+!addons/space/
+!addons/task/
+!addons/member/
+
+data/log/
+data/logs/
+frontend/dist/
+frontend/node_modules/

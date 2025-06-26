@@ -2,6 +2,7 @@ package admin
 
 import (
 	"dzhgo/addons/task/service"
+
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/util/gconv"
@@ -21,7 +22,7 @@ func init() {
 		},
 	}
 	// 注册路由
-	dzhcore.RegisterController(taskInfoController)
+	dzhcore.AddController(taskInfoController)
 }
 
 // TaskInfoStopReq 请求参数

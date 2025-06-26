@@ -36,6 +36,5 @@ func NewDictInfo() *DictInfo {
 
 // init 创建表
 func init() {
-
-	dzhcore.CreateTable(&DictInfo{})
+	dzhcore.AddModel(&DictInfo{})
 }
