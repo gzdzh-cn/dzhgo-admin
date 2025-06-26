@@ -37,7 +37,7 @@ func (a *dictAddon) NewInit() {
 		ctx = gctx.GetInitCtx()
 	)
 	g.Log().Debug(ctx, "------------ addon dict init start ...")
-	g.Log().Debugf(ctx, "dict version:%v", Version)
+	g.Log().Debugf(ctx, "dict version:%v", internal.Version)
 	dzhcore.FillInitData(ctx, "dict", &model.DictInfo{})
 	dzhcore.FillInitData(ctx, "dict", &model.DictType{})
 	dzhcore.FillInitData(ctx, "dict", &baseModel.BaseSysMenu{})

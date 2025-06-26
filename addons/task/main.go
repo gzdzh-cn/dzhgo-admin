@@ -41,7 +41,7 @@ func (a *taskAddon) NewInit() {
 	)
 
 	g.Log().Debug(ctx, "------------ addon task init start ...")
-	g.Log().Debugf(ctx, "task version:%v", Version)
+	g.Log().Debugf(ctx, "task version:%v", internal.Version)
 	dzhcore.FillInitData(ctx, "task", &model.TaskInfo{})
 	dzhcore.FillInitData(ctx, "task", &baseModel.BaseSysMenu{})
 
