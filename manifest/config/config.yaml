@@ -23,24 +23,24 @@ database:
     file: "sql-{Y-m-d}.log"
     level: "all"
     stdout: true # 控制台打印sql
-  # default:
-  #   # link: "mysql:root:dzh123456@tcp(127.0.0.1:3306)/dzhgo_go?loc=Local&parseTime=true&charset=utf8mb4"
-  #   type: "mysql"
-  #   host: "127.0.0.1" # mac本地docker运行写host.docker.internal，可以读取宿主机mysql
-  #   port: "13306"
-  #   user: "root"
-  #   pass: "dzh123456"
-  #   name: "dzhgo_go"
-  #   charset: "utf8mb4"
-  #   timezone: "Asia/Shanghai"
-  #   createdAt: "createTime"
-  #   updatedAt: "updateTime"
-  #   deletedAt: "deletedAt"  # 填deleteTime，关闭软删除，填deletedAt开启软删除
-  #   debug: true #开启调试模式,启用后将在控制台打印相关sql语句
+#  default:
+#     # link: "mysql:root:dzh123456@tcp(127.0.0.1:3306)/dzhgo_go?loc=Local&parseTime=true&charset=utf8mb4"
+#     type: "mysql"
+#     host: "127.0.0.1" # mac本地docker运行写host.docker.internal，可以读取宿主机mysql
+#     port: "13306"
+#     user: "root"
+#     pass: "dzh123456"
+#     name: "dzhgo_go"
+#     charset: "utf8mb4"
+#     timezone: "Asia/Shanghai"
+#     createdAt: "createTime"
+#     updatedAt: "updateTime"
+#     deletedAt: "deletedAt"  # 填deleteTime，关闭软删除，填deletedAt开启软删除
+#     debug: true #开启调试模式,启用后将在控制台打印相关sql语句
   default:
     # link: sqlite::@file(/var/data/db.sqlite3)
     type: "sqlite" # 数据库类型
-    name: "@file(./data/dzhgo_go.sqlite)" # 数据库名称,对于sqlite来说就是数据库文件名
+    name: "./data/dzhgo_go.sqlite" # 数据库名称,对于sqlite来说就是数据库文件名
     extra: busy_timeout=5000 # 扩展参数 如 busy_timeout=5000&journal_mode=ALL
     createdAt: "createTime" # 创建时间字段名称
     updatedAt: "updateTime" # 更新时间字段名称
@@ -61,8 +61,8 @@ redis:
 #     pass: "123456"
 
 core:
-  autoMigrate: false #自动建表
-  eps: false
+  autoMigrate: true #自动建表
+  eps: true
   # 运行日志
   # runLogger:
   #   # path: "./data/logs/run/"
