@@ -71,9 +71,7 @@ func StdOutLog(ctx context.Context, startTime time.Time, memStatsStart runtime.M
 		ctxId       = gctx.CtxId(r.GetCtx()) //获取当前请求的ctxid
 		elapsedTime = time.Since(startTime)  // 请求处理时间
 		outLogger_  *defineType.OutputsForLogger
-
 		memStatsEnd runtime.MemStats // 记录结束内存状态
-
 	)
 
 	// 根据处理时间计算吞吐率
@@ -90,13 +88,16 @@ func StdOutLog(ctx context.Context, startTime time.Time, memStatsStart runtime.M
 		RunTime:    float64(elapsedTime.Nanoseconds()) / 1e9,
 		Throughput: throughput,
 		MemUsed:    memUsed,
+		Prefix:     outLogger.Prefix,
+		Suffix:     outLogger.Suffix,
 		FileRule:   outLogger.FileRule,
 		Stdout:     outLogger.Stdout,
 		Path:       outLogger.Path,
 		RotateSize: outLogger.RotateSize,
 	}
 
-	fileName := fmt.Sprintf("%s.log", gtime.Now().Format(outLogger_.FileRule))
+	fname := outLogger_.Prefix + gtime.Now().Format(outLogger_.FileRule) + outLogger_.Suffix
+	fileName := fmt.Sprintf("%s.log", fname)
 	tempFile := fmt.Sprintf("%v%v", outLogger_.Path, fileName)
 
 	throughputStringFixed := decimal.NewFromFloat(outLogger_.Throughput).StringFixed(2)

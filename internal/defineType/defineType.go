@@ -36,6 +36,8 @@ type OutputsForLogger struct {
 	RequestURI string    `json:"requestURI"`
 	Params     string    `json:"params"`
 	RunTime    float64   `json:"runTime"`
+	Prefix     string    `json:"prefix"`
+	Suffix     string    `json:"suffix"`
 	File       string    `json:"file"`
 	FileRule   string    `json:"fileRule"`
 	RotateSize string    `json:"rotateSize"`

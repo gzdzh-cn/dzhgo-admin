@@ -1,0 +1,316 @@
+2025-07-01T01:55:30.866+08:00 [DEBU] local.go:59: ------------ local NewInit start
+2025-07-01T01:55:30.867+08:00 [DEBU] local.go:80: ------------ local NewInit end
+2025-07-01T01:55:30.867+08:00 [DEBU] {202b2fafa5e34d18f70385025ada999c} core.go:128: ------------ dzhcore NewInit start
+2025-07-01T01:55:30.867+08:00 [DEBU] {202b2fafa5e34d18f70385025ada999c} core.go:129: IsProd:false, AppName:dzhgo, IsDesktop:true
+2025-07-01T01:55:30.867+08:00 [INFO] {202b2fafa5e34d18f70385025ada999c} core.go:135: 开发环境
+2025-07-01T01:55:30.867+08:00 [INFO] {202b2fafa5e34d18f70385025ada999c} core.go:137: dzhcore version:v1.2.1
+2025-07-01T01:55:30.867+08:00 [INFO] {202b2fafa5e34d18f70385025ada999c} core.go:138: 当前运行模式:dev
+2025-07-01T01:55:30.867+08:00 [INFO] {202b2fafa5e34d18f70385025ada999c} core.go:139: 当前实例ID:1lak4371ztjdb027lqctxug1004uml4y
+2025-07-01T01:55:30.867+08:00 [INFO] {202b2fafa5e34d18f70385025ada999c} core.go:140: 是否redis缓存模式:false
+2025-07-01T01:55:30.867+08:00 [INFO] {202b2fafa5e34d18f70385025ada999c} core.go:141: 是否DbRedisEnable缓存模式:false
+2025-07-01T01:55:30.872+08:00 [DEBU] {202b2fafa5e34d18f70385025ada999c} core.go:150: ------------ dzhcore NewInit end
+2025-07-01T01:55:30.874+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T01:55:30.874+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_user, 已经初始化过,跳过本次初始化.
+2025-07-01T01:55:30.874+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_user_role, 已经初始化过,跳过本次初始化.
+2025-07-01T01:55:30.874+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_role, 已经初始化过,跳过本次初始化.
+2025-07-01T01:55:30.874+08:00 [DEBU] initdb.go:143: model.TableName(): base_sys_role_menu,path:internal/resource/initjson/base_sys_role_menu.json
+2025-07-01T01:55:30.874+08:00 [DEBU] initdb.go:146: 分组%!(EXTRA string=default, string=中的表, string=base_sys_role_menu, string=无可用的初始化数据,跳过本次初始化. jsonData:, *gjson.Json=)
+2025-07-01T01:55:30.874+08:00 [DEBU] initdb.go:129: 分组 default, 模块 base 中的表 base_sys_role_menu, 初始化完成 
+2025-07-01T01:55:30.874+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_department, 已经初始化过,跳过本次初始化.
+2025-07-01T01:55:30.874+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_role_department, 已经初始化过,跳过本次初始化.
+2025-07-01T01:55:30.875+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_setting, 已经初始化过,跳过本次初始化.
+2025-07-01T01:55:30.875+08:00 [DEBU] initdb.go:143: model.TableName(): base_sys_addons,path:internal/resource/initjson/base_sys_addons.json
+2025-07-01T01:55:30.875+08:00 [DEBU] initdb.go:146: 分组%!(EXTRA string=default, string=中的表, string=base_sys_addons, string=无可用的初始化数据,跳过本次初始化. jsonData:, *gjson.Json=)
+2025-07-01T01:55:30.875+08:00 [DEBU] initdb.go:129: 分组 default, 模块 base 中的表 base_sys_addons, 初始化完成 
+2025-07-01T01:55:30.875+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_addons_types, 已经初始化过,跳过本次初始化.
+2025-07-01T01:55:30.875+08:00 [DEBU] {202b2fafa5e34d18f70385025ada999c} addons.go:41: InitAddons,数量： 4，分别是：dict-v1.2.0,member-v1.2.0,space-v1.2.0,task-v1.2.0
+2025-07-01T01:55:30.875+08:00 [DEBU] {202b2fafa5e34d18f70385025ada999c} addons.go:44: addon: dict
+2025-07-01T01:55:30.875+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 addons_dict_info, 已经初始化过,跳过本次初始化.
+2025-07-01T01:55:30.875+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 addons_dict_type, 已经初始化过,跳过本次初始化.
+2025-07-01T01:55:30.875+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T01:55:30.875+08:00 [DEBU] {202b2fafa5e34d18f70385025ada999c} addons.go:44: addon: member
+2025-07-01T01:55:30.876+08:00 [DEBU] initdb.go:114: 分组 default, 模块 member 中的表 addons_member_manage, 已经初始化过,跳过本次初始化.
+2025-07-01T01:55:30.876+08:00 [DEBU] initdb.go:114: 分组 default, 模块 member 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T01:55:30.876+08:00 [DEBU] {202b2fafa5e34d18f70385025ada999c} addons.go:44: addon: space
+2025-07-01T01:55:30.876+08:00 [DEBU] {202b2fafa5e34d18f70385025ada999c} addons.go:44: addon: task
+2025-07-01T01:55:30.876+08:00 [DEBU] initdb.go:114: 分组 default, 模块 task 中的表 addons_task_info, 已经初始化过,跳过本次初始化.
+2025-07-01T01:55:30.876+08:00 [DEBU] initdb.go:114: 分组 default, 模块 task 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.846+08:00 [DEBU] local.go:59: ------------ local NewInit start
+2025-07-01T01:59:03.846+08:00 [DEBU] local.go:80: ------------ local NewInit end
+2025-07-01T01:59:03.846+08:00 [DEBU] {5825bc45d7e34d187e386953664b60d2} core.go:128: ------------ dzhcore NewInit start
+2025-07-01T01:59:03.846+08:00 [DEBU] {5825bc45d7e34d187e386953664b60d2} core.go:129: IsProd:false, AppName:dzhgo, IsDesktop:true
+2025-07-01T01:59:03.846+08:00 [INFO] {5825bc45d7e34d187e386953664b60d2} core.go:135: 开发环境
+2025-07-01T01:59:03.846+08:00 [INFO] {5825bc45d7e34d187e386953664b60d2} core.go:137: dzhcore version:v1.2.1
+2025-07-01T01:59:03.846+08:00 [INFO] {5825bc45d7e34d187e386953664b60d2} core.go:138: 当前运行模式:dev
+2025-07-01T01:59:03.846+08:00 [INFO] {5825bc45d7e34d187e386953664b60d2} core.go:139: 当前实例ID:1lak437vq00db02abkn6nds100e2msis
+2025-07-01T01:59:03.846+08:00 [INFO] {5825bc45d7e34d187e386953664b60d2} core.go:140: 是否redis缓存模式:false
+2025-07-01T01:59:03.846+08:00 [INFO] {5825bc45d7e34d187e386953664b60d2} core.go:141: 是否DbRedisEnable缓存模式:false
+2025-07-01T01:59:03.849+08:00 [DEBU] {5825bc45d7e34d187e386953664b60d2} core.go:150: ------------ dzhcore NewInit end
+2025-07-01T01:59:03.849+08:00 [DEBU] cmd.go:45: ------------ base init start ...
+2025-07-01T01:59:03.849+08:00 [DEBU] cmd.go:45: base version:v1.2.0
+2025-07-01T01:59:03.850+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.850+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_user, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.850+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_user_role, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.850+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_role, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.851+08:00 [DEBU] initdb.go:143: model.TableName(): base_sys_role_menu,path:internal/resource/initjson/base_sys_role_menu.json
+2025-07-01T01:59:03.851+08:00 [DEBU] initdb.go:146: 分组%!(EXTRA string=default, string=中的表, string=base_sys_role_menu, string=无可用的初始化数据,跳过本次初始化. jsonData:, *gjson.Json=)
+2025-07-01T01:59:03.851+08:00 [DEBU] initdb.go:129: 分组 default, 模块 base 中的表 base_sys_role_menu, 初始化完成 
+2025-07-01T01:59:03.851+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_department, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.852+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_role_department, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.852+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_setting, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.852+08:00 [DEBU] initdb.go:143: model.TableName(): base_sys_addons,path:internal/resource/initjson/base_sys_addons.json
+2025-07-01T01:59:03.852+08:00 [DEBU] initdb.go:146: 分组%!(EXTRA string=default, string=中的表, string=base_sys_addons, string=无可用的初始化数据,跳过本次初始化. jsonData:, *gjson.Json=)
+2025-07-01T01:59:03.852+08:00 [DEBU] initdb.go:129: 分组 default, 模块 base 中的表 base_sys_addons, 初始化完成 
+2025-07-01T01:59:03.852+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_addons_types, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.852+08:00 [DEBU] cmd.go:45: ------------ base init end ...
+2025-07-01T01:59:03.852+08:00 [DEBU] {5825bc45d7e34d187e386953664b60d2} addons.go:41: InitAddons,数量： 4，分别是：dict-v1.2.0,member-v1.2.0,space-v1.2.0,task-v1.2.0
+2025-07-01T01:59:03.852+08:00 [DEBU] {5825bc45d7e34d187e386953664b60d2} addons.go:44: addon: dict
+2025-07-01T01:59:03.852+08:00 [DEBU] addons.go:45: ------------ addon dict init start ...
+2025-07-01T01:59:03.852+08:00 [DEBU] addons.go:45: dict version:v1.2.0
+2025-07-01T01:59:03.852+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 addons_dict_info, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.852+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 addons_dict_type, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.852+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.852+08:00 [DEBU] addons.go:45: ------------ addon dict init end ...
+2025-07-01T01:59:03.852+08:00 [DEBU] {5825bc45d7e34d187e386953664b60d2} addons.go:44: addon: member
+2025-07-01T01:59:03.852+08:00 [DEBU] addons.go:45: ------------ addon member init start ...
+2025-07-01T01:59:03.853+08:00 [DEBU] addons.go:45: member version:v1.2.0
+2025-07-01T01:59:03.853+08:00 [DEBU] initdb.go:114: 分组 default, 模块 member 中的表 addons_member_manage, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.853+08:00 [DEBU] initdb.go:114: 分组 default, 模块 member 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.853+08:00 [DEBU] addons.go:45: addon member init end ...
+2025-07-01T01:59:03.853+08:00 [DEBU] {5825bc45d7e34d187e386953664b60d2} addons.go:44: addon: space
+2025-07-01T01:59:03.853+08:00 [DEBU] addons.go:45: ------------ addon space init start ...
+2025-07-01T01:59:03.853+08:00 [DEBU] addons.go:45: ------------ addon space init end ...
+2025-07-01T01:59:03.853+08:00 [DEBU] {5825bc45d7e34d187e386953664b60d2} addons.go:44: addon: task
+2025-07-01T01:59:03.853+08:00 [DEBU] addons.go:45: ------------ addon task init start ...
+2025-07-01T01:59:03.853+08:00 [DEBU] addons.go:45: task version:v1.2.0
+2025-07-01T01:59:03.853+08:00 [DEBU] initdb.go:114: 分组 default, 模块 task 中的表 addons_task_info, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.853+08:00 [DEBU] initdb.go:114: 分组 default, 模块 task 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T01:59:03.854+08:00 [DEBU] addons.go:45: ------------ addon task init end ...
+2025-07-01T01:59:43.568+08:00 [DEBU] base_open.go:33: 验证码 1lak437vq00db02attlkkm8200b7uxeb 7230
+2025-07-01T02:00:37.590+08:00 [DEBU] local.go:59: ------------ local NewInit start
+2025-07-01T02:00:37.591+08:00 [DEBU] local.go:80: ------------ local NewInit end
+2025-07-01T02:00:37.591+08:00 [DEBU] {a0c95919ede34d1853c7271469ddda17} core.go:128: ------------ dzhcore NewInit start
+2025-07-01T02:00:37.591+08:00 [DEBU] {a0c95919ede34d1853c7271469ddda17} core.go:129: IsProd:false, AppName:dzhgo, IsDesktop:true
+2025-07-01T02:00:37.591+08:00 [INFO] {a0c95919ede34d1853c7271469ddda17} core.go:135: 开发环境
+2025-07-01T02:00:37.591+08:00 [INFO] {a0c95919ede34d1853c7271469ddda17} core.go:137: dzhcore version:v1.2.1
+2025-07-01T02:00:37.591+08:00 [INFO] {a0c95919ede34d1853c7271469ddda17} core.go:138: 当前运行模式:dev
+2025-07-01T02:00:37.591+08:00 [INFO] {a0c95919ede34d1853c7271469ddda17} core.go:139: 当前实例ID:1lak4373iy0db02bin0bflk100cww19k
+2025-07-01T02:00:37.591+08:00 [INFO] {a0c95919ede34d1853c7271469ddda17} core.go:140: 是否redis缓存模式:false
+2025-07-01T02:00:37.591+08:00 [INFO] {a0c95919ede34d1853c7271469ddda17} core.go:141: 是否DbRedisEnable缓存模式:false
+2025-07-01T02:00:37.596+08:00 [DEBU] {a0c95919ede34d1853c7271469ddda17} core.go:150: ------------ dzhcore NewInit end
+2025-07-01T02:00:37.596+08:00 [DEBU] cmd.go:45: ------------ base init start ...
+2025-07-01T02:00:37.596+08:00 [DEBU] cmd.go:45: base version:v1.2.0
+2025-07-01T02:00:37.597+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:00:37.597+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_user, 已经初始化过,跳过本次初始化.
+2025-07-01T02:00:37.597+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_user_role, 已经初始化过,跳过本次初始化.
+2025-07-01T02:00:37.597+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_role, 已经初始化过,跳过本次初始化.
+2025-07-01T02:00:37.597+08:00 [DEBU] initdb.go:143: model.TableName(): base_sys_role_menu,path:internal/resource/initjson/base_sys_role_menu.json
+2025-07-01T02:00:37.597+08:00 [DEBU] initdb.go:146: 分组%!(EXTRA string=default, string=中的表, string=base_sys_role_menu, string=无可用的初始化数据,跳过本次初始化. jsonData:, *gjson.Json=)
+2025-07-01T02:00:37.597+08:00 [DEBU] initdb.go:129: 分组 default, 模块 base 中的表 base_sys_role_menu, 初始化完成 
+2025-07-01T02:00:37.597+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_department, 已经初始化过,跳过本次初始化.
+2025-07-01T02:00:37.597+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_role_department, 已经初始化过,跳过本次初始化.
+2025-07-01T02:00:37.597+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_setting, 已经初始化过,跳过本次初始化.
+2025-07-01T02:00:37.598+08:00 [DEBU] initdb.go:143: model.TableName(): base_sys_addons,path:internal/resource/initjson/base_sys_addons.json
+2025-07-01T02:00:37.598+08:00 [DEBU] initdb.go:146: 分组%!(EXTRA string=default, string=中的表, string=base_sys_addons, string=无可用的初始化数据,跳过本次初始化. jsonData:, *gjson.Json=)
+2025-07-01T02:00:37.598+08:00 [DEBU] initdb.go:129: 分组 default, 模块 base 中的表 base_sys_addons, 初始化完成 
+2025-07-01T02:00:37.598+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_addons_types, 已经初始化过,跳过本次初始化.
+2025-07-01T02:00:37.598+08:00 [DEBU] cmd.go:45: ------------ base init end ...
+2025-07-01T02:00:37.598+08:00 [DEBU] {a0c95919ede34d1853c7271469ddda17} addons.go:41: InitAddons,数量： 4，分别是：dict-v1.2.0,member-v1.2.0,space-v1.2.0,task-v1.2.0
+2025-07-01T02:00:37.598+08:00 [DEBU] {a0c95919ede34d1853c7271469ddda17} addons.go:44: addon: dict
+2025-07-01T02:00:37.598+08:00 [DEBU] addons.go:45: ------------ addon dict init start ...
+2025-07-01T02:00:37.598+08:00 [DEBU] addons.go:45: dict version:v1.2.0
+2025-07-01T02:00:37.598+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 addons_dict_info, 已经初始化过,跳过本次初始化.
+2025-07-01T02:00:37.598+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 addons_dict_type, 已经初始化过,跳过本次初始化.
+2025-07-01T02:00:37.598+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:00:37.598+08:00 [DEBU] addons.go:45: ------------ addon dict init end ...
+2025-07-01T02:00:37.598+08:00 [DEBU] {a0c95919ede34d1853c7271469ddda17} addons.go:44: addon: member
+2025-07-01T02:00:37.598+08:00 [DEBU] addons.go:45: ------------ addon member init start ...
+2025-07-01T02:00:37.598+08:00 [DEBU] addons.go:45: member version:v1.2.0
+2025-07-01T02:00:37.598+08:00 [DEBU] initdb.go:114: 分组 default, 模块 member 中的表 addons_member_manage, 已经初始化过,跳过本次初始化.
+2025-07-01T02:00:37.598+08:00 [DEBU] initdb.go:114: 分组 default, 模块 member 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:00:37.598+08:00 [DEBU] addons.go:45: addon member init end ...
+2025-07-01T02:00:37.598+08:00 [DEBU] {a0c95919ede34d1853c7271469ddda17} addons.go:44: addon: space
+2025-07-01T02:00:37.598+08:00 [DEBU] addons.go:45: ------------ addon space init start ...
+2025-07-01T02:00:37.598+08:00 [DEBU] addons.go:45: ------------ addon space init end ...
+2025-07-01T02:00:37.598+08:00 [DEBU] {a0c95919ede34d1853c7271469ddda17} addons.go:44: addon: task
+2025-07-01T02:00:37.598+08:00 [DEBU] addons.go:45: ------------ addon task init start ...
+2025-07-01T02:00:37.598+08:00 [DEBU] addons.go:45: task version:v1.2.0
+2025-07-01T02:00:37.599+08:00 [DEBU] initdb.go:114: 分组 default, 模块 task 中的表 addons_task_info, 已经初始化过,跳过本次初始化.
+2025-07-01T02:00:37.599+08:00 [DEBU] initdb.go:114: 分组 default, 模块 task 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:00:37.600+08:00 [DEBU] addons.go:45: ------------ addon task init end ...
+2025-07-01T02:02:24.884+08:00 [DEBU] local.go:59: ------------ local NewInit start
+2025-07-01T02:02:24.884+08:00 [DEBU] local.go:80: ------------ local NewInit end
+2025-07-01T02:02:24.884+08:00 [DEBU] {68b2941406e44d18becc0a5a4987982c} core.go:128: ------------ dzhcore NewInit start
+2025-07-01T02:02:24.884+08:00 [DEBU] {68b2941406e44d18becc0a5a4987982c} core.go:129: IsProd:false, AppName:dzhgo, IsDesktop:true
+2025-07-01T02:02:24.884+08:00 [INFO] {68b2941406e44d18becc0a5a4987982c} core.go:135: 开发环境
+2025-07-01T02:02:24.885+08:00 [INFO] {68b2941406e44d18becc0a5a4987982c} core.go:137: dzhcore version:v1.2.1
+2025-07-01T02:02:24.885+08:00 [INFO] {68b2941406e44d18becc0a5a4987982c} core.go:138: 当前运行模式:dev
+2025-07-01T02:02:24.885+08:00 [INFO] {68b2941406e44d18becc0a5a4987982c} core.go:139: 当前实例ID:1lak4376n90db02cvxghfl41007ds0er
+2025-07-01T02:02:24.885+08:00 [INFO] {68b2941406e44d18becc0a5a4987982c} core.go:140: 是否redis缓存模式:false
+2025-07-01T02:02:24.885+08:00 [INFO] {68b2941406e44d18becc0a5a4987982c} core.go:141: 是否DbRedisEnable缓存模式:false
+2025-07-01T02:02:24.889+08:00 [DEBU] {68b2941406e44d18becc0a5a4987982c} core.go:150: ------------ dzhcore NewInit end
+2025-07-01T02:02:24.889+08:00 [DEBU] cmd.go:45: ------------ base init start ...
+2025-07-01T02:02:24.889+08:00 [DEBU] cmd.go:45: base version:v1.2.0
+2025-07-01T02:02:24.890+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:02:24.890+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_user, 已经初始化过,跳过本次初始化.
+2025-07-01T02:02:24.890+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_user_role, 已经初始化过,跳过本次初始化.
+2025-07-01T02:02:24.890+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_role, 已经初始化过,跳过本次初始化.
+2025-07-01T02:02:24.890+08:00 [DEBU] initdb.go:143: model.TableName(): base_sys_role_menu,path:internal/resource/initjson/base_sys_role_menu.json
+2025-07-01T02:02:24.890+08:00 [DEBU] initdb.go:146: 分组%!(EXTRA string=default, string=中的表, string=base_sys_role_menu, string=无可用的初始化数据,跳过本次初始化. jsonData:, *gjson.Json=)
+2025-07-01T02:02:24.890+08:00 [DEBU] initdb.go:129: 分组 default, 模块 base 中的表 base_sys_role_menu, 初始化完成 
+2025-07-01T02:02:24.890+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_department, 已经初始化过,跳过本次初始化.
+2025-07-01T02:02:24.890+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_role_department, 已经初始化过,跳过本次初始化.
+2025-07-01T02:02:24.890+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_setting, 已经初始化过,跳过本次初始化.
+2025-07-01T02:02:24.890+08:00 [DEBU] initdb.go:143: model.TableName(): base_sys_addons,path:internal/resource/initjson/base_sys_addons.json
+2025-07-01T02:02:24.890+08:00 [DEBU] initdb.go:146: 分组%!(EXTRA string=default, string=中的表, string=base_sys_addons, string=无可用的初始化数据,跳过本次初始化. jsonData:, *gjson.Json=)
+2025-07-01T02:02:24.890+08:00 [DEBU] initdb.go:129: 分组 default, 模块 base 中的表 base_sys_addons, 初始化完成 
+2025-07-01T02:02:24.890+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_addons_types, 已经初始化过,跳过本次初始化.
+2025-07-01T02:02:24.890+08:00 [DEBU] cmd.go:45: ------------ base init end ...
+2025-07-01T02:02:24.890+08:00 [DEBU] {68b2941406e44d18becc0a5a4987982c} addons.go:41: InitAddons,数量： 4，分别是：dict-v1.2.0,member-v1.2.0,space-v1.2.0,task-v1.2.0
+2025-07-01T02:02:24.891+08:00 [DEBU] {68b2941406e44d18becc0a5a4987982c} addons.go:44: addon: dict
+2025-07-01T02:02:24.891+08:00 [DEBU] addons.go:45: ------------ addon dict init start ...
+2025-07-01T02:02:24.891+08:00 [DEBU] addons.go:45: dict version:v1.2.0
+2025-07-01T02:02:24.891+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 addons_dict_info, 已经初始化过,跳过本次初始化.
+2025-07-01T02:02:24.891+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 addons_dict_type, 已经初始化过,跳过本次初始化.
+2025-07-01T02:02:24.891+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:02:24.891+08:00 [DEBU] addons.go:45: ------------ addon dict init end ...
+2025-07-01T02:02:24.891+08:00 [DEBU] {68b2941406e44d18becc0a5a4987982c} addons.go:44: addon: member
+2025-07-01T02:02:24.891+08:00 [DEBU] addons.go:45: ------------ addon member init start ...
+2025-07-01T02:02:24.891+08:00 [DEBU] addons.go:45: member version:v1.2.0
+2025-07-01T02:02:24.891+08:00 [DEBU] initdb.go:114: 分组 default, 模块 member 中的表 addons_member_manage, 已经初始化过,跳过本次初始化.
+2025-07-01T02:02:24.891+08:00 [DEBU] initdb.go:114: 分组 default, 模块 member 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:02:24.891+08:00 [DEBU] addons.go:45: addon member init end ...
+2025-07-01T02:02:24.891+08:00 [DEBU] {68b2941406e44d18becc0a5a4987982c} addons.go:44: addon: space
+2025-07-01T02:02:24.891+08:00 [DEBU] addons.go:45: ------------ addon space init start ...
+2025-07-01T02:02:24.891+08:00 [DEBU] addons.go:45: ------------ addon space init end ...
+2025-07-01T02:02:24.891+08:00 [DEBU] {68b2941406e44d18becc0a5a4987982c} addons.go:44: addon: task
+2025-07-01T02:02:24.891+08:00 [DEBU] addons.go:45: ------------ addon task init start ...
+2025-07-01T02:02:24.891+08:00 [DEBU] addons.go:45: task version:v1.2.0
+2025-07-01T02:02:24.891+08:00 [DEBU] initdb.go:114: 分组 default, 模块 task 中的表 addons_task_info, 已经初始化过,跳过本次初始化.
+2025-07-01T02:02:24.891+08:00 [DEBU] initdb.go:114: 分组 default, 模块 task 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:02:24.892+08:00 [DEBU] addons.go:45: ------------ addon task init end ...
+2025-07-01T02:03:27.162+08:00 [DEBU] local.go:59: ------------ local NewInit start
+2025-07-01T02:03:27.162+08:00 [DEBU] local.go:80: ------------ local NewInit end
+2025-07-01T02:03:27.162+08:00 [DEBU] {880aa79414e44d18a2ee73036b83ec85} core.go:128: ------------ dzhcore NewInit start
+2025-07-01T02:03:27.162+08:00 [DEBU] {880aa79414e44d18a2ee73036b83ec85} core.go:129: IsProd:false, AppName:dzhgo, IsDesktop:true
+2025-07-01T02:03:27.162+08:00 [INFO] {880aa79414e44d18a2ee73036b83ec85} core.go:135: 开发环境
+2025-07-01T02:03:27.162+08:00 [INFO] {880aa79414e44d18a2ee73036b83ec85} core.go:137: dzhcore version:v1.2.1
+2025-07-01T02:03:27.162+08:00 [INFO] {880aa79414e44d18a2ee73036b83ec85} core.go:138: 当前运行模式:dev
+2025-07-01T02:03:27.162+08:00 [INFO] {880aa79414e44d18a2ee73036b83ec85} core.go:139: 当前实例ID:1lak4378id0db02dojfb7b4100jwi4pb
+2025-07-01T02:03:27.162+08:00 [INFO] {880aa79414e44d18a2ee73036b83ec85} core.go:140: 是否redis缓存模式:false
+2025-07-01T02:03:27.162+08:00 [INFO] {880aa79414e44d18a2ee73036b83ec85} core.go:141: 是否DbRedisEnable缓存模式:false
+2025-07-01T02:03:27.166+08:00 [DEBU] {880aa79414e44d18a2ee73036b83ec85} core.go:150: ------------ dzhcore NewInit end
+2025-07-01T02:03:27.167+08:00 [DEBU] cmd.go:45: ------------ base init start ...
+2025-07-01T02:03:27.167+08:00 [DEBU] cmd.go:45: base version:v1.2.0
+2025-07-01T02:03:27.168+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:27.168+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_user, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:27.168+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_user_role, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:27.168+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_role, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:27.168+08:00 [DEBU] initdb.go:143: model.TableName(): base_sys_role_menu,path:internal/resource/initjson/base_sys_role_menu.json
+2025-07-01T02:03:27.168+08:00 [DEBU] initdb.go:146: 分组%!(EXTRA string=default, string=中的表, string=base_sys_role_menu, string=无可用的初始化数据,跳过本次初始化. jsonData:, *gjson.Json=)
+2025-07-01T02:03:27.168+08:00 [DEBU] initdb.go:129: 分组 default, 模块 base 中的表 base_sys_role_menu, 初始化完成 
+2025-07-01T02:03:27.168+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_department, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:27.168+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_role_department, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:27.168+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_setting, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:27.169+08:00 [DEBU] initdb.go:143: model.TableName(): base_sys_addons,path:internal/resource/initjson/base_sys_addons.json
+2025-07-01T02:03:27.169+08:00 [DEBU] initdb.go:146: 分组%!(EXTRA string=default, string=中的表, string=base_sys_addons, string=无可用的初始化数据,跳过本次初始化. jsonData:, *gjson.Json=)
+2025-07-01T02:03:27.169+08:00 [DEBU] initdb.go:129: 分组 default, 模块 base 中的表 base_sys_addons, 初始化完成 
+2025-07-01T02:03:27.169+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_addons_types, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:27.169+08:00 [DEBU] cmd.go:45: ------------ base init end ...
+2025-07-01T02:03:27.169+08:00 [DEBU] {880aa79414e44d18a2ee73036b83ec85} addons.go:41: InitAddons,数量： 4，分别是：dict-v1.2.0,member-v1.2.0,space-v1.2.0,task-v1.2.0
+2025-07-01T02:03:27.169+08:00 [DEBU] {880aa79414e44d18a2ee73036b83ec85} addons.go:44: addon: dict
+2025-07-01T02:03:27.169+08:00 [DEBU] addons.go:45: ------------ addon dict init start ...
+2025-07-01T02:03:27.169+08:00 [DEBU] addons.go:45: dict version:v1.2.0
+2025-07-01T02:03:27.169+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 addons_dict_info, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:27.169+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 addons_dict_type, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:27.169+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:27.169+08:00 [DEBU] addons.go:45: ------------ addon dict init end ...
+2025-07-01T02:03:27.169+08:00 [DEBU] {880aa79414e44d18a2ee73036b83ec85} addons.go:44: addon: member
+2025-07-01T02:03:27.169+08:00 [DEBU] addons.go:45: ------------ addon member init start ...
+2025-07-01T02:03:27.169+08:00 [DEBU] addons.go:45: member version:v1.2.0
+2025-07-01T02:03:27.169+08:00 [DEBU] initdb.go:114: 分组 default, 模块 member 中的表 addons_member_manage, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:27.169+08:00 [DEBU] initdb.go:114: 分组 default, 模块 member 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:27.169+08:00 [DEBU] addons.go:45: addon member init end ...
+2025-07-01T02:03:27.169+08:00 [DEBU] {880aa79414e44d18a2ee73036b83ec85} addons.go:44: addon: space
+2025-07-01T02:03:27.169+08:00 [DEBU] addons.go:45: ------------ addon space init start ...
+2025-07-01T02:03:27.169+08:00 [DEBU] addons.go:45: ------------ addon space init end ...
+2025-07-01T02:03:27.169+08:00 [DEBU] {880aa79414e44d18a2ee73036b83ec85} addons.go:44: addon: task
+2025-07-01T02:03:27.169+08:00 [DEBU] addons.go:45: ------------ addon task init start ...
+2025-07-01T02:03:27.169+08:00 [DEBU] addons.go:45: task version:v1.2.0
+2025-07-01T02:03:27.169+08:00 [DEBU] initdb.go:114: 分组 default, 模块 task 中的表 addons_task_info, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:27.169+08:00 [DEBU] initdb.go:114: 分组 default, 模块 task 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:27.171+08:00 [DEBU] addons.go:45: ------------ addon task init end ...
+2025-07-01T02:03:48.620+08:00 [DEBU] local.go:59: ------------ local NewInit start
+2025-07-01T02:03:48.620+08:00 [DEBU] local.go:80: ------------ local NewInit end
+2025-07-01T02:03:48.620+08:00 [DEBU] {c82d9f9319e44d18527dcf309af2d9a5} core.go:128: ------------ dzhcore NewInit start
+2025-07-01T02:03:48.620+08:00 [DEBU] {c82d9f9319e44d18527dcf309af2d9a5} core.go:129: IsProd:false, AppName:dzhgo, IsDesktop:true
+2025-07-01T02:03:48.620+08:00 [INFO] {c82d9f9319e44d18527dcf309af2d9a5} core.go:135: 开发环境
+2025-07-01T02:03:48.620+08:00 [INFO] {c82d9f9319e44d18527dcf309af2d9a5} core.go:137: dzhcore version:v1.2.1
+2025-07-01T02:03:48.620+08:00 [INFO] {c82d9f9319e44d18527dcf309af2d9a5} core.go:138: 当前运行模式:dev
+2025-07-01T02:03:48.620+08:00 [INFO] {c82d9f9319e44d18527dcf309af2d9a5} core.go:139: 当前实例ID:1lak4379740db02dyeaky2w100tbciyx
+2025-07-01T02:03:48.620+08:00 [INFO] {c82d9f9319e44d18527dcf309af2d9a5} core.go:140: 是否redis缓存模式:false
+2025-07-01T02:03:48.620+08:00 [INFO] {c82d9f9319e44d18527dcf309af2d9a5} core.go:141: 是否DbRedisEnable缓存模式:false
+2025-07-01T02:03:48.624+08:00 [DEBU] {c82d9f9319e44d18527dcf309af2d9a5} core.go:150: ------------ dzhcore NewInit end
+2025-07-01T02:03:48.624+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:48.624+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_user, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:48.624+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_user_role, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:48.624+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_role, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:48.624+08:00 [DEBU] initdb.go:143: model.TableName(): base_sys_role_menu,path:internal/resource/initjson/base_sys_role_menu.json
+2025-07-01T02:03:48.624+08:00 [DEBU] initdb.go:146: 分组%!(EXTRA string=default, string=中的表, string=base_sys_role_menu, string=无可用的初始化数据,跳过本次初始化. jsonData:, *gjson.Json=)
+2025-07-01T02:03:48.625+08:00 [DEBU] initdb.go:129: 分组 default, 模块 base 中的表 base_sys_role_menu, 初始化完成 
+2025-07-01T02:03:48.625+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_department, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:48.625+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_role_department, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:48.625+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_setting, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:48.625+08:00 [DEBU] initdb.go:143: model.TableName(): base_sys_addons,path:internal/resource/initjson/base_sys_addons.json
+2025-07-01T02:03:48.625+08:00 [DEBU] initdb.go:146: 分组%!(EXTRA string=default, string=中的表, string=base_sys_addons, string=无可用的初始化数据,跳过本次初始化. jsonData:, *gjson.Json=)
+2025-07-01T02:03:48.625+08:00 [DEBU] initdb.go:129: 分组 default, 模块 base 中的表 base_sys_addons, 初始化完成 
+2025-07-01T02:03:48.625+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_addons_types, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:48.625+08:00 [DEBU] {c82d9f9319e44d18527dcf309af2d9a5} addons.go:41: InitAddons,数量： 4，分别是：dict-v1.2.0,member-v1.2.0,space-v1.2.0,task-v1.2.0
+2025-07-01T02:03:48.625+08:00 [DEBU] {c82d9f9319e44d18527dcf309af2d9a5} addons.go:44: addon: dict
+2025-07-01T02:03:48.625+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 addons_dict_info, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:48.625+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 addons_dict_type, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:48.625+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:48.626+08:00 [DEBU] {c82d9f9319e44d18527dcf309af2d9a5} addons.go:44: addon: member
+2025-07-01T02:03:48.626+08:00 [DEBU] initdb.go:114: 分组 default, 模块 member 中的表 addons_member_manage, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:48.626+08:00 [DEBU] initdb.go:114: 分组 default, 模块 member 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:48.626+08:00 [DEBU] {c82d9f9319e44d18527dcf309af2d9a5} addons.go:44: addon: space
+2025-07-01T02:03:48.626+08:00 [DEBU] {c82d9f9319e44d18527dcf309af2d9a5} addons.go:44: addon: task
+2025-07-01T02:03:48.626+08:00 [DEBU] initdb.go:114: 分组 default, 模块 task 中的表 addons_task_info, 已经初始化过,跳过本次初始化.
+2025-07-01T02:03:48.626+08:00 [DEBU] initdb.go:114: 分组 default, 模块 task 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:05:16.581+08:00 [DEBU] local.go:59: ------------ local NewInit start
+2025-07-01T02:05:16.581+08:00 [DEBU] local.go:80: ------------ local NewInit end
+2025-07-01T02:05:16.581+08:00 [DEBU] {68c3890e2ee44d18e2a67759da9fa037} core.go:128: ------------ dzhcore NewInit start
+2025-07-01T02:05:16.582+08:00 [DEBU] {68c3890e2ee44d18e2a67759da9fa037} core.go:129: IsProd:false, AppName:dzhgo, IsDesktop:true
+2025-07-01T02:05:16.582+08:00 [INFO] {68c3890e2ee44d18e2a67759da9fa037} core.go:135: 开发环境
+2025-07-01T02:05:16.582+08:00 [INFO] {68c3890e2ee44d18e2a67759da9fa037} core.go:137: dzhcore version:v1.2.1
+2025-07-01T02:05:16.582+08:00 [INFO] {68c3890e2ee44d18e2a67759da9fa037} core.go:138: 当前运行模式:dev
+2025-07-01T02:05:16.582+08:00 [INFO] {68c3890e2ee44d18e2a67759da9fa037} core.go:139: 当前实例ID:1lak437bol0db02f2t0lzy81000fkb6d
+2025-07-01T02:05:16.582+08:00 [INFO] {68c3890e2ee44d18e2a67759da9fa037} core.go:140: 是否redis缓存模式:false
+2025-07-01T02:05:16.582+08:00 [INFO] {68c3890e2ee44d18e2a67759da9fa037} core.go:141: 是否DbRedisEnable缓存模式:false
+2025-07-01T02:05:16.584+08:00 [DEBU] {68c3890e2ee44d18e2a67759da9fa037} core.go:150: ------------ dzhcore NewInit end
+2025-07-01T02:05:16.586+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:05:16.586+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_user, 已经初始化过,跳过本次初始化.
+2025-07-01T02:05:16.586+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_user_role, 已经初始化过,跳过本次初始化.
+2025-07-01T02:05:16.586+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_role, 已经初始化过,跳过本次初始化.
+2025-07-01T02:05:16.586+08:00 [DEBU] initdb.go:143: model.TableName(): base_sys_role_menu,path:internal/resource/initjson/base_sys_role_menu.json
+2025-07-01T02:05:16.586+08:00 [DEBU] initdb.go:146: 分组%!(EXTRA string=default, string=中的表, string=base_sys_role_menu, string=无可用的初始化数据,跳过本次初始化. jsonData:, *gjson.Json=)
+2025-07-01T02:05:16.586+08:00 [DEBU] initdb.go:129: 分组 default, 模块 base 中的表 base_sys_role_menu, 初始化完成 
+2025-07-01T02:05:16.586+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_department, 已经初始化过,跳过本次初始化.
+2025-07-01T02:05:16.586+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_role_department, 已经初始化过,跳过本次初始化.
+2025-07-01T02:05:16.586+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_setting, 已经初始化过,跳过本次初始化.
+2025-07-01T02:05:16.586+08:00 [DEBU] initdb.go:143: model.TableName(): base_sys_addons,path:internal/resource/initjson/base_sys_addons.json
+2025-07-01T02:05:16.586+08:00 [DEBU] initdb.go:146: 分组%!(EXTRA string=default, string=中的表, string=base_sys_addons, string=无可用的初始化数据,跳过本次初始化. jsonData:, *gjson.Json=)
+2025-07-01T02:05:16.586+08:00 [DEBU] initdb.go:129: 分组 default, 模块 base 中的表 base_sys_addons, 初始化完成 
+2025-07-01T02:05:16.586+08:00 [DEBU] initdb.go:114: 分组 default, 模块 base 中的表 base_sys_addons_types, 已经初始化过,跳过本次初始化.
+2025-07-01T02:05:16.586+08:00 [DEBU] {68c3890e2ee44d18e2a67759da9fa037} addons.go:41: InitAddons,数量： 4，分别是：dict-v1.2.0,member-v1.2.0,space-v1.2.0,task-v1.2.0
+2025-07-01T02:05:16.586+08:00 [DEBU] {68c3890e2ee44d18e2a67759da9fa037} addons.go:44: addon: dict
+2025-07-01T02:05:16.587+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 addons_dict_info, 已经初始化过,跳过本次初始化.
+2025-07-01T02:05:16.587+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 addons_dict_type, 已经初始化过,跳过本次初始化.
+2025-07-01T02:05:16.587+08:00 [DEBU] initdb.go:114: 分组 default, 模块 dict 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:05:16.587+08:00 [DEBU] {68c3890e2ee44d18e2a67759da9fa037} addons.go:44: addon: member
+2025-07-01T02:05:16.587+08:00 [DEBU] initdb.go:114: 分组 default, 模块 member 中的表 addons_member_manage, 已经初始化过,跳过本次初始化.
+2025-07-01T02:05:16.587+08:00 [DEBU] initdb.go:114: 分组 default, 模块 member 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.
+2025-07-01T02:05:16.587+08:00 [DEBU] {68c3890e2ee44d18e2a67759da9fa037} addons.go:44: addon: space
+2025-07-01T02:05:16.587+08:00 [DEBU] {68c3890e2ee44d18e2a67759da9fa037} addons.go:44: addon: task
+2025-07-01T02:05:16.587+08:00 [DEBU] initdb.go:114: 分组 default, 模块 task 中的表 addons_task_info, 已经初始化过,跳过本次初始化.
+2025-07-01T02:05:16.587+08:00 [DEBU] initdb.go:114: 分组 default, 模块 task 中的表 base_sys_menu, 已经初始化过,跳过本次初始化.

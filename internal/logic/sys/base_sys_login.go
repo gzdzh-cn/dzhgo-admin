@@ -12,12 +12,14 @@ import (
 	v1 "dzhgo/internal/api/admin_v1"
 	"dzhgo/internal/config"
 	"dzhgo/internal/model"
+
 	"github.com/gzdzh-cn/dzhcore"
 
 	"github.com/gogf/gf/v2/crypto/gmd5"
 	"github.com/gogf/gf/v2/encoding/gbase64"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/gogf/gf/v2/util/grand"
 	"github.com/gogf/gf/v2/util/guid"
@@ -48,6 +50,7 @@ func (s *sBaseSysLoginService) Login(ctx context.Context, req *v1.BaseOpenLoginR
 	vcode, _ := dzhcore.CacheManager.Get(ctx, captchaId)
 	if vcode.String() != verifyCode {
 		err = gerror.New("验证码错误")
+		g.Log().Error(ctx, err.Error())
 		return
 	}
 	md5password, _ := gmd5.Encrypt(password)
@@ -56,10 +59,12 @@ func (s *sBaseSysLoginService) Login(ctx context.Context, req *v1.BaseOpenLoginR
 	dao.BaseSysUser.Ctx(ctx).Where("username=?", username).Where("password=?", md5password).Scan(&user)
 	if user != nil && gconv.Int(user.Status) == 0 {
 		err = gerror.New("账号已被禁止~")
+		g.Log().Error(ctx, err.Error())
 		return
 	}
 	if user == nil {
 		err = gerror.New("账户或密码不正确~")
+		g.Log().Error(ctx, err.Error())
 		return
 	}
 
@@ -78,9 +83,8 @@ func (*sBaseSysLoginService) Captcha(req *v1.BaseOpenCaptchaReq) (interface{}, e
 		Data      string `json:"data"`
 	}
 	var (
-		ctx g.Ctx
-		err error
-
+		ctx    = gctx.GetInitCtx()
+		err    error
 		result = &capchaInfo{}
 	)
 	captchaText := grand.Digits(4)
@@ -90,7 +94,6 @@ func (*sBaseSysLoginService) Captcha(req *v1.BaseOpenCaptchaReq) (interface{}, e
 	result.Data = `data:image/svg+xml;base64,` + svgbase64
 	result.CaptchaId = guid.S()
 	dzhcore.CacheManager.Set(ctx, result.CaptchaId, captchaText, 1800*time.Second)
-	g.Log().Debug(ctx, "验证码", result.CaptchaId, captchaText)
 	return result, err
 }
 

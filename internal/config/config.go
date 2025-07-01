@@ -16,14 +16,12 @@ type sConfig struct {
 	Jwt        *Jwt
 	Middleware *Middleware
 	Setting    *g.Map
-	//WxConfig   *defineType.WxConfig
 }
 
 type Middleware struct {
 	Cors      bool
 	Authority *Authority
 	Log       *Log
-	RunLogger *RunLogger
 }
 
 type Authority struct {
@@ -31,9 +29,6 @@ type Authority struct {
 }
 
 type Log struct {
-	Enable bool
-}
-type RunLogger struct {
 	Enable bool
 }
 
@@ -66,9 +61,6 @@ func NewConfig() *sConfig {
 			},
 			Log: &Log{
 				Enable: dzhcore.GetCfgWithDefault(ctx, "modules.base.middleware.log.enable", g.NewVar(true)).Bool(),
-			},
-			RunLogger: &RunLogger{
-				Enable: dzhcore.GetCfgWithDefault(ctx, "modules.base.middleware.runLogger.enable", g.NewVar(false)).Bool(),
 			},
 		},
 		Setting: &g.Map{

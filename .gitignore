@@ -33,7 +33,7 @@ node_modules/
 
 # 忽略 addons 目录下的所有内容
 addons/*
-
+dzhcore
 
 # 但不忽略这三个子目录及其内容
 !addons/dict/

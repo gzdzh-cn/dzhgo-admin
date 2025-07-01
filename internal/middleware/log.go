@@ -1,15 +1,7 @@
 package middleware
 
 import (
-	"dzhgo/internal/config"
-	"dzhgo/internal/defineType"
 	logic "dzhgo/internal/logic/sys"
-	"dzhgo/internal/utils"
-	"runtime"
-	"time"
-
-	"github.com/gzdzh-cn/dzhcore"
-	"github.com/gzdzh-cn/dzhcore/utility/util"
 
 	"github.com/gogf/gf/v2/container/garray"
 	"github.com/gogf/gf/v2/frame/g"
@@ -38,33 +30,4 @@ func BaseLog(r *ghttp.Request) {
 
 	r.Middleware.Next()
 
-}
-
-// 请求日志运行明细开启
-func RunLog(r *ghttp.Request) {
-	var (
-		startTime     = time.Now() //请求进入时间
-		ctx           = r.Context()
-		memStatsStart runtime.MemStats
-	)
-	runtime.ReadMemStats(&memStatsStart)
-
-	r.Middleware.Next()
-	runLogger := &defineType.RunLogger{
-		Path:       util.GetLoggerPath(dzhcore.IsProd, config.AppName) + "run/",
-		File:       g.Cfg().MustGet(ctx, "modules.base.middleware.runLogger.file").String(),
-		RotateSize: g.Cfg().MustGet(ctx, "modules.base.middleware.runLogger.rotateSize").String(),
-		Stdout:     g.Cfg().MustGet(ctx, "modules.base.middleware.runLogger.stdout").Bool(),
-	}
-
-	outLogger := &defineType.OutputsForLogger{
-		File:       runLogger.File,
-		FileRule:   gstr.Trim(gstr.Split(runLogger.File, ".")[0], "{}"),
-		RotateSize: runLogger.RotateSize,
-		Stdout:     runLogger.Stdout,
-		Path:       runLogger.Path,
-	}
-
-	//日志打印运行时间
-	utils.StdOutLog(ctx, startTime, memStatsStart, outLogger)
 }

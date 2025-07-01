@@ -12,6 +12,8 @@ import (
 	"dzhgo/internal/config"
 	"dzhgo/internal/defineType"
 	"fmt"
+	"time"
+
 	"github.com/gogf/gf/v2/crypto/gmd5"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/errors/gerror"
@@ -21,7 +23,6 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/gzdzh-cn/dzhcore"
 	"github.com/gzdzh-cn/dzhcore/utility/util"
-	"time"
 )
 
 func init() {
@@ -375,7 +376,7 @@ func (s *sMemberManageService) GetWxAccessToken(ctx context.Context, code string
 
 	wxMpTokenResponse := &memberDefineType.WxMpTokenResponse{}
 	header := g.MapStrStr{"content-type": "application/x-www-form-urlencoded"}
-	err = util.HttpPost(ctx, url, header, postData, wxMpTokenResponse)
+	err = util.NewHttpClient().Post(ctx, url, header, postData, wxMpTokenResponse)
 	if err != nil {
 		g.Log().Error(ctx, err)
 		return nil, err
@@ -402,7 +403,7 @@ func (s *sMemberManageService) GetUserInfo(ctx context.Context, wxMpTokenRespons
 	}
 
 	wxMpUserInfoResponse := &memberDefineType.WxMpUserInfoResponse{}
-	err = util.HttpGet(ctx, url, nil, postData, wxMpUserInfoResponse)
+	err = util.NewHttpClient().Post(ctx, url, nil, postData, wxMpUserInfoResponse)
 	if err != nil {
 		g.Log().Error(ctx, err)
 		return nil, err

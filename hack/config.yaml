@@ -24,12 +24,12 @@ gfcli:
   # 工具编译配置
   build:
 #    name: "main" # 用gf docker的时候,一定要写main,或者不要name参数
-    arch: "amd64"
-    system: "linux"
+    arch: "arm64"
+    system: "darwin"
     mod: "none"
     cgo: 0
     path: "./bin"
-#    packSrc: "manifest" # 需要打包的目录 打包后在internal/packed生成二进制文件
+    packSrc: "manifest,resource,public,template" # 需要打包的目录 打包后在internal/packed生成二进制文件
 #    version: "v1.1.5" #用gf docker的时候，不能写版本号
 
 #使用gen.dao，多个link情况下，命令行的参数会失效
