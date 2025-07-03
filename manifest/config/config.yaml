@@ -65,7 +65,7 @@ core:
   gfLogger:
     path: "./data/logs/" #服务器端，如果不写此参数，开发环境和生产环境默认路径：./data/logs/run/，如果是桌面端，不写此参数，开发环境默认是./data/logs/run/，生产环境此参数失效，默认是系统 appdata 或 Library 目录里面
     file: "{Y-m-d}.log"
-    level : "all"
+    level : "debug"
     stdout: true,
     flags: 44
   # 带吞吐量，响应时间参数的http 请求日志
@@ -74,7 +74,7 @@ core:
     enable: 1 # 开启
     file: "run-{Y-m-d}.log"
     rotateSize: 3MB #切割大小，要带单位写，例如MB，KB
-    stdout: 0 # 开启控制台输出
+    stdout: false # 开启控制台输出
 
   file:
     mode: "local" #oss,local

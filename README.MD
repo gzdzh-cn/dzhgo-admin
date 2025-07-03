@@ -23,6 +23,13 @@
 
 ## 使用
 
+```
+根据自己的数据库，在 main.go 或 cmd.go 文件引入对应的驱动
+// _ "github.com/gogf/gf/contrib/drivers/pgsql/v2"
+// _ "github.com/gogf/gf/contrib/drivers/sqlite/v2"
+// _ "github.com/gogf/gf/contrib/drivers/mysql/v2"
+```
+
 1. 安装依赖
 
 ```bash
@@ -64,11 +71,13 @@ setmirror                      设置国内镜像源,用于在开发容器生成
 * [插件市场分为本地插件和云插件]（升级）
 * [用户表和角色表的数据权限逻辑，部门主管看团队，成员看自己]（升级）
 - [修复安装插件后，超管要更新一次权限缓存]
-- [dict改为不是插件方式]
-- [修复未安装的插件，菜单列表为不可见]
+
 
 
 ## 更新日志
+### v1.2.5 - 20250703
+- 升级 dzhcore 到新版v1.2.9
+
 ### v1.2.4 - 20250703
 - 升级 dzhcore 到新版v1.2.8
 

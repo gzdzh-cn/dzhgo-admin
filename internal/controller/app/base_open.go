@@ -5,11 +5,14 @@ import (
 	v1 "dzhgo/internal/api/admin_v1"
 	"dzhgo/internal/config"
 	"dzhgo/internal/service"
+
 	"github.com/gzdzh-cn/dzhcore"
+	"github.com/gzdzh-cn/dzhcore/coreconfig"
+
+	"regexp"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/gconv"
-	"regexp"
 )
 
 type BaseOpenController struct {
@@ -28,7 +31,7 @@ func init() {
 
 // eps 接口
 func (c *BaseOpenController) Eps(ctx context.Context, req *v1.BaseCommControllerEpsReq) (res *dzhcore.BaseRes, err error) {
-	if !dzhcore.Config.Eps {
+	if !coreconfig.Config.Core.Eps {
 		g.Log().Error(ctx, "eps is not open")
 		res = dzhcore.Ok(nil)
 		return

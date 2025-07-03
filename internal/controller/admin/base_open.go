@@ -7,9 +7,9 @@ import (
 
 	v1 "dzhgo/internal/api/admin_v1"
 
-	"github.com/gzdzh-cn/dzhcore"
-
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gzdzh-cn/dzhcore"
+	"github.com/gzdzh-cn/dzhcore/coreconfig"
 )
 
 type BaseOpenController struct {
@@ -37,7 +37,7 @@ func (c *BaseOpenController) BaseOpenCaptcha(ctx context.Context, req *v1.BaseOp
 
 // eps 接口
 func (c *BaseOpenController) Eps(ctx context.Context, req *v1.BaseOpenEpsReq) (res *dzhcore.BaseRes, err error) {
-	if !dzhcore.Config.Eps {
+	if !coreconfig.Config.Core.Eps {
 		g.Log().Error(ctx, "eps is not open")
 		res = dzhcore.Ok(nil)
 		return
