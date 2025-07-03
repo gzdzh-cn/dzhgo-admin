@@ -11,11 +11,7 @@ server:
 
  
 database:
-  logger:
-    path: "./data/logs/sql"
-    file: "sql-{Y-m-d}.log"
-    level: "all"
-    stdout: false # 控制台打印sql
+  # 数据库配置
 #  default:
 #     # link: "mysql:root:dzh123456@tcp(127.0.0.1:3306)/dzhgo_go?loc=Local&parseTime=true&charset=utf8mb4"
 #     type: "mysql"
@@ -33,7 +29,7 @@ database:
   default:
     # link: sqlite::@file(./database/dzhgo_go.sqlite)
     type: "sqlite" # 数据库类型
-    name: "./database/dzhgo_go.sqlite" # 数据库名称,对于sqlite来说就是数据库文件名
+    name: "./data/database/dzhgo_go.sqlite" # 数据库名称,对于sqlite来说就是数据库文件名
     extra: busy_timeout=5000 # 扩展参数 如 busy_timeout=5000&journal_mode=ALL
     createdAt: "createTime" # 创建时间字段名称
     updatedAt: "updateTime" # 更新时间字段名称
@@ -55,11 +51,17 @@ redis:
 
 core:
   appName: "dzhgo" # 桌面端使用，给生产环境时，生成日志路径使用，macos会在系统 /Users/****/Library/Application Support/ 目录下建一个 dzhgo 目录
-  isDesktop: true # 桌面端运行
-  isProd: true # 桌面端才设置指定是否是生产模式，生产模式的日志路径为系统目录，下面日志的路径参数在生产模式下会失效
+  isDesktop: false # 桌面端运行
+  isProd: false # 桌面端才设置指定是否是生产模式，生产模式的日志路径为系统目录，下面日志的路径参数在生产模式下会失效
   autoMigrate: true #自动建表
   eps: true # 生成前端请求路由
-  # gf 日志
+  # gf 自带数据库日志配置
+  sqlLogger:
+    path: "./data/logs/sql"
+    file: "sql-{Y-m-d}.log"
+    level: "all"
+    stdout: false # 控制台打印sql
+  # gf自带的log日志配置
   gfLogger:
     path: "./data/logs/" #服务器端，如果不写此参数，开发环境和生产环境默认路径：./data/logs/run/，如果是桌面端，不写此参数，开发环境默认是./data/logs/run/，生产环境此参数失效，默认是系统 appdata 或 Library 目录里面
     file: "{Y-m-d}.log"
@@ -70,7 +72,7 @@ core:
   runLogger:
     path: "./data/logs/run/" # 服务器端，如果不写此参数，开发环境和生产环境默认路径：./data/logs/run/，如果是桌面端，不写此参数，开发环境默认是./data/logs/run/，生产环境此参数失效，默认是系统 appdata 或 Library 目录里面
     enable: 1 # 开启
-    file: "{Y-m-d}.log"
+    file: "run-{Y-m-d}.log"
     rotateSize: 3MB #切割大小，要带单位写，例如MB，KB
     stdout: 0 # 开启控制台输出
 
