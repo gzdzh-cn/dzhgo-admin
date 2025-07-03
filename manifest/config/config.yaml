@@ -9,14 +9,7 @@ server:
   defaultFile: "index.html"
   delimiters: ["{{", "}}"]
 
-# logger:
-#   path: "./data/logs/"
-#   file: "{Y-m-d}.log"
-#   level : "all"
-#   stdout: true,
-#   flags: 44
-
-
+ 
 database:
   logger:
     path: "./data/logs/sql"
@@ -38,7 +31,7 @@ database:
 #     deletedAt: "deletedAt"  # 填deleteTime，关闭软删除，填deletedAt开启软删除
 #     debug: true #开启调试模式,启用后将在控制台打印相关sql语句
   default:
-    # link: sqlite::@file(/var/data/db.sqlite3)
+    # link: sqlite::@file(./database/dzhgo_go.sqlite)
     type: "sqlite" # 数据库类型
     name: "./database/dzhgo_go.sqlite" # 数据库名称,对于sqlite来说就是数据库文件名
     extra: busy_timeout=5000 # 扩展参数 如 busy_timeout=5000&journal_mode=ALL
@@ -61,21 +54,21 @@ redis:
 #     pass: "123456"
 
 core:
-  appName: "dzhgo"
+  appName: "dzhgo" # 桌面端使用，给生产环境时，生成日志路径使用，macos会在系统 /Users/****/Library/Application Support/ 目录下建一个 dzhgo 目录
   isDesktop: true # 桌面端运行
-  isProd: false #桌面端才设置是否生产模式
-  autoMigrate: false #自动建表
-  eps: true
+  isProd: true # 桌面端才设置指定是否是生产模式，生产模式的日志路径为系统目录，下面日志的路径参数在生产模式下会失效
+  autoMigrate: true #自动建表
+  eps: true # 生成前端请求路由
   # gf 日志
   gfLogger:
-    path: "./data/logs/"
+    path: "./data/logs/" #服务器端，如果不写此参数，开发环境和生产环境默认路径：./data/logs/run/，如果是桌面端，不写此参数，开发环境默认是./data/logs/run/，生产环境此参数失效，默认是系统 appdata 或 Library 目录里面
     file: "{Y-m-d}.log"
     level : "all"
     stdout: true,
     flags: 44
-  # 带吞吐量，响应时间参数的运行日志
+  # 带吞吐量，响应时间参数的http 请求日志
   runLogger:
-    path: "./data/logs/run/"
+    path: "./data/logs/run/" # 服务器端，如果不写此参数，开发环境和生产环境默认路径：./data/logs/run/，如果是桌面端，不写此参数，开发环境默认是./data/logs/run/，生产环境此参数失效，默认是系统 appdata 或 Library 目录里面
     enable: 1 # 开启
     file: "{Y-m-d}.log"
     rotateSize: 3MB #切割大小，要带单位写，例如MB，KB
