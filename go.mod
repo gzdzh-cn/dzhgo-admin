@@ -11,7 +11,7 @@ require (
 	github.com/gogf/gf/v2 v2.9.0
 	github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/gzdzh-cn/dzh-ftp v1.1.1
-	github.com/gzdzh-cn/dzhcore v1.2.7
+	github.com/gzdzh-cn/dzhcore v1.2.8
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/robfig/cron v1.2.0
 	github.com/shopspring/decimal v1.4.0

@@ -4,6 +4,7 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gzdzh-cn/dzhcore"
+	"github.com/gzdzh-cn/dzhcore/utility/env"
 )
 
 var (
@@ -47,20 +48,20 @@ func NewConfig() *sConfig {
 
 	return &sConfig{
 		Jwt: &Jwt{
-			Sso:    dzhcore.GetCfgWithDefault(ctx, "modules.base.jwt.sso", g.NewVar(false)).Bool(),
-			Secret: dzhcore.GetCfgWithDefault(ctx, "modules.base.jwt.secret", g.NewVar(dzhcore.ProcessFlag)).String(),
+			Sso:    env.GetCfgWithDefault(ctx, "modules.base.jwt.sso", g.NewVar(false)).Bool(),
+			Secret: env.GetCfgWithDefault(ctx, "modules.base.jwt.secret", g.NewVar(dzhcore.ProcessFlag)).String(),
 			Token: &Token{
-				Expire:        dzhcore.GetCfgWithDefault(ctx, "modules.base.jwt.token.expire", g.NewVar(2*3600)).Uint(),
-				RefreshExpire: dzhcore.GetCfgWithDefault(ctx, "modules.base.jwt.token.refreshExpire", g.NewVar(15*24*3600)).Uint(),
+				Expire:        env.GetCfgWithDefault(ctx, "modules.base.jwt.token.expire", g.NewVar(2*3600)).Uint(),
+				RefreshExpire: env.GetCfgWithDefault(ctx, "modules.base.jwt.token.refreshExpire", g.NewVar(15*24*3600)).Uint(),
 			},
 		},
 		Middleware: &Middleware{
-			Cors: dzhcore.GetCfgWithDefault(ctx, "modules.base.middleware.cors", g.NewVar(false)).Bool(),
+			Cors: env.GetCfgWithDefault(ctx, "modules.base.middleware.cors", g.NewVar(false)).Bool(),
 			Authority: &Authority{
-				Enable: dzhcore.GetCfgWithDefault(ctx, "modules.base.middleware.authority.enable", g.NewVar(true)).Bool(),
+				Enable: env.GetCfgWithDefault(ctx, "modules.base.middleware.authority.enable", g.NewVar(true)).Bool(),
 			},
 			Log: &Log{
-				Enable: dzhcore.GetCfgWithDefault(ctx, "modules.base.middleware.log.enable", g.NewVar(true)).Bool(),
+				Enable: env.GetCfgWithDefault(ctx, "modules.base.middleware.log.enable", g.NewVar(true)).Bool(),
 			},
 		},
 		Setting: &g.Map{
