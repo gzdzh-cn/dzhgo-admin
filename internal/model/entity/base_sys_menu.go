@@ -11,8 +11,8 @@ import (
 // BaseSysMenu is the golang structure for table base_sys_menu.
 type BaseSysMenu struct {
 	Id         string      `json:"id"         orm:"id"         ` //
-	CreateTime *gtime.Time `json:"createTime" orm:"createTime" ` // 创建时间
-	UpdateTime *gtime.Time `json:"updateTime" orm:"updateTime" ` // 更新时间
+	CreateTime *gtime.Time `json:"createTime" orm:"createTime" ` //
+	UpdateTime *gtime.Time `json:"updateTime" orm:"updateTime" ` //
 	DeletedAt  *gtime.Time `json:"deletedAt"  orm:"deleted_at" ` //
 	ParentId   string      `json:"parentId"   orm:"parentId"   ` //
 	Name       string      `json:"name"       orm:"name"       ` //

@@ -13,24 +13,24 @@ import (
 
 // BaseSysAddonsTypesDao is the data access object for the table base_sys_addons_types.
 type BaseSysAddonsTypesDao struct {
-	table    string                   // table is the underlying table name of the DAO.
-	group    string                   // group is the database configuration group name of the current DAO.
+	table    string                    // table is the underlying table name of the DAO.
+	group    string                    // group is the database configuration group name of the current DAO.
 	columns  BaseSysAddonsTypesColumns // columns contains all the column names of Table for convenient usage.
-	handlers []gdb.ModelHandler       // handlers for customized model modification.
+	handlers []gdb.ModelHandler        // handlers for customized model modification.
 }
 
 // BaseSysAddonsTypesColumns defines and stores column names for the table base_sys_addons_types.
 type BaseSysAddonsTypesColumns struct {
 	Id         string //
-	CreateTime string // 创建时间
-	UpdateTime string // 更新时间
+	CreateTime string //
+	UpdateTime string //
 	DeletedAt  string //
-	Name       string // 标题
-	Image      string // 图片
-	Link       string // 跳转
-	Remark     string // 备注
-	Status     string // 状态
-	OrderNum   string // 排序
+	Name       string //
+	Image      string //
+	Link       string //
+	Remark     string //
+	Status     string //
+	OrderNum   string //
 }
 
 // baseSysAddonsTypesColumns holds the columns for the table base_sys_addons_types.

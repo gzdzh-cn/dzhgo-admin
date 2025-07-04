@@ -13,15 +13,15 @@ import (
 type BaseSysAddons struct {
 	g.Meta     `orm:"table:base_sys_addons, do:true"`
 	Id         interface{} //
-	CreateTime *gtime.Time // 创建时间
-	UpdateTime *gtime.Time // 更新时间
+	CreateTime *gtime.Time //
+	UpdateTime *gtime.Time //
 	DeletedAt  *gtime.Time //
-	Name       interface{} // 标题
-	Image      interface{} // 图片
-	Link       interface{} // 跳转
-	MenuId     interface{} // 菜单
-	TypeId     interface{} // 类别
-	Remark     interface{} // 备注
-	Status     interface{} // 状态
-	OrderNum   interface{} // 排序
+	Name       interface{} //
+	Image      interface{} //
+	Link       interface{} //
+	MenuId     interface{} //
+	TypeId     interface{} //
+	Remark     interface{} //
+	Status     interface{} //
+	OrderNum   interface{} //
 }

@@ -37,7 +37,7 @@ type BaseSysSetting struct {
 	TemplateCode *string `gorm:"column:templateCode;comment:模板;type:varchar(50)" json:"templateCode"`
 	Endpoint     *string `gorm:"column:endpoint;comment:endpoint;type:varchar(50)" json:"endpoint"`
 	RemindMobile *string `gorm:"column:remindMobile;comment:通知手机号码;type:varchar(50)" json:"remindMobile"`
-	RemindDay    *string `gorm:"column:remindDay;comment:到期提醒提前天数;type:varchar(50)" json:"remindDay"`
+	RemindDay    *int    `gorm:"column:remindDay;comment:到期提醒提前天数;type:int(11)" json:"remindDay"`
 	FieldJson    *string `gorm:"column:fieldJson;comment:自定义字段" json:"fieldJson"`
 
 	Notice      *string `gorm:"column:notice;comment:公告" json:"notice"`

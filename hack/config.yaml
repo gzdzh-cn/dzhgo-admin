@@ -8,9 +8,16 @@ database:
     level: "all"
     stdout: true
   default:
-    link: "mysql:root:dzh123456@tcp(127.0.0.1:13306)/dzhgo_go?loc=Local&parseTime=true"
-  oi:
-    link: "mysql:root:dzh123456@tcp(127.0.0.1:3306)/3136_php?loc=Local&parseTime=true"
+    # link: "mysql:root:dzh123456@tcp(127.0.0.1:13306)/dzhgo_go?loc=Local&parseTime=true"
+    type: "sqlite" # 数据库类型
+    name: "./data/database/dzhgo_go.sqlite" # 数据库名称,对于sqlite来说就是数据库文件名
+    extra: busy_timeout=5000 # 扩展参数 如 busy_timeout=5000&journal_mode=ALL
+    createdAt: "createTime" # 创建时间字段名称
+    updatedAt: "updateTime" # 更新时间字段名称
+    deletedAt: "deletedAt"  # 填deleteTime，关闭软删除，填deletedAt开启软删除
+    debug: true # 开启调试模式,启用后将在控制台打印相关sql语句
+  # oi:
+  #   link: "mysql:root:dzh123456@tcp(127.0.0.1:3306)/3136_php?loc=Local&parseTime=true"
 
 
 

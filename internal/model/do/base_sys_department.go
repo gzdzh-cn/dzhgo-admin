@@ -13,8 +13,8 @@ import (
 type BaseSysDepartment struct {
 	g.Meta     `orm:"table:base_sys_department, do:true"`
 	Id         interface{} //
-	CreateTime *gtime.Time // 创建时间
-	UpdateTime *gtime.Time // 更新时间
+	CreateTime *gtime.Time //
+	UpdateTime *gtime.Time //
 	DeletedAt  *gtime.Time //
 	Name       interface{} //
 	ParentId   interface{} //

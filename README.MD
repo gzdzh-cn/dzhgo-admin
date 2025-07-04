@@ -25,9 +25,10 @@
 
 ```
 根据自己的数据库，在 main.go 或 cmd.go 文件引入对应的驱动
-// _ "github.com/gogf/gf/contrib/drivers/pgsql/v2"
-// _ "github.com/gogf/gf/contrib/drivers/sqlite/v2"
-// _ "github.com/gogf/gf/contrib/drivers/mysql/v2"
+_ "github.com/gogf/gf/contrib/drivers/pgsql/v2"
+_ "github.com/gogf/gf/contrib/drivers/sqlite/v2"
+_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
+_ "github.com/gogf/gf/contrib/nosql/redis/v2"
 ```
 
 1. 安装依赖

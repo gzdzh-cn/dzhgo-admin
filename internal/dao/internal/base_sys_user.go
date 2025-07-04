@@ -22,8 +22,8 @@ type BaseSysUserDao struct {
 // BaseSysUserColumns defines and stores column names for the table base_sys_user.
 type BaseSysUserColumns struct {
 	Id           string //
-	CreateTime   string // 创建时间
-	UpdateTime   string // 更新时间
+	CreateTime   string //
+	UpdateTime   string //
 	DeletedAt    string //
 	DepartmentId string //
 	Name         string //
