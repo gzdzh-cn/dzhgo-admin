@@ -12,7 +12,7 @@ require (
 	github.com/gogf/gf/v2 v2.9.0
 	github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/gzdzh-cn/dzh-ftp v1.1.1
-	github.com/gzdzh-cn/dzhcore v1.2.9
+	github.com/gzdzh-cn/dzhcore v1.3.0
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/robfig/cron v1.2.0
 	github.com/shopspring/decimal v1.4.0
@@ -38,7 +38,6 @@ require (
 	github.com/glebarez/go-sqlite v1.21.2 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/gogf/gf/contrib/drivers/mysql/v2 v2.7.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect

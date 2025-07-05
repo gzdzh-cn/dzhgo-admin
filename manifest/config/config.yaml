@@ -39,20 +39,21 @@ database:
 
 # Redis 配置示例
 redis:
-  enable: 0 # 开启 redis 缓存
-  dbRedis:
-    enable: 0 ##开启 sql 查询后缓存到 redis
-    expire: 60000, # 60*1000 
-    db: 9
+  enable: true # 开启 redis 缓存
   core:
     address: "127.0.0.1:16379"  # mac本地docker运行写host.docker.internal，可以读取宿主机mysql
     db: 0
-#     pass: "123456"
+    pass: ""
+  dbRedis:
+    enable: false ##开启 sql 查询后缓存到 redis
+    expire: 60000, # 60*1000 
+    db: 9
+
 
 core:
   appName: "dzhgo" # 桌面端使用，给生产环境时，生成日志路径使用，macos会在系统 /Users/****/Library/Application Support/ 目录下建一个 dzhgo 目录
-  isDesktop: false # 桌面端运行
-  isProd: false # 桌面端才设置指定是否是生产模式，生产模式的日志路径为系统目录，下面日志的路径参数在生产模式下会失效
+  isDesktop: true # 桌面端运行
+  isProd: true # 桌面端才设置指定是否是生产模式，生产模式的日志路径为系统目录，下面日志的路径参数在生产模式下会失效
   autoMigrate: true #自动建表
   eps: true # 生成前端请求路由
   # gf 自带数据库日志配置
@@ -66,21 +67,21 @@ core:
     path: "./data/logs/" #服务器端，如果不写此参数，开发环境和生产环境默认路径：./data/logs/run/，如果是桌面端，不写此参数，开发环境默认是./data/logs/run/，生产环境此参数失效，默认是系统 appdata 或 Library 目录里面
     file: "{Y-m-d}.log"
     level : "debug"
-    stdout: true,
+    stdout: true
     flags: 44
   # 带吞吐量，响应时间参数的http 请求日志
   runLogger:
     path: "./data/logs/run/" # 服务器端，如果不写此参数，开发环境和生产环境默认路径：./data/logs/run/，如果是桌面端，不写此参数，开发环境默认是./data/logs/run/，生产环境此参数失效，默认是系统 appdata 或 Library 目录里面
-    enable: 1 # 开启
+    enable: true # 开启
     file: "run-{Y-m-d}.log"
     rotateSize: 3MB #切割大小，要带单位写，例如MB，KB
     stdout: false # 开启控制台输出
 
   file:
     mode: "local" #oss,local
-    domain: "/dzhimg" #mode参数为local 上传图片文件目录映射，如果不传，会默认录入 http://域名+图片相对路径，如果填写dzhimg，就会录入 /dzhimg + 图片相对地址
-    # oss配置项兼容 minio oss 需要配置bucket公开读
-    oss:
+    filePrefix: "/dzhimg" #mode参数为local 上传图片文件目录映射，如果不传，会默认录入 http://域名+图片相对路径，如果填写dzhimg，就会录入 /dzhimg + 图片相对地址
+    uploadPath: "/public/uploads"
+    oss: # oss配置项兼容 minio oss 需要配置bucket公开读
       endpoint: ""
       accessKeyID: ""
       secretAccessKey: ""
@@ -100,9 +101,9 @@ modules:
     middleware:
       cors: true # 跨域
       authority:
-        enable: 1 # 开启中间件监听
+        enable: true # 开启中间件监听
       log:
-        enable: 1
+        enable: true
         ignorePath: "/admin/base/sys/log/getKeep" #忽略日志写入的路径
         ignoreReg: "/(page|list)$" #page和list结尾的链接忽略日志写入
     # 客户端请求代理
