@@ -2,8 +2,8 @@ package sys
 
 import (
 	"context"
-	definetype "dzhgo/addons/bank/defineType"
 	"dzhgo/addons/dict/dao"
+	definetype "dzhgo/addons/dict/defineType"
 	"dzhgo/addons/dict/model"
 	"dzhgo/addons/dict/model/entity"
 	"dzhgo/addons/dict/service"

@@ -7,7 +7,7 @@ package service
 
 import (
 	"context"
-	definetype "dzhgo/addons/bank/defineType"
+	definetype "dzhgo/addons/dict/defineType"
 
 	"github.com/gogf/gf/v2/frame/g"
 )
