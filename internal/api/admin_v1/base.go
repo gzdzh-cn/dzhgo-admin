@@ -82,3 +82,17 @@ type SetKeepReq struct {
 	g.Meta `method:"POST" path:"/setKeep" summary:"设置保留天数" tags:"系统日志"`
 	Value  int `json:"value" v:"required#请输入保留天数"`
 }
+
+type NoticeSseReq struct {
+	g.Meta `path:"/noticeSse" method:"GET"`
+}
+
+type NoticeSseCheckedReq struct {
+	g.Meta       `path:"/noticeSseChecked" method:"POST"`
+	ConnectionID string `json:"connectionID" v:"required#connectionID不能为空"`
+}
+
+// 一键已阅
+type NoticeReadAllReq struct {
+	g.Meta `path:"/noticeReadAll" method:"POST"`
+}

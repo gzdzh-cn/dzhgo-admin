@@ -11,8 +11,8 @@ import (
 // BaseSysUser is the golang structure for table base_sys_user.
 type BaseSysUser struct {
 	Id           string      `json:"id"           orm:"id"           ` //
-	CreateTime   *gtime.Time `json:"createTime"   orm:"createTime"   ` //
-	UpdateTime   *gtime.Time `json:"updateTime"   orm:"updateTime"   ` //
+	CreateTime   *gtime.Time `json:"createTime"   orm:"createTime"   ` // 创建时间
+	UpdateTime   *gtime.Time `json:"updateTime"   orm:"updateTime"   ` // 更新时间
 	DeletedAt    *gtime.Time `json:"deletedAt"    orm:"deleted_at"   ` //
 	DepartmentId string      `json:"departmentId" orm:"departmentId" ` //
 	Name         string      `json:"name"         orm:"name"         ` //
@@ -26,4 +26,5 @@ type BaseSysUser struct {
 	Status       int         `json:"status"       orm:"status"       ` //
 	Remark       string      `json:"remark"       orm:"remark"       ` //
 	SocketId     string      `json:"socketId"     orm:"socketId"     ` //
+	LoginIp      string      `json:"loginIp"      orm:"loginIp"      ` //
 }

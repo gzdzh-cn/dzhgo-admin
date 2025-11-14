@@ -1,6 +1,8 @@
 package defineType
 
-import "time"
+import (
+	"time"
+)
 
 // 微信公众号配置
 type WxConfig struct {

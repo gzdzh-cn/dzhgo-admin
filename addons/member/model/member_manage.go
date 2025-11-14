@@ -14,7 +14,7 @@ type MemberManage struct {
 	AvatarUrl     string    `gorm:"column:avatarUrl;comment:头像;type:varchar(200)" json:"avatarUrl"`
 	Password      string    `gorm:"column:password;not null;comment:会员密码;type:varchar(50)" json:"password"`
 	PasswordV     *int32    `gorm:"column:passwordV;not null;type:int(11);default:1" json:"passwordV"` // 密码版本, 作用是改完密码，让原来的token失效
-	UserName      string    `gorm:"column:username;comment:会员账号;type:varchar(50);index" json:"username"`
+	MemberName    string    `gorm:"column:member_name;comment:会员;type:varchar(50);index" json:"memberName"`
 	Nickname      string    `gorm:"column:nickname;comment:会员昵称;type:varchar(50);index" json:"nickname"`
 	LevelName     string    `gorm:"column:levelName;comment:等级名称;type:varchar(50);default:普通会员" json:"levelName"`
 	Level         int       `gorm:"column:level;comment:等级;type:int(11);default:1" json:"level"`
@@ -26,6 +26,9 @@ type MemberManage struct {
 	Email         *string   `gorm:"column:email;comment:email;type:varchar(50);index" json:"email"`
 	Role          string    `gorm:"column:role;comment:家庭角色;" json:"role"`
 	LastLoginTime time.Time `gorm:"column:lastLoginTime;comment:最后登录时间;" json:"lastLoginTime"`
+
+	// 多租户从属 id
+	UserId string `gorm:"column:user_id;comment:多租户从属 id;type:varchar(50);index" json:"userId"`
 
 	Openid     string `gorm:"column:openid;comment:openid;" json:"openid"`
 	UnionId    string `gorm:"column:unionId;comment:unionId;" json:"unionId"`

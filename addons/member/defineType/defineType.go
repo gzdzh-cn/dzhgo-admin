@@ -5,9 +5,7 @@ import "github.com/gogf/gf/v2/os/gtime"
 type MemberInfo struct {
 	Id            string      `json:"id"            orm:"id"            ` //
 	CreateTime    *gtime.Time `json:"createTime"    orm:"createTime"    ` // 创建时间
-	UpdateTime    *gtime.Time `json:"updateTime"    orm:"updateTime"    ` // 更新时间
 	AvatarUrl     string      `json:"avatarUrl"     orm:"avatarUrl"     ` // 头像
-	Username      string      `json:"username"      orm:"username"      ` // 会员账号
 	Nickname      string      `json:"nickname"      orm:"nickname"      ` // 会员昵称
 	LevelName     string      `json:"levelName"     orm:"levelName"     ` // 等级名称
 	Level         int64       `json:"level"         orm:"level"         ` // 等级
@@ -17,15 +15,15 @@ type MemberInfo struct {
 	Wx            string      `json:"wx"            orm:"wx"            ` // 微信号
 	WxImg         string      `json:"wxImg"         orm:"wxImg"         ` // 微信二维码
 	Email         string      `json:"email"         orm:"email"         ` // email
-	Role          string      `json:"role"          orm:"role"          ` // 家庭角色
-	SessionKey    string      `json:"sessionKey"    orm:"session_key"   ` // session_key
 	Remark        string      `json:"remark"        orm:"remark"        ` // 备注
 	Status        int         `json:"status"        orm:"status"        ` //
 	Description   string      `json:"description"   orm:"description"   ` // 描述
 	LastLoginTime *gtime.Time `json:"lastLoginTime" orm:"lastLoginTime" ` // 最后登录时间
 
+	UserId string `json:"userId" orm:"user_id" ` // 多租户从属 id
+
 	Type           int    `json:"type"           orm:"type"            ` // 类型:1=公众号,2=小程序
-	UserId         string `json:"userId"         orm:"user_id"         ` // 用户ID
+	MemberName     string `json:"memberName"    orm:"member_name"   `    // 会员
 	Notify         int64  `json:"notify"         orm:"notify"          ` // 微信通知:1=是,0=否
 	Language       string `json:"language"       orm:"language"        ` // 语言
 	Country        string `json:"country"        orm:"country"         ` // 国家

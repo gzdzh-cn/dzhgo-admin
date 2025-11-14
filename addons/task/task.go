@@ -44,6 +44,7 @@ func (a *taskAddon) NewInit() {
 	g.Log().Debugf(ctx, "task version:%v", internal.Version)
 	dzhcore.FillInitData(ctx, "task", &model.TaskInfo{})
 	dzhcore.FillInitData(ctx, "task", &baseModel.BaseSysMenu{})
+	dzhcore.FillInitData(ctx, "task", &baseModel.BaseSysAddons{})
 
 	result, err := dzhcore.DBM(taskInfo).Where("status = ?", 1).All()
 	if err != nil {

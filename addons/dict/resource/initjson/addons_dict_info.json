@@ -8,6 +8,7 @@
     "value": "clothing",
     "orderNum": 1,
     "remark": null,
-    "parentId": null
+    "parentId": null,
+    "addonsName" : "base"
   }
 ]

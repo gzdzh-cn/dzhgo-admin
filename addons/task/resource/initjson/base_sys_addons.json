@@ -1,0 +1,16 @@
+[
+	{
+		"id" : "1960335719494848512",
+		"createTime" : "2025-08-26 21:37:11.463",
+		"updateTime" : "2025-08-26 21:37:11.463",
+		"deleted_at" : null,
+		"name" : "任务管理",
+		"image" : null,
+		"link" : null,
+		"menuId" : "1152921504606847032",
+		"typeId" : "1769989517017616384",
+		"remark" : null,
+		"status" : 1,
+		"orderNum" : 99
+	}
+]

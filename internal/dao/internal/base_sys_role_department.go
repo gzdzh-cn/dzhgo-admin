@@ -22,8 +22,8 @@ type BaseSysRoleDepartmentDao struct {
 // BaseSysRoleDepartmentColumns defines and stores column names for the table base_sys_role_department.
 type BaseSysRoleDepartmentColumns struct {
 	Id           string //
-	CreateTime   string //
-	UpdateTime   string //
+	CreateTime   string // 创建时间
+	UpdateTime   string // 更新时间
 	DeletedAt    string //
 	RoleId       string //
 	DepartmentId string //

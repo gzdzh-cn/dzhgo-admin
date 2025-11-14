@@ -10,7 +10,7 @@ const TableNameMemberAttr = "addons_member_attr"
 type MemberAttr struct {
 	*dzhcore.Model
 	Type           int    `gorm:"column:type;comment:类型:1=公众号,2=小程序;type:int(11);;not null;default:1" json:"type"`
-	UserID         string `gorm:"column:user_id;comment:用户ID;not null" json:"user_id"`
+	MemberId       string `gorm:"column:member_id;comment:会员ID;not null" json:"memberId"`
 	UnionID        string `gorm:"column:unionid;comment:UnionID" json:"unionid"`
 	Notify         int    `gorm:"column:notify;comment:微信通知:1=是,0=否;not null;type:int(11);default:0" json:"notify"`
 	OpenID         string `gorm:"column:openid;comment:openid;default:''" json:"openid"`

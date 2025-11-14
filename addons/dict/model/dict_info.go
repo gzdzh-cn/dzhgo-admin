@@ -9,12 +9,13 @@ const TableNameDictInfo = "addons_dict_info"
 // DictInfo mapped from table <addons_dict_info>
 type DictInfo struct {
 	*dzhcore.Model
-	TypeID   string  `gorm:"column:typeId;not null" json:"typeId"`               // 类型ID
-	Name     string  `gorm:"column:name;type:varchar(255);not null" json:"name"` // 名称
-	Value    string  `gorm:"column:value;type:varchar(255)" json:"value"`        // 值
-	OrderNum int32   `gorm:"column:orderNum;type:int;not null" json:"orderNum"`  // 排序
-	Remark   *string `gorm:"column:remark;type:varchar(255)" json:"remark"`      // 备注
-	ParentID *int32  `gorm:"column:parentId;type:int" json:"parentId"`           // 父ID
+	TypeID     string  `gorm:"column:typeId;not null" json:"typeId"`                                   // 类型ID
+	Name       string  `gorm:"column:name;type:varchar(255);not null" json:"name"`                     // 名称
+	Value      string  `gorm:"column:value;type:varchar(255)" json:"value"`                            // 值
+	OrderNum   int32   `gorm:"column:orderNum;type:int;not null" json:"orderNum"`                      // 排序
+	Remark     *string `gorm:"column:remark;type:varchar(255)" json:"remark"`                          // 备注
+	ParentID   *int32  `gorm:"column:parentId;type:int" json:"parentId"`                               // 父ID
+	AddonsName *string `gorm:"column:addonsName;not null;varchar(255);default:base" json:"addonsName"` // 插件名称
 }
 
 // TableName DictInfo's table name

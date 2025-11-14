@@ -1,0 +1,16 @@
+[
+  {
+    "id": "1960335673202315264",
+    "createTime": "2025-08-26 21:37:00.426",
+    "updateTime": "2025-08-26 21:37:00.426",
+    "deleted_at": null,
+    "name": "字典管理",
+    "image": null,
+    "link": null,
+    "menuId": "1152921504606847024",
+    "typeId": "1769989517017616384",
+    "remark": null,
+    "status": 1,
+    "orderNum": 99
+  }
+]

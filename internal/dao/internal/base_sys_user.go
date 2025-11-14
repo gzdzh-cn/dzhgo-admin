@@ -22,8 +22,8 @@ type BaseSysUserDao struct {
 // BaseSysUserColumns defines and stores column names for the table base_sys_user.
 type BaseSysUserColumns struct {
 	Id           string //
-	CreateTime   string //
-	UpdateTime   string //
+	CreateTime   string // 创建时间
+	UpdateTime   string // 更新时间
 	DeletedAt    string //
 	DepartmentId string //
 	Name         string //
@@ -37,6 +37,7 @@ type BaseSysUserColumns struct {
 	Status       string //
 	Remark       string //
 	SocketId     string //
+	LoginIp      string //
 }
 
 // baseSysUserColumns holds the columns for the table base_sys_user.
@@ -57,6 +58,7 @@ var baseSysUserColumns = BaseSysUserColumns{
 	Status:       "status",
 	Remark:       "remark",
 	SocketId:     "socketId",
+	LoginIp:      "loginIp",
 }
 
 // NewBaseSysUserDao creates and returns a new DAO object for table data access.

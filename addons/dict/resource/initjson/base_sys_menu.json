@@ -13,8 +13,8 @@
     "orderNum": 99,
     "viewPath": null,
     "keepAlive": 1,
-    "isShow": 0,
-    "isInstall": 0,
+    "isShow": 1,
+    "isInstall": 1,
     "menuType": "addon"
   },
   {

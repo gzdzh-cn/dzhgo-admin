@@ -19,7 +19,6 @@ type AddonsMemberManage struct {
 	AvatarUrl     interface{} // 头像
 	Password      interface{} // 会员密码
 	PasswordV     interface{} //
-	Username      interface{} // 会员账号
 	Nickname      interface{} // 会员昵称
 	LevelName     interface{} // 等级名称
 	Level         interface{} // 等级
@@ -37,4 +36,6 @@ type AddonsMemberManage struct {
 	Remark        interface{} // 备注
 	Status        interface{} //
 	Description   interface{} // 描述
+	UserId        interface{} // 多租户从属 id
+	MemberName    interface{} // 会员
 }

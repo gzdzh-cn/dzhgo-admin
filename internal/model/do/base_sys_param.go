@@ -13,8 +13,8 @@ import (
 type BaseSysParam struct {
 	g.Meta     `orm:"table:base_sys_param, do:true"`
 	Id         interface{} //
-	CreateTime *gtime.Time //
-	UpdateTime *gtime.Time //
+	CreateTime *gtime.Time // 创建时间
+	UpdateTime *gtime.Time // 更新时间
 	DeletedAt  *gtime.Time //
 	KeyName    interface{} //
 	Name       interface{} //

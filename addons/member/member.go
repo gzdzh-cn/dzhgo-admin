@@ -41,6 +41,7 @@ func (a *memberAddon) NewInit() {
 	g.Log().Debugf(ctx, "member version:%v", internal.Version)
 
 	dzhcore.FillInitData(ctx, "member", &model.MemberManage{})
+	dzhcore.FillInitData(ctx, "member", &model.MemberAttr{})
 	dzhcore.FillInitData(ctx, "member", &baseModel.BaseSysMenu{})
 	g.Log().Debug(ctx, "addon member init end ...")
 

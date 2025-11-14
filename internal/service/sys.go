@@ -8,7 +8,9 @@ package service
 import (
 	"context"
 	v1 "dzhgo/internal/api/admin_v1"
+	baseCommon "dzhgo/internal/common"
 	"dzhgo/internal/model"
+	"dzhgo/internal/model/entity"
 
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/frame/g"
@@ -28,6 +30,10 @@ type (
 		// 服务器信息
 		ServerInfo(ctx context.Context) (data interface{}, err error)
 	}
+	IBaseSysActionLogService interface {
+		// 记录操作日志
+		Record(ctx context.Context, userId string, name string, remark string) (data any, err error)
+	}
 	IBaseSysAddonsService interface {
 		// 安装卸载插件
 		InstallUpdateStatus(ctx context.Context, req *v1.InstallUpdateStatusReq) (data interface{}, err error)
@@ -45,9 +51,14 @@ type (
 	}
 	IBaseSysDepartmentService interface {
 		// GetByRoleIds 获取部门
-		GetByRoleIds(roleIds []string, isAdmin bool) (res []uint)
+		GetByRoleIds(roleIds []string) (res []uint)
 		// Order 排序部门
 		Order(ctx g.Ctx) (err error)
+	}
+	IBaseSysFeedbackService interface {
+		ServiceAdd(ctx context.Context, req *dzhcore.AddReq) (data any, err error)
+		// ServiceInfo 获取反馈信息
+		ServiceInfo(ctx context.Context, req *dzhcore.InfoReq) (data any, err error)
 	}
 	IBaseSysLogService interface {
 		// Record 记录日志
@@ -68,14 +79,41 @@ type (
 		GenerateTokenByUser(ctx context.Context, user *model.BaseSysUser) (result *v1.TokenRes, err error)
 	}
 	IBaseSysMenuService interface {
-		// GetPerms 获取菜单的权限
-		GetPerms(roleIds []string) []string
-		// GetMenus 获取菜单
-		GetMenus(roleIds []string, isAdmin bool) (result gdb.Result)
 		// ModifyAfter 修改后
 		ModifyAfter(ctx context.Context, method string, param g.MapStrAny) (err error)
 		// ServiceAdd 添加
 		ServiceAdd(ctx context.Context, req *dzhcore.AddReq) (data interface{}, err error)
+		// GetPerms 获取菜单的权限
+		GetPerms(roleIds []string) []string
+		// GetMenus 获取菜单
+		GetMenus(roleIds []string) (result gdb.Result)
+	}
+	IBaseSysNoticeService interface {
+		ServiceInfo(ctx context.Context, req *dzhcore.InfoReq) (data any, err error)
+		// 更新阅读状态
+		ServiceUpdate(ctx context.Context, req *dzhcore.UpdateReq) (data any, err error)
+		// 删除用户消息
+		ServiceDelete(ctx context.Context, req *dzhcore.DeleteReq) (data any, err error)
+		// 一键已阅
+		ServiceReadAll(ctx context.Context) (data any, err error)
+		// NoticeAdd 给指定用户推送消息（保持接口兼容性）
+		NoticeAdd(ctx context.Context, notice *entity.BaseSysNotice, userIdSlice *[]string) (data any, err error)
+		// NoticeAddWithTarget 使用接口多态的消息推送
+		NoticeAddWithTarget(ctx context.Context, notice *entity.BaseSysNotice, target baseCommon.NoticeTarget) (data any, err error)
+		// NoticeAddToAllUsers 添加通知并推送给全部用户
+		NoticeAddToAllUsers(ctx context.Context, notice *entity.BaseSysNotice) (data any, err error)
+		// 消息通知处理（保持接口兼容性）
+		NoticeDo(ctx context.Context, notice *entity.BaseSysNotice, userIdSlice *[]string) (data any, err error)
+		// NoticeDoWithTarget 使用接口多态的消息处理
+		NoticeDoWithTarget(ctx context.Context, notice *entity.BaseSysNotice, target baseCommon.NoticeTarget) (data any, err error)
+		// 推送队列到 Redis
+		NoticePushQueue(ctx context.Context, noticeId string, userId *string) (data any, err error)
+		// 队列处理,把队列的数据插入到数据库
+		NoticeQueueDo(ctx context.Context, noticeId string, userId *string) (data any, err error)
+		// 启动 Redis 队列消费者
+		StartRedisQueueConsumer()
+		// 检查队列状态
+		CheckQueueStatus(ctx context.Context) (data any, err error)
 	}
 	IBaseSysParamService interface {
 		// HtmlByKey 根据配置参数key获取网页内容(富文本)
@@ -118,18 +156,21 @@ type (
 )
 
 var (
-	localBaseOpenService          IBaseOpenService
-	localBaseSysAddonsService     IBaseSysAddonsService
+	localBaseOpenService           IBaseOpenService
+	localBaseSysActionLogService   IBaseSysActionLogService
+	localBaseSysAddonsService      IBaseSysAddonsService
 	localBaseSysAddonsTypesService IBaseSysAddonsTypesService
-	localBaseSysConfService       IBaseSysConfService
-	localBaseSysDepartmentService IBaseSysDepartmentService
-	localBaseSysLogService        IBaseSysLogService
-	localBaseSysLoginService      IBaseSysLoginService
-	localBaseSysMenuService       IBaseSysMenuService
-	localBaseSysParamService      IBaseSysParamService
-	localBaseSysPermsService      IBaseSysPermsService
-	localBaseSysRoleService       IBaseSysRoleService
-	localBaseSysUserService       IBaseSysUserService
+	localBaseSysConfService        IBaseSysConfService
+	localBaseSysDepartmentService  IBaseSysDepartmentService
+	localBaseSysFeedbackService    IBaseSysFeedbackService
+	localBaseSysLogService         IBaseSysLogService
+	localBaseSysLoginService       IBaseSysLoginService
+	localBaseSysMenuService        IBaseSysMenuService
+	localBaseSysNoticeService      IBaseSysNoticeService
+	localBaseSysParamService       IBaseSysParamService
+	localBaseSysPermsService       IBaseSysPermsService
+	localBaseSysRoleService        IBaseSysRoleService
+	localBaseSysUserService        IBaseSysUserService
 )
 
 func BaseOpenService() IBaseOpenService {
@@ -141,6 +182,17 @@ func BaseOpenService() IBaseOpenService {
 
 func RegisterBaseOpenService(i IBaseOpenService) {
 	localBaseOpenService = i
+}
+
+func BaseSysActionLogService() IBaseSysActionLogService {
+	if localBaseSysActionLogService == nil {
+		panic("implement not found for interface IBaseSysActionLogService, forgot register?")
+	}
+	return localBaseSysActionLogService
+}
+
+func RegisterBaseSysActionLogService(i IBaseSysActionLogService) {
+	localBaseSysActionLogService = i
 }
 
 func BaseSysAddonsService() IBaseSysAddonsService {
@@ -187,6 +239,17 @@ func RegisterBaseSysDepartmentService(i IBaseSysDepartmentService) {
 	localBaseSysDepartmentService = i
 }
 
+func BaseSysFeedbackService() IBaseSysFeedbackService {
+	if localBaseSysFeedbackService == nil {
+		panic("implement not found for interface IBaseSysFeedbackService, forgot register?")
+	}
+	return localBaseSysFeedbackService
+}
+
+func RegisterBaseSysFeedbackService(i IBaseSysFeedbackService) {
+	localBaseSysFeedbackService = i
+}
+
 func BaseSysLogService() IBaseSysLogService {
 	if localBaseSysLogService == nil {
 		panic("implement not found for interface IBaseSysLogService, forgot register?")
@@ -218,6 +281,17 @@ func BaseSysMenuService() IBaseSysMenuService {
 
 func RegisterBaseSysMenuService(i IBaseSysMenuService) {
 	localBaseSysMenuService = i
+}
+
+func BaseSysNoticeService() IBaseSysNoticeService {
+	if localBaseSysNoticeService == nil {
+		panic("implement not found for interface IBaseSysNoticeService, forgot register?")
+	}
+	return localBaseSysNoticeService
+}
+
+func RegisterBaseSysNoticeService(i IBaseSysNoticeService) {
+	localBaseSysNoticeService = i
 }
 
 func BaseSysParamService() IBaseSysParamService {

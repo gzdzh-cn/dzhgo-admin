@@ -1,0 +1,7 @@
+# rsync-exclude.txt
+.git/
+.idea/
+node_modules/
+*.log
+sync_code.sh
+rsync-exclude.txt

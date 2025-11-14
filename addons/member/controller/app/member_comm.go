@@ -27,7 +27,7 @@ func init() {
 func (c *MemberCommController) Person(ctx context.Context, req *v1.PersonReq) (res *dzhcore.BaseRes, err error) {
 
 	member := common.GetMember(ctx)
-	data, err := service.MemberManageService().Person(ctx, member.UserId)
+	data, err := service.MemberManageService().Person(ctx, member.MemberId)
 	if err != nil {
 		return
 	}

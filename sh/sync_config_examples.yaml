@@ -1,0 +1,235 @@
+# MySQL到ES同步方案配置示例
+
+# 方案1: Canal + Kafka + Logstash
+canal_config:
+  # Canal配置
+  canal:
+    instance:
+      filter:
+        regex: ".*\\.addons_customer_pro_clues"  # 只同步指定表
+      mysql:
+        host: "localhost"
+        port: 3306
+        username: "root"
+        password: "password"
+        database: "dzhgo"
+  
+  # Kafka配置
+  kafka:
+    bootstrap_servers: "localhost:9092"
+    topic: "mysql_binlog"
+    group_id: "es_sync_group"
+  
+  # Logstash配置
+  logstash:
+    input:
+      kafka:
+        bootstrap_servers: "localhost:9092"
+        topics: ["mysql_binlog"]
+        codec: json
+    filter:
+      - if:
+          equals:
+            table: "addons_customer_pro_clues"
+        mutate:
+          add_field:
+            target_index: "addons_customer_pro_clues"
+    output:
+      elasticsearch:
+        hosts: ["localhost:9200"]
+        index: "%{target_index}"
+        document_id: "%{id}"
+
+# 方案2: DataX配置
+datax_config:
+  job:
+    content:
+      - reader:
+          name: mysqlreader
+          parameter:
+            username: "root"
+            password: "password"
+            column:
+              - "id"
+              - "name"
+              - "services_ids"
+              - "create_time"
+            connection:
+              - jdbcUrl: ["jdbc:mysql://localhost:3306/dzhgo"]
+                table: ["addons_customer_pro_clues"]
+        writer:
+          name: elasticsearchwriter
+          parameter:
+            endpoint: "http://localhost:9200"
+            index: "addons_customer_pro_clues"
+            type: "_doc"
+            batchSize: 1000
+
+# 方案3: Flink CDC配置
+flink_cdc_config:
+  # Flink SQL
+  sql: |
+    CREATE TABLE clues (
+      id STRING,
+      name STRING,
+      services_ids STRING,
+      create_time TIMESTAMP(3),
+      update_time TIMESTAMP(3),
+      PRIMARY KEY (id) NOT ENFORCED
+    ) WITH (
+      'connector' = 'mysql-cdc',
+      'hostname' = 'localhost',
+      'port' = '3306',
+      'username' = 'root',
+      'password' = 'password',
+      'database-name' = 'dzhgo',
+      'table-name' = 'addons_customer_pro_clues'
+    );
+
+    CREATE TABLE clues_attr (
+      clues_id STRING,
+      guest_ip_info STRING,
+      address STRING,
+      city STRING,
+      PRIMARY KEY (clues_id) NOT ENFORCED
+    ) WITH (
+      'connector' = 'mysql-cdc',
+      'hostname' = 'localhost',
+      'port' = '3306',
+      'username' = 'root',
+      'password' = 'password',
+      'database-name' = 'dzhgo',
+      'table-name' = 'addons_customer_pro_clues_attr'
+    );
+
+    CREATE TABLE es_clues_aggregated (
+      id STRING,
+      name STRING,
+      services_ids STRING,
+      create_time TIMESTAMP(3),
+      guest_ip_info STRING,
+      address STRING,
+      city STRING,
+      PRIMARY KEY (id) NOT ENFORCED
+    ) WITH (
+      'connector' = 'elasticsearch-7',
+      'hosts' = 'http://localhost:9200',
+      'index' = 'addons_customer_pro_clues_aggregated'
+    );
+
+    INSERT INTO es_clues_aggregated
+    SELECT 
+      c.id,
+      c.name,
+      c.services_ids,
+      c.create_time,
+      ca.guest_ip_info,
+      ca.address,
+      ca.city
+    FROM clues c
+    LEFT JOIN clues_attr ca ON c.id = ca.clues_id;
+
+# 方案4: 自研同步程序配置
+custom_sync_config:
+  # 数据库配置
+  mysql:
+    host: "localhost"
+    port: 3306
+    username: "root"
+    password: "password"
+    database: "dzhgo"
+    charset: "utf8mb4"
+  
+  # ES配置
+  elasticsearch:
+    url: "http://localhost:9200"
+    index: "addons_customer_pro_clues_aggregated"
+  
+  # 同步配置
+  sync:
+    batch_size: 1000
+    interval: "5m"  # 增量同步间隔
+    tables:
+      - name: "addons_customer_pro_clues"
+        alias: "c"
+        fields:
+          - "id"
+          - "name"
+          - "services_ids"
+          - "create_time"
+          - "update_time"
+      - name: "addons_customer_pro_clues_attr"
+        alias: "ca"
+        fields:
+          - "clues_id"
+          - "guest_ip_info"
+          - "address"
+          - "city"
+        join:
+          type: "LEFT JOIN"
+          condition: "c.id = ca.clues_id"
+  
+  # 聚合查询
+  aggregation_query: |
+    SELECT 
+      c.id,
+      c.name,
+      c.services_ids,
+      c.create_time,
+      ca.guest_ip_info,
+      ca.address,
+      ca.city
+    FROM addons_customer_pro_clues c
+    LEFT JOIN addons_customer_pro_clues_attr ca ON c.id = ca.clues_id
+    WHERE c.deleted_at IS NULL
+    ORDER BY c.create_time DESC
+
+# 性能优化配置
+performance_config:
+  # 批量处理
+  batch:
+    size: 1000
+    timeout: "30s"
+  
+  # 并发控制
+  concurrency:
+    workers: 4
+    queue_size: 10000
+  
+  # 内存优化
+  memory:
+    max_heap: "2g"
+    gc_interval: "5m"
+  
+  # 网络优化
+  network:
+    timeout: "30s"
+    retry_times: 3
+    retry_interval: "1s"
+
+# 监控配置
+monitoring_config:
+  # 指标收集
+  metrics:
+    enabled: true
+    port: 8080
+    path: "/metrics"
+  
+  # 日志配置
+  logging:
+    level: "info"
+    format: "json"
+    output: "file"
+    file: "sync.log"
+  
+  # 告警配置
+  alerting:
+    enabled: true
+    webhook: "http://localhost:8081/alert"
+    rules:
+      - name: "sync_error_rate"
+        condition: "error_rate > 0.1"
+        threshold: 0.1
+      - name: "sync_latency"
+        condition: "latency > 30s"
+        threshold: 30 

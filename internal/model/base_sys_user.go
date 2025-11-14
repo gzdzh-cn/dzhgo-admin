@@ -19,6 +19,7 @@ type BaseSysUser struct {
 	Status       *int32  `gorm:"column:status;not null;default:1" json:"status"`                   // 状态 0:禁用 1：启用
 	Remark       *string `gorm:"column:remark;type:varchar(255)" json:"remark"`                    // 备注
 	SocketID     *string `gorm:"column:socketId;type:varchar(255)" json:"socketId"`                // socketId
+	LoginIP      *string `gorm:"column:loginIp;type:varchar(255)" json:"loginIp"`                  // 登录IP
 }
 
 // TableName BaseSysUser's table name

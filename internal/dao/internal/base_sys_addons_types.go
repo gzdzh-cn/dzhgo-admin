@@ -22,15 +22,15 @@ type BaseSysAddonsTypesDao struct {
 // BaseSysAddonsTypesColumns defines and stores column names for the table base_sys_addons_types.
 type BaseSysAddonsTypesColumns struct {
 	Id         string //
-	CreateTime string //
-	UpdateTime string //
+	CreateTime string // 创建时间
+	UpdateTime string // 更新时间
 	DeletedAt  string //
-	Name       string //
-	Image      string //
-	Link       string //
-	Remark     string //
-	Status     string //
-	OrderNum   string //
+	Name       string // 标题
+	Image      string // 图片
+	Link       string // 跳转
+	Remark     string // 备注
+	Status     string // 状态
+	OrderNum   string // 排序
 }
 
 // baseSysAddonsTypesColumns holds the columns for the table base_sys_addons_types.

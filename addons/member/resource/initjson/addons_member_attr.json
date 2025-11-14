@@ -1,0 +1,28 @@
+[
+	{
+		"id" : "1",
+		"createTime" : "2025-08-28 11:17:07.551",
+		"updateTime" : "2025-08-28 11:17:07.551",
+		"deleted_at" : null,
+		"type" : 1,
+		"user_id" : "1",
+		"unionid" : null,
+		"notify" : 0,
+		"openid" : "",
+		"nickname" : null,
+		"sex" : 0,
+		"language" : null,
+		"country" : null,
+		"province" : null,
+		"city" : null,
+		"headimgurl" : null,
+		"subscribe" : 0,
+		"subscribe_time" : null,
+		"groupid" : null,
+		"tagid_list" : null,
+		"privilege" : null,
+		"subscribe_scene" : null,
+		"qr_scene" : null,
+		"qr_scene_str" : null
+	}
+]

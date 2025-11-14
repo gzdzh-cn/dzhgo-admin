@@ -23,6 +23,16 @@ func init() {
 	dzhcore.AddControllerSimple(memberOpenController)
 }
 
+// 账号注册
+func (c *MemberOpenController) AccountRegister(ctx context.Context, req *v1.AccountRegisterReq) (res *dzhcore.BaseRes, err error) {
+	data, err := service.MemberManageService().AccountRegister(ctx, req)
+	if err != nil {
+		return
+	}
+	res = dzhcore.Ok(data)
+	return
+}
+
 // 账号登录
 func (c *MemberOpenController) AccountLogin(ctx context.Context, req *v1.AccountLoginReq) (res *dzhcore.BaseRes, err error) {
 	data, err := service.MemberManageService().AccountLogin(ctx, req)

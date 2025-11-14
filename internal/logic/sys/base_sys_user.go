@@ -8,6 +8,7 @@ import (
 	baseEntity "dzhgo/internal/model/entity"
 	"dzhgo/internal/service"
 	"fmt"
+
 	"github.com/gogf/gf/v2/container/garray"
 	"github.com/gogf/gf/v2/container/gset"
 	"github.com/gogf/gf/v2/crypto/gmd5"
@@ -38,21 +39,54 @@ func NewsBaseSysUserService() *sBaseSysUserService {
 			UniqueKey: map[string]string{
 				"username": "用户名不能重复",
 			},
-			PageQueryOp: &dzhcore.QueryOp{
-				Select:  "base_sys_user.*,dept.`name` as departmentName,GROUP_CONCAT( role.`name` ) AS `roleName`",
+			ListQueryOp: &dzhcore.QueryOp{
+				Select:  "user.*",
 				FieldEQ: []string{"password"},
+				As:      "user",
+				Join:    []*dzhcore.JoinOp{},
+				Where: func(ctx context.Context) []g.Array {
+
+					r := g.RequestFromCtx(ctx)
+					var where = []g.Array{}
+					if r.GetCtxVar("admin").String() != "" {
+
+						//  找出全部管理员id
+						adminList, err := dao.BaseSysUserRole.Ctx(ctx).Where("roleId", "1").Fields("userId").Array()
+						if err != nil {
+							g.Log().Error(ctx, err)
+							return where
+						}
+						// 排除 adminList 中的 id
+						where = append(where, g.Array{"user.id NOT IN (?)", adminList})
+					}
+
+					return where
+				},
+				Extend: func(ctx g.Ctx, m *gdb.Model) *gdb.Model {
+					return m
+				},
+				KeyWordField: []string{},
+				ModifyResult: func(ctx g.Ctx, data interface{}) interface{} {
+
+					return data
+				},
+			},
+			PageQueryOp: &dzhcore.QueryOp{
+				Select:  "user.*,dept.`name` as departmentName,GROUP_CONCAT( role.`name` ) AS `roleName`",
+				FieldEQ: []string{"password"},
+				As:      "user",
 				Join: []*dzhcore.JoinOp{
 					{
 						Model:     model.NewBaseSysDepartment(),
 						Alias:     "dept",
 						Type:      "LeftJoin",
-						Condition: "`base_sys_user`.`departmentId` = `dept`.`id`",
+						Condition: "`user`.`departmentId` = `dept`.`id`",
 					},
 					{
 						Model:     model.NewBaseSysUserRole(),
 						Alias:     "user_role",
 						Type:      "LeftJoin",
-						Condition: "`base_sys_user`.`id` = `user_role`.`userId`",
+						Condition: "`user`.`id` = `user_role`.`userId`",
 					},
 					{
 						Model:     model.NewBaseSysRole(),
@@ -63,25 +97,36 @@ func NewsBaseSysUserService() *sBaseSysUserService {
 				},
 				Where: func(ctx context.Context) []g.Array {
 
-					r := g.RequestFromCtx(ctx).GetMap()
+					r := g.RequestFromCtx(ctx)
+					rMap := r.GetMap()
 					admin := common.GetAdmin(ctx)
+					var where = []g.Array{}
+					if r.GetCtxVar("admin").String() != "" {
+						// where = []g.Array{{"(user.departmentId IN (?))", gconv.SliceStr(rMap["departmentIds"])}}
+						where = append(where, g.Array{"(user.departmentId IN (?))", gconv.SliceStr(rMap["departmentIds"])})
+						if gstr.Equal(admin.UserId, "1152921504606846975") {
+							where = append(where, g.Slice{"user.id NOT IN (?)", g.Slice{"1152921504606846976"}})
+						}
 
-					var condition = []g.Array{{"(departmentId IN (?))", gconv.SliceStr(r["departmentIds"])}}
-
-					if gstr.Equal(admin.UserId, "1152921504606846975") {
-						condition = append(condition, g.Slice{"id NOT IN (?)", g.Slice{"1152921504606846976"}})
+						if !gstr.Equal(admin.UserId, "1152921504606846975") && !gstr.Equal(admin.UserId, "1152921504606846976") {
+							where = append(where, g.Slice{"user.id NOT IN (?)", g.Slice{"1152921504606846975", "1152921504606846976"}})
+						}
+						//  找出全部管理员id
+						adminList, err := dao.BaseSysUserRole.Ctx(ctx).Where("roleId", "1").Fields("userId").Array()
+						if err != nil {
+							g.Log().Error(ctx, err)
+							return where
+						}
+						// 排除 adminList 中的 id
+						where = append(where, g.Array{"user.id NOT IN (?)", adminList})
 					}
 
-					if !gstr.Equal(admin.UserId, "1152921504606846975") && !gstr.Equal(admin.UserId, "1152921504606846976") {
-						condition = append(condition, g.Slice{"id NOT IN (?)", g.Slice{"1152921504606846975", "1152921504606846976"}})
-					}
-
-					return condition
+					return where
 				},
 				Extend: func(ctx g.Ctx, m *gdb.Model) *gdb.Model {
-					return m.Group("`base_sys_user`.`id`")
+					return m.Group("`user`.`id`")
 				},
-				KeyWordField: []string{"name", "username", "nickName"},
+				KeyWordField: []string{"user.name", "user.username", "user.nickName"},
 				ModifyResult: func(ctx g.Ctx, data interface{}) interface{} {
 					type List struct {
 						*baseEntity.BaseSysUser
@@ -335,7 +380,27 @@ func (s *sBaseSysUserService) ServiceInfo(ctx g.Ctx, req *dzhcore.InfoReq) (data
 	}
 
 	resultMap["roleIdList"] = roleIds
-	data = resultMap
+
+	type UserInfo struct {
+		Id         string   `json:"id"           orm:"id"           ` //
+		Name       string   `json:"name"         orm:"name"         ` //
+		Username   string   `json:"username"     orm:"username"     ` //
+		NickName   string   `json:"nickName"     orm:"nickName"     ` //
+		HeadImg    string   `json:"headImg"      orm:"headImg"      ` //
+		Phone      string   `json:"phone"        orm:"phone"        ` //
+		Email      string   `json:"email"        orm:"email"        ` //
+		Status     int      `json:"status"       orm:"status"       ` //
+		Remark     string   `json:"remark"       orm:"remark"       ` //
+		RoleIdList []string `json:"roleIdList"`
+	}
+
+	var userInfo *UserInfo
+	err = gconv.Struct(resultMap, &userInfo)
+	if err != nil {
+		return nil, err
+	}
+
+	data = userInfo
 
 	return
 }

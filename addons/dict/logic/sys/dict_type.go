@@ -3,12 +3,12 @@ package sys
 import (
 	"dzhgo/addons/dict/dao"
 	"dzhgo/addons/dict/model"
-	"dzhgo/addons/dict/service"
+
 	"github.com/gzdzh-cn/dzhcore"
 )
 
 func init() {
-	service.RegisterDictTypeService(&sDictTypeService{})
+	// service.RegisterDictTypeService(&sDictTypeService{})
 }
 
 type sDictTypeService struct {

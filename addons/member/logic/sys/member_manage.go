@@ -9,11 +9,15 @@ import (
 	"dzhgo/addons/member/model"
 	"dzhgo/addons/member/model/entity"
 	"dzhgo/addons/member/service"
+	"dzhgo/internal/common"
 	"dzhgo/internal/config"
+	baseDao "dzhgo/internal/dao"
 	"dzhgo/internal/defineType"
+	baseEntity "dzhgo/internal/model/entity"
 	"fmt"
 	"time"
 
+	"github.com/gogf/gf/v2/container/garray"
 	"github.com/gogf/gf/v2/crypto/gmd5"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/errors/gerror"
@@ -38,18 +42,129 @@ func NewsMemberManageService() *sMemberManageService {
 		&dzhcore.Service{
 			Dao:   &dao.AddonsMemberManage,
 			Model: model.NewMemberManage(),
+			ListQueryOp: &dzhcore.QueryOp{
+				FieldEQ:      []string{},
+				KeyWordField: []string{},
+				AddOrderby:   g.MapStrStr{"createTime": "DESC"},
+				Select:       "m.*,ma.type,ma.member_id,ma.notify,ma.country,ma.province,ma.city",
+				As:           "m", //主表别名
+				Join: []*dzhcore.JoinOp{
+					{
+						Model:     model.NewMemberAttr(),
+						Alias:     "ma",
+						Type:      "LeftJoin",
+						Condition: "ma.member_id = m.`id`",
+					},
+				},
+				Where: func(ctx context.Context) []g.Array {
+
+					var where []g.Array
+					r := g.RequestFromCtx(ctx)
+
+					// 会员查看自己的数据
+					if r.GetCtxVar("admin").String() != "" {
+						admin := common.GetAdmin(ctx)
+						// 权限控制
+						// 非超管仅看自己的数据
+						if !garray.NewStrArrayFrom(admin.RoleIds).Contains("1") {
+							where = append(where, g.Array{"m.user_id = ?", admin.UserId})
+						}
+
+					}
+
+					return where
+				},
+				ModifyResult: func(ctx g.Ctx, data any) any {
+
+					var List []*memberDefineType.MemberInfo
+					err := gconv.Struct(data, &List)
+					if err != nil {
+						g.Log().Error(ctx, err.Error())
+						return nil
+					}
+					data = List
+					return data
+				},
+			},
 			PageQueryOp: &dzhcore.QueryOp{
 				FieldEQ:      []string{},
 				KeyWordField: []string{},
 				AddOrderby:   g.MapStrStr{},
-				Select:       "addons_member_manage.*,member_attr.type,member_attr.user_id,member_attr.notify,member_attr.country,member_attr.province,member_attr.city",
+				Select:       "m.*,ma.type,ma.member_id,ma.notify,ma.country,ma.province,ma.city",
+				As:           "m", //主表别名
 				Join: []*dzhcore.JoinOp{
 					{
 						Model:     model.NewMemberAttr(),
-						Alias:     "member_attr",
+						Alias:     "ma",
 						Type:      "LeftJoin",
-						Condition: "member_attr.user_id = addons_member_manage.`id`",
+						Condition: "ma.member_id = m.`id`",
 					},
+				},
+				Where: func(ctx context.Context) []g.Array {
+
+					var where []g.Array
+					r := g.RequestFromCtx(ctx)
+
+					// 会员查看自己的数据
+					if r.GetCtxVar("admin").String() != "" {
+						admin := common.GetAdmin(ctx)
+						// 权限控制
+						// 非超管仅看自己的数据
+						if !garray.NewStrArrayFrom(admin.RoleIds).Contains("1") {
+							where = append(where, g.Array{"m.user_id = ?", admin.UserId})
+						}
+
+					}
+
+					return where
+				},
+				ModifyResult: func(ctx g.Ctx, data any) any {
+
+					type List struct {
+						*memberDefineType.MemberInfo
+						UserName string `json:"username"`
+					}
+
+					type PageData struct {
+						List       []*List            `json:"list"`
+						Pagination *common.Pagination `json:"pagination"`
+					}
+
+					var (
+						pageData    *PageData
+						usernameMap = g.MapStrStr{} //id为下标的会员数集
+					)
+
+					//id为下标的租户数集
+					{
+						var userList []*baseEntity.BaseSysUser
+						err := baseDao.BaseSysUser.Ctx(ctx).Fields("id", "username").Scan(&userList)
+						if err != nil {
+							g.Log().Error(ctx, err.Error())
+							return err
+						}
+						for _, user := range userList {
+							usernameMap[user.Id] = user.Username
+						}
+					}
+
+					err := gconv.Struct(data, &pageData)
+					if err != nil {
+						g.Log().Error(ctx, err.Error())
+						return nil
+					}
+
+					if len(pageData.List) > 0 {
+						for _, v := range pageData.List {
+							if v != nil && v.UserId != "" {
+								if userName, ok := usernameMap[v.UserId]; ok {
+									v.UserName = userName
+								}
+							}
+						}
+					}
+					data = pageData
+					return data
 				},
 			},
 		},
@@ -59,11 +174,45 @@ func NewsMemberManageService() *sMemberManageService {
 // 新增|删除|修改前的操作
 func (s *sMemberManageService) ModifyBefore(ctx context.Context, method string, param g.MapStrAny) (err error) {
 
+	if method == "Add" {
+		if g.RequestFromCtx(ctx).GetParam("userId").IsNil() && !garray.NewStrArrayFrom(common.GetAdmin(ctx).RoleIds).Contains("1") {
+			admin := common.GetAdmin(ctx)
+			g.RequestFromCtx(ctx).SetParam("userId", admin.UserId)
+		}
+	}
+
+	if method == "Update" {
+		if gconv.String(param["password"]) != "" {
+			password := gmd5.MustEncryptString(gconv.String(param["password"]))
+			g.RequestFromCtx(ctx).SetParam("password", password)
+			g.RequestFromCtx(ctx).SetParam("passwordV", &gdb.Counter{
+				Field: "passwordV",
+				Value: 1,
+			})
+		}
+	}
+
 	return
 }
 
 // 新增|删除|修改后的操作
 func (s *sMemberManageService) ModifyAfter(ctx context.Context, method string, param g.MapStrAny) (err error) {
+
+	if method == "Delete" {
+		rmap := g.RequestFromCtx(ctx).GetMap()
+
+		if rmap["id"] == "" {
+			return
+		}
+		_, err = dao.AddonsMemberAttr.Ctx(ctx).Where("user_id", rmap["id"]).Delete()
+		if err != nil {
+			g.Log().Error(ctx, err)
+			return err
+		}
+
+		return
+	}
+
 	return
 }
 
@@ -83,7 +232,7 @@ func (s *sMemberManageService) ServiceAdd(ctx context.Context, req *dzhcore.AddR
 	}
 	err = g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) (err error) {
 
-		rmap["id"] = dzhcore.NodeSnowflake.Generate().String()
+		rmap["id"] = dzhcore.CreateSnowflakeId()
 		_, err = m.TX(tx).Data(rmap).Insert()
 		if err != nil {
 			g.Log().Error(ctx, err)
@@ -95,8 +244,8 @@ func (s *sMemberManageService) ServiceAdd(ctx context.Context, req *dzhcore.AddR
 			g.Log().Error(ctx, err)
 			return err
 		}
-		memberAttr.Id = dzhcore.NodeSnowflake.Generate().String()
-		memberAttr.UserId = gconv.String(rmap["id"])
+		memberAttr.Id = dzhcore.CreateSnowflakeId()
+		memberAttr.MemberId = gconv.String(rmap["id"])
 		_, err = dao.AddonsMemberAttr.Ctx(ctx).Data(memberAttr).OmitEmpty().Insert()
 		if err != nil {
 			g.Log().Error(ctx, err)
@@ -113,9 +262,8 @@ func (s *sMemberManageService) ServiceAdd(ctx context.Context, req *dzhcore.AddR
 func (s *sMemberManageService) ServiceInfo(ctx context.Context, req *dzhcore.InfoReq) (data interface{}, err error) {
 
 	rmap := g.RequestFromCtx(ctx).GetMap()
-
-	m := dao.AddonsMemberManage.Ctx(ctx).As("m").Fields("m.*,member_attr.type,member_attr.user_id,member_attr.notify,member_attr.country,member_attr.province,member_attr.city")
-	m = m.LeftJoin("addons_member_attr member_attr", "member_attr.user_id = m.id")
+	m := dao.AddonsMemberManage.Ctx(ctx).As("m").Fields("m.*,member_attr.type,member_attr.member_id,member_attr.notify,member_attr.country,member_attr.province,member_attr.city")
+	m = m.LeftJoin("addons_member_attr member_attr", "member_attr.member_id = m.id")
 	one, err := m.Where("m.id", rmap["id"]).One()
 	if err != nil {
 		g.Log().Error(ctx, err)
@@ -132,26 +280,62 @@ func (s *sMemberManageService) ServiceInfo(ctx context.Context, req *dzhcore.Inf
 	return
 }
 
-// 账号登录
-func (s *sMemberManageService) AccountLogin(ctx context.Context, req *v1.AccountLoginReq) (data interface{}, err error) {
+// 账号注册
+func (s *sMemberManageService) AccountRegister(ctx context.Context, req *v1.AccountRegisterReq) (data interface{}, err error) {
 
-	pw, _ := gmd5.Encrypt(req.PassWord)
-	one, err := dao.AddonsMemberManage.Ctx(ctx).Where("username=?", req.UserName).Where("password=?", pw).One()
+	var member *entity.AddonsMemberManage
+	err = dao.AddonsMemberManage.Ctx(ctx).Where("member_name=?", req.MemberName).Scan(&member)
 	if err != nil {
 		g.Log().Error(ctx, err)
 		return nil, err
 	}
-	if one == nil {
-		err = gerror.New("账号密码错误")
+	if member != nil {
+		err = gerror.New("账号已存在")
 		g.Log().Error(ctx, err)
 		return
 	}
 
-	var member *entity.AddonsMemberManage
-	err = gconv.Struct(one, &member)
+	// 创建新的member对象
+	member = &entity.AddonsMemberManage{}
+	pw, _ := gmd5.Encrypt(req.PassWord)
+	member.Id = dzhcore.CreateSnowflakeId()
+	//更新创建时间
+	member.CreateTime = gtime.Now()
+	member.LastLoginTime = gtime.Now()
+	member.Password = pw
+	member.MemberName = req.MemberName
+	member.PasswordV = 1
+	member.Level = 1
+
+	_, err = dao.AddonsMemberManage.Ctx(ctx).Data(member).Insert()
 	if err != nil {
 		g.Log().Error(ctx, err)
 		return nil, err
+	}
+
+	// 生成token
+	data, err = s.GenerateTokenByUser(ctx, member)
+	if err != nil {
+		g.Log().Error(ctx, err)
+		return
+	}
+	return
+}
+
+// 账号登录
+func (s *sMemberManageService) AccountLogin(ctx context.Context, req *v1.AccountLoginReq) (data interface{}, err error) {
+
+	pw, _ := gmd5.Encrypt(req.PassWord)
+	var member *entity.AddonsMemberManage
+	err = dao.AddonsMemberManage.Ctx(ctx).Where("member_name=?", req.MemberName).Where("password=?", pw).Scan(&member)
+	if err != nil {
+		g.Log().Error(ctx, err)
+		return nil, err
+	}
+	if member == nil {
+		err = gerror.New("账号密码错误")
+		g.Log().Error(ctx, err)
+		return
 	}
 
 	//更新登录时间
@@ -229,7 +413,7 @@ func (s *sMemberManageService) MpLogin(ctx context.Context, req *v1.MpLoginReq) 
 	//	1、有UserId，微信登录绑定到账号，没有UserId就不绑定账号
 
 	//不绑定账号
-	if req.UserId == nil {
+	if req.MemberId == nil {
 
 		// 判断openId是否存在
 		//err = manage.Ctx(ctx).Where("openid", wxMpTokenResponse.Openid).Scan(member.AddonsMemberManage)
@@ -254,7 +438,7 @@ func (s *sMemberManageService) MpLogin(ctx context.Context, req *v1.MpLoginReq) 
 	err = manage.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
 
 		//不绑定账号并且不存在openId的会员，直接新增一个微信登录的会员
-		if req.UserId == nil && member.AddonsMemberManage.Id == "" {
+		if req.MemberId == nil && member.AddonsMemberManage.Id == "" {
 
 			//主表
 			member.AddonsMemberManage.Id = dzhcore.NodeSnowflake.Generate().String()
@@ -267,7 +451,7 @@ func (s *sMemberManageService) MpLogin(ctx context.Context, req *v1.MpLoginReq) 
 
 			//副表
 			member.AddonsMemberAttr.Id = dzhcore.NodeSnowflake.Generate().String()
-			member.AddonsMemberAttr.UserId = member.AddonsMemberManage.Id
+			member.AddonsMemberAttr.MemberId = member.AddonsMemberManage.Id
 			_, err = tx.Model(attr.Table()).Data(member.AddonsMemberAttr).OmitEmpty().Insert()
 			if err != nil {
 				g.Log().Error(ctx, err)
@@ -283,13 +467,13 @@ func (s *sMemberManageService) MpLogin(ctx context.Context, req *v1.MpLoginReq) 
 			member.AddonsMemberManage.LastLoginTime = gtime.Now()
 
 			//不绑定账号并且会员openId已存在，更新到openId的账号
-			if req.UserId == nil && member.AddonsMemberManage.Id != "" {
+			if req.MemberId == nil && member.AddonsMemberManage.Id != "" {
 				id = member.AddonsMemberManage.Id
 			}
 
 			//微信数据直接更新到指定的账号
-			if req.UserId != nil {
-				id = gconv.String(req.UserId)
+			if req.MemberId != nil {
+				id = gconv.String(req.MemberId)
 				member.AddonsMemberManage.Id = id
 			}
 
@@ -297,7 +481,7 @@ func (s *sMemberManageService) MpLogin(ctx context.Context, req *v1.MpLoginReq) 
 				"id": id,
 			}
 			attrWhereData = g.Map{
-				"user_id": id,
+				"member_id": id,
 			}
 
 			//主表
@@ -307,7 +491,7 @@ func (s *sMemberManageService) MpLogin(ctx context.Context, req *v1.MpLoginReq) 
 				return err
 			}
 
-			count, err := tx.Model(attr.Table()).Where("user_id = ?", id).Count()
+			count, err := tx.Model(attr.Table()).Where("member_id = ?", id).Count()
 			if err != nil {
 				g.Log().Error(ctx, err)
 				return err
@@ -315,7 +499,7 @@ func (s *sMemberManageService) MpLogin(ctx context.Context, req *v1.MpLoginReq) 
 			if count == 0 {
 				//副表
 				member.AddonsMemberAttr.Id = dzhcore.NodeSnowflake.Generate().String()
-				member.AddonsMemberAttr.UserId = id
+				member.AddonsMemberAttr.MemberId = id
 				_, err = tx.Model(attr.Table()).Where(attrWhereData).Data(member.AddonsMemberAttr).OmitEmpty().Insert()
 				if err != nil {
 					g.Log().Error(ctx, err)
@@ -413,11 +597,11 @@ func (s *sMemberManageService) GetUserInfo(ctx context.Context, wxMpTokenRespons
 }
 
 // Person 方法 返回不带密码的用户信息
-func (s *sMemberManageService) Person(ctx context.Context, userId string) (data interface{}, err error) {
+func (s *sMemberManageService) Person(ctx context.Context, memberId string) (data any, err error) {
 
-	m := dao.AddonsMemberManage.Ctx(ctx).As("m").Fields("m.*,member_attr.type,member_attr.user_id,member_attr.notify,member_attr.country,member_attr.province,member_attr.city")
-	m = m.LeftJoin("addons_member_attr member_attr", "member_attr.user_id = m.id")
-	m = m.Where("m.id = ?", userId)
+	m := dao.AddonsMemberManage.Ctx(ctx).As("m").Fields("m.*,member_attr.type,member_attr.member_id,member_attr.notify,member_attr.country,member_attr.province,member_attr.city")
+	m = m.LeftJoin("addons_member_attr member_attr", "member_attr.member_id = m.id")
+	m = m.Where("m.id = ?", memberId)
 	one, err := m.One()
 	if err != nil {
 		g.Log().Error(ctx, err)
@@ -468,11 +652,13 @@ func (s *sMemberManageService) generateToken(ctx g.Ctx, member *entity.AddonsMem
 	}
 
 	passwordVersion := gconv.Int32(member.PasswordV)
-	claims := &dzhcore.Claims{
+	claims := &dzhcore.AppClaims{
 		IsRefresh:       isRefresh,
-		RoleIds:         roleIds,
-		Username:        member.Username,
-		UserId:          member.Id,
+		MemberName:      member.MemberName,
+		MemberId:        member.Id,
+		NickName:        member.Nickname,
+		LevelName:       member.LevelName,
+		Level:           member.Level,
 		PasswordVersion: &passwordVersion,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(expire) * time.Second)),

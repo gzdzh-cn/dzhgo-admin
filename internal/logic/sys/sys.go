@@ -1,9 +1,5 @@
 package sys
 
-import (
-	"context"
-)
+import "github.com/gogf/gf/v2/os/gctx"
 
-var ctx = context.Background()
-
-//var ctx = gctx.GetInitCtx()
+var ctx = gctx.GetInitCtx()

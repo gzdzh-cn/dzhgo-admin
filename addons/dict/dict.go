@@ -41,5 +41,6 @@ func (a *dictAddon) NewInit() {
 	dzhcore.FillInitData(ctx, "dict", &model.DictInfo{})
 	dzhcore.FillInitData(ctx, "dict", &model.DictType{})
 	dzhcore.FillInitData(ctx, "dict", &baseModel.BaseSysMenu{})
+	dzhcore.FillInitData(ctx, "dict", &baseModel.BaseSysAddons{})
 	g.Log().Debug(ctx, "------------ addon dict init end ...")
 }

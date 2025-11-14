@@ -15,7 +15,6 @@ type AddonsMemberAttr struct {
 	UpdateTime     *gtime.Time `json:"updateTime"     orm:"updateTime"      ` // 更新时间
 	DeletedAt      *gtime.Time `json:"deletedAt"      orm:"deleted_at"      ` //
 	Type           int         `json:"type"           orm:"type"            ` // 类型:1=公众号,2=小程序
-	UserId         string      `json:"userId"         orm:"user_id"         ` // 用户ID
 	Unionid        string      `json:"unionid"        orm:"unionid"         ` // UnionID
 	Notify         int         `json:"notify"         orm:"notify"          ` // 微信通知:1=是,0=否
 	Openid         string      `json:"openid"         orm:"openid"          ` // openid
@@ -34,4 +33,5 @@ type AddonsMemberAttr struct {
 	SubscribeScene string      `json:"subscribeScene" orm:"subscribe_scene" ` // 关注来源
 	QrScene        string      `json:"qrScene"        orm:"qr_scene"        ` // 扫码场景
 	QrSceneStr     string      `json:"qrSceneStr"     orm:"qr_scene_str"    ` // 扫码场景描述
+	MemberId       string      `json:"memberId"       orm:"member_id"       ` // 会员ID
 }

@@ -22,8 +22,8 @@ type BaseSysUserRoleDao struct {
 // BaseSysUserRoleColumns defines and stores column names for the table base_sys_user_role.
 type BaseSysUserRoleColumns struct {
 	Id         string //
-	CreateTime string //
-	UpdateTime string //
+	CreateTime string // 创建时间
+	UpdateTime string // 更新时间
 	DeletedAt  string //
 	UserId     string //
 	RoleId     string //

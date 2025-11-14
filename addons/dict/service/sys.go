@@ -7,21 +7,25 @@ package service
 
 import (
 	"context"
+	definetype "dzhgo/addons/bank/defineType"
+
+	"github.com/gogf/gf/v2/frame/g"
 )
 
 type (
 	IDictInfoService interface {
-		// Data 方法, 用于获取数据
-		Data(ctx context.Context, types []string) (data interface{}, err error)
+		ModifyBefore(ctx context.Context, method string, param g.MapStrAny) (err error)
 		// ModifyAfter 修改后
 		ModifyAfter(ctx context.Context, method string, param map[string]interface{}) (err error)
+		// Data 方法, 用于获取数据
+		Data(ctx context.Context, types []string) (data interface{}, err error)
+		// 列表
+		DictList(ctx context.Context, types string) (data []*definetype.DictType, err error)
 	}
-	IDictTypeService interface{}
 )
 
 var (
 	localDictInfoService IDictInfoService
-	localDictTypeService IDictTypeService
 )
 
 func DictInfoService() IDictInfoService {
@@ -33,15 +37,4 @@ func DictInfoService() IDictInfoService {
 
 func RegisterDictInfoService(i IDictInfoService) {
 	localDictInfoService = i
-}
-
-func DictTypeService() IDictTypeService {
-	if localDictTypeService == nil {
-		panic("implement not found for interface IDictTypeService, forgot register?")
-	}
-	return localDictTypeService
-}
-
-func RegisterDictTypeService(i IDictTypeService) {
-	localDictTypeService = i
 }

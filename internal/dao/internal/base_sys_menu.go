@@ -22,8 +22,8 @@ type BaseSysMenuDao struct {
 // BaseSysMenuColumns defines and stores column names for the table base_sys_menu.
 type BaseSysMenuColumns struct {
 	Id         string //
-	CreateTime string //
-	UpdateTime string //
+	CreateTime string // 创建时间
+	UpdateTime string // 更新时间
 	DeletedAt  string //
 	ParentId   string //
 	Name       string //
@@ -37,6 +37,7 @@ type BaseSysMenuColumns struct {
 	IsShow     string //
 	IsInstall  string //
 	MenuType   string //
+	AddonsName string //
 }
 
 // baseSysMenuColumns holds the columns for the table base_sys_menu.
@@ -57,6 +58,7 @@ var baseSysMenuColumns = BaseSysMenuColumns{
 	IsShow:     "isShow",
 	IsInstall:  "isInstall",
 	MenuType:   "menuType",
+	AddonsName: "addonsName",
 }
 
 // NewBaseSysMenuDao creates and returns a new DAO object for table data access.

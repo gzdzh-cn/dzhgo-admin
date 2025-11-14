@@ -10,9 +10,9 @@ const TableNameBaseSysInit = "base_sys_init"
 // BaseSysInit mapped from table <base_sys_init>
 type BaseSysInit struct {
 	Id     string `gorm:"primaryKey;autoIncrement:false;varchar(255);index" json:"id"`
-	Module string `gorm:"index;not null" json:"module"`
-	Tables string `gorm:"index;not null" json:"tables"`
-	Group  string `gorm:"index;not null" json:"group"`
+	Module string `gorm:"column:module;type:varchar(255)" json:"module"`
+	Tables string `gorm:"column:tables;type:varchar(255)" json:"tables"`
+	Group  string `gorm:"column:group;type:varchar(255)" json:"group"`
 }
 
 // TableName BaseSysInit's table namer

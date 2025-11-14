@@ -4,7 +4,9 @@ import (
 	"context"
 	"dzhgo/internal/common"
 	"dzhgo/internal/dao"
+	"dzhgo/internal/model/do"
 	"dzhgo/internal/service"
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -45,6 +47,7 @@ func (s *sBaseSysLoginService) Login(ctx context.Context, req *v1.BaseOpenLoginR
 		verifyCode = req.VerifyCode
 		password   = req.Password
 		username   = req.Username
+		r          = g.RequestFromCtx(ctx)
 	)
 
 	vcode, _ := dzhcore.CacheManager.Get(ctx, captchaId)
@@ -68,10 +71,16 @@ func (s *sBaseSysLoginService) Login(ctx context.Context, req *v1.BaseOpenLoginR
 		return
 	}
 
+	dao.BaseSysUser.Ctx(ctx).Where("id=?", user.ID).Data(do.BaseSysUser{
+		LoginIp: gconv.String(r.GetClientIp()),
+	}).Update()
+
 	result, err = s.GenerateTokenByUser(ctx, user)
 	if err != nil {
 		return
 	}
+
+	common.RecordActionLog(ctx, "登录", user.ID, fmt.Sprintf("登录成功,用户名:%s,IP:%s", user.Username, gconv.String(r.GetClientIp())))
 
 	return
 }
@@ -99,7 +108,13 @@ func (*sBaseSysLoginService) Captcha(req *v1.BaseOpenCaptchaReq) (interface{}, e
 
 // Logout 退出登录
 func (*sBaseSysLoginService) Logout(ctx context.Context) (err error) {
-	userId := common.GetAdmin(ctx).UserId
+	admin := common.GetAdmin(ctx)
+	if admin == nil {
+		g.Log().Warning(ctx, "无法获取admin信息，退出登录失败")
+		return gerror.New("无法获取用户信息")
+	}
+
+	userId := admin.UserId
 	dzhcore.CacheManager.Remove(ctx, "admin:department:"+gconv.String(userId))
 	dzhcore.CacheManager.Remove(ctx, "admin:perms:"+gconv.String(userId))
 	dzhcore.CacheManager.Remove(ctx, "admin:token:"+gconv.String(userId))
@@ -199,7 +214,7 @@ func (s *sBaseSysLoginService) GenerateTokenByUser(ctx context.Context, user *mo
 	result.RefreshToken = s.generateToken(ctx, user, roleIds, result.RefreshExpire, true)
 	// 将用户相关信息保存到缓存
 	perms := service.BaseSysMenuService().GetPerms(roleIds)
-	departments := service.BaseSysDepartmentService().GetByRoleIds(roleIds, user.Username == "admin")
+	departments := service.BaseSysDepartmentService().GetByRoleIds(roleIds)
 	dzhcore.CacheManager.Set(ctx, "admin:department:"+gconv.String(user.ID), departments, 0)
 	dzhcore.CacheManager.Set(ctx, "admin:perms:"+gconv.String(user.ID), perms, 0)
 	dzhcore.CacheManager.Set(ctx, "admin:token:"+gconv.String(user.ID), result.Token, 0)

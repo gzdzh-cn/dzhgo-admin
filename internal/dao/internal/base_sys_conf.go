@@ -22,8 +22,8 @@ type BaseSysConfDao struct {
 // BaseSysConfColumns defines and stores column names for the table base_sys_conf.
 type BaseSysConfColumns struct {
 	Id         string //
-	CreateTime string //
-	UpdateTime string //
+	CreateTime string // 创建时间
+	UpdateTime string // 更新时间
 	DeletedAt  string //
 	CKey       string //
 	CValue     string //

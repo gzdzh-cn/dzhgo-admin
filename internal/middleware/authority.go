@@ -36,7 +36,6 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 	var (
 		statusCode = 200
 		ctx        = r.GetCtx()
-		//ctx = context.Background()
 	)
 
 	url := r.URL.String()
@@ -61,13 +60,14 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 		})
 	}
 	if !token.Valid {
-		g.Log().Error(ctx, "BaseAuthorityMiddleware", "token invalid")
+		// g.Log().Error(ctx, "BaseAuthorityMiddleware", "token invalid")
 		statusCode = 401
 		r.Response.WriteStatusExit(statusCode, g.Map{
 			"code":    1001,
 			"message": "登陆失效～",
 		})
 	}
+
 	admin := token.Claims.(*dzhcore.Claims)
 	//g.Log().Debugf(ctx, "admin %v", gconv.String(admin))
 	// 将用户信息放入上下文
@@ -82,7 +82,7 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 
 		//超管开启sso无效
 		if tokenString != rtoken && config.Cfg.Jwt.Sso {
-			g.Log().Error(ctx, "BaseAuthorityMiddleware", "token invalid")
+			// g.Log().Error(ctx, "BaseAuthorityMiddleware", "token invalid")
 			statusCode = 401
 			r.Response.WriteStatusExit(statusCode, g.Map{
 				"code":    1001,

@@ -22,8 +22,8 @@ type BaseSysParamDao struct {
 // BaseSysParamColumns defines and stores column names for the table base_sys_param.
 type BaseSysParamColumns struct {
 	Id         string //
-	CreateTime string //
-	UpdateTime string //
+	CreateTime string // 创建时间
+	UpdateTime string // 更新时间
 	DeletedAt  string //
 	KeyName    string //
 	Name       string //

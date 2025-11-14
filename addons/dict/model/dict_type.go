@@ -9,8 +9,9 @@ const TableNameDictType = "addons_dict_type"
 // DictType mapped from table <addons_dict_type>
 type DictType struct {
 	*dzhcore.Model
-	Name string `gorm:"column:name;type:varchar(255);not null" json:"name"` // 名称
-	Key  string `gorm:"column:key;type:varchar(255);not null" json:"key"`   // 标识
+	Name       string  `gorm:"column:name;type:varchar(255);not null" json:"name"`                     // 名称
+	Key        string  `gorm:"column:key;type:varchar(255);not null" json:"key"`                       // 标识
+	AddonsName *string `gorm:"column:addonsName;not null;varchar(255);default:base" json:"addonsName"` // 插件名称
 }
 
 // TableName DictType's table name

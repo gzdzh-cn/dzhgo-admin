@@ -4,6 +4,8 @@ import (
 	"dzhgo/internal/dao"
 	"dzhgo/internal/model"
 	"dzhgo/internal/service"
+
+	"github.com/gogf/gf/v2/container/garray"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/gconv"
@@ -30,14 +32,14 @@ func NewsBaseSysDepartmentService() *sBaseSysDepartmentService {
 }
 
 // GetByRoleIds 获取部门
-func (s *sBaseSysDepartmentService) GetByRoleIds(roleIds []string, isAdmin bool) (res []uint) {
+func (s *sBaseSysDepartmentService) GetByRoleIds(roleIds []string) (res []uint) {
 	var (
 		result gdb.Result
 	)
 	// 如果roleIds不为空
 	if len(roleIds) > 0 {
 		// 如果是超级管理员，则返回所有部门
-		if isAdmin {
+		if garray.NewStrArrayFrom(roleIds).Contains("1") {
 			result, _ = s.Dao.Ctx(ctx).Fields("id").All()
 			for _, v := range result {
 				vmap := v.Map()

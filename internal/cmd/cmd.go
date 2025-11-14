@@ -12,7 +12,7 @@ import (
 	_ "dzhgo/internal/logic"
 	_ "dzhgo/internal/packed"
 
-	_ "github.com/gogf/gf/contrib/drivers/sqlite/v2"
+	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
 	_ "github.com/gogf/gf/contrib/nosql/redis/v2"
 )
 
@@ -35,7 +35,6 @@ var (
 			}
 
 			s := g.Server()
-
 			s.Run()
 
 			return nil

@@ -1,0 +1,29 @@
+[
+	{
+		"id" : "1957093508170911744",
+		"createTime" : "2025-08-17 22:53:46.079",
+		"updateTime" : "2025-08-17 22:53:46",
+		"deleted_at" : null,
+		"name" : "工单类别",
+		"key" : "feType",
+		"addonsName" : "base"
+	},
+	{
+		"id" : "1957102520224452608",
+		"createTime" : "2025-08-17 23:29:36.683",
+		"updateTime" : "2025-08-17 23:29:36.683",
+		"deleted_at" : null,
+		"name" : "优先级",
+		"key" : "priority",
+		"addonsName" : "base"
+	},
+	{
+		"id" : "1957112067831894016",
+		"createTime" : "2025-08-18 00:07:33.021",
+		"updateTime" : "2025-08-18 00:07:33.021",
+		"deleted_at" : null,
+		"name" : "处理进度",
+		"key" : "process",
+		"addonsName" : "base"
+	}
+]

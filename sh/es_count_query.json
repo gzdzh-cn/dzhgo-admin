@@ -1,0 +1,60 @@
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "bool": {
+            "minimum_should_match": "1",
+            "should": {
+              "bool": {
+                "minimum_should_match": "1",
+                "should": [
+                  {
+                    "match_phrase": {
+                      "id": {
+                        "query": "1955626764487102464"
+                      }
+                    }
+                  },
+                  {
+                    "match_phrase": {
+                      "guest_id": {
+                        "query": "1955626764487102464"
+                      }
+                    }
+                  },
+                  {
+                    "match_phrase": {
+                      "mobile": {
+                        "query": "1955626764487102464"
+                      }
+                    }
+                  },
+                  {
+                    "match_phrase": {
+                      "name": {
+                        "query": "1955626764487102464"
+                      }
+                    }
+                  },
+                  {
+                    "match_phrase": {
+                      "keywords": {
+                        "query": "1955626764487102464"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "term": {
+            "status": 0
+          }
+        }
+      ]
+    }
+  }
+} 

@@ -26,6 +26,8 @@ type (
 		ServiceAdd(ctx context.Context, req *dzhcore.AddReq) (data interface{}, err error)
 		// 查询
 		ServiceInfo(ctx context.Context, req *dzhcore.InfoReq) (data interface{}, err error)
+		// 账号注册
+		AccountRegister(ctx context.Context, req *v1.AccountRegisterReq) (data interface{}, err error)
 		// 账号登录
 		AccountLogin(ctx context.Context, req *v1.AccountLoginReq) (data interface{}, err error)
 		// 公众号登录
@@ -35,7 +37,7 @@ type (
 		// 获取解密后的数据
 		GetUserInfo(ctx context.Context, wxMpTokenResponse *memberDefineType.WxMpTokenResponse) (data *memberDefineType.WxMpUserInfoResponse, err error)
 		// Person 方法 返回不带密码的用户信息
-		Person(ctx context.Context, userId string) (data interface{}, err error)
+		Person(ctx context.Context, memberId string) (data any, err error)
 		// 根据用户生成前端需要的Token信息
 		GenerateTokenByUser(ctx g.Ctx, member *entity.AddonsMemberManage) (result *v1.TokenRes, err error)
 	}

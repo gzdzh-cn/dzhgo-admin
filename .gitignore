@@ -45,3 +45,7 @@ dzhcore
 
 frontend/dist/
 frontend/node_modules/
+
+
+docker/mysql/data
+docker/mysql/backup

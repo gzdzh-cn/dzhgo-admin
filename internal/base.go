@@ -4,9 +4,10 @@ import (
 	"dzhgo/internal/model"
 
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gzdzh-cn/dzhcore"
 
-	"github.com/gogf/gf/v2/os/gctx"
+	dictModel "dzhgo/addons/dict/model"
 
 	_ "dzhgo/internal/controller"
 	_ "dzhgo/internal/funcs"
@@ -35,8 +36,10 @@ func NewInit() {
 	dzhcore.FillInitData(ctx, "base", &model.BaseSysDepartment{})
 	dzhcore.FillInitData(ctx, "base", &model.BaseSysRoleDepartment{})
 	dzhcore.FillInitData(ctx, "base", &model.BaseSysSetting{})
-	dzhcore.FillInitData(ctx, "base", &model.BaseSysAddons{})
+	// dzhcore.FillInitData(ctx, "base", &model.BaseSysAddons{})
 	dzhcore.FillInitData(ctx, "base", &model.BaseSysAddonsTypes{})
+	dzhcore.FillInitData(ctx, "base", &dictModel.DictType{})
+	dzhcore.FillInitData(ctx, "base", &dictModel.DictInfo{})
 
 	g.Log().Debug(ctx, "------------ base init end ...")
 }

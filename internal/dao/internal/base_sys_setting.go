@@ -22,60 +22,60 @@ type BaseSysSettingDao struct {
 // BaseSysSettingColumns defines and stores column names for the table base_sys_setting.
 type BaseSysSettingColumns struct {
 	Id                 string //
-	CreateTime         string //
-	UpdateTime         string //
+	CreateTime         string // 创建时间
+	UpdateTime         string // 更新时间
 	DeletedAt          string //
-	SiteName           string //
-	SiteDescribe       string //
-	DomainName         string //
-	Copyright          string //
-	Logo               string //
-	WxCode             string //
-	Company            string //
-	Contact            string //
-	ContactWay         string //
-	Mobile             string //
-	Address            string //
-	Keyword            string //
-	Description        string //
-	Smtp               string //
-	SmtpEmail          string //
-	SmtpPass           string //
-	RemindEmail        string //
-	IsRemindEmail      string //
-	IsRemindSms        string //
-	AccessKeyId        string //
-	AccessKeySecret    string //
-	SignName           string //
-	TemplateCode       string //
-	Endpoint           string //
-	RemindMobile       string //
-	RemindDay          string //
-	FieldJson          string //
-	Notice             string //
-	Policy             string //
-	Image              string //
-	ContactList        string //
-	BaiduTranApiKey    string //
-	BaiduTranSecretKey string //
-	CdnProxyUrl        string //
-	Phrase             string //
-	WxPayAppid         string //
-	WxPayMchId         string //
-	CAPIv3Key          string //
-	CSerialNo          string //
-	CNotifyUrl         string //
-	SpMchid            string //
-	SpAppid            string //
-	SubMchId           string //
-	APIv3Key           string //
-	SerialNo           string //
-	NotifyUrl          string //
-	PayType            string //
-	MpName             string //
-	WxAppId            string //
-	WxSecret           string //
-	IsWpNotice         string //
+	SiteName           string // 站点名称
+	SiteDescribe       string // 站点介绍
+	DomainName         string // 网站域名
+	Copyright          string // 版权所有
+	Logo               string // logo
+	WxCode             string // 二维码
+	Company            string // 公司名称
+	Contact            string // 联系人
+	ContactWay         string // 座机
+	Mobile             string // 手机
+	Address            string // 地址
+	Keyword            string // 关键词
+	Description        string // 描述
+	Smtp               string // smtp
+	SmtpEmail          string // 发送邮箱
+	SmtpPass           string // 邮箱授权码
+	RemindEmail        string // 接收邮箱
+	IsRemindEmail      string // 到期邮件开启 0关闭 1开启
+	IsRemindSms        string // 到期短信开启 0关闭 1开启
+	AccessKeyId        string // accessKeyId
+	AccessKeySecret    string // accessKeySecret
+	SignName           string // 签名
+	TemplateCode       string // 模板
+	Endpoint           string // endpoint
+	RemindMobile       string // 通知手机号码
+	RemindDay          string // 到期提醒提前天数
+	FieldJson          string // 自定义字段
+	Notice             string // 公告
+	Policy             string // 隐私政策
+	Image              string // 图片
+	ContactList        string // 客服列表
+	BaiduTranApiKey    string // 百度翻译apikey
+	BaiduTranSecretKey string // 百度翻译Secretkey
+	CdnProxyUrl        string // 图片代理地址
+	Phrase             string // 过滤词
+	WxPayAppid         string // 普通商户appid
+	WxPayMchId         string // 普通商户号
+	CAPIv3Key          string // 收款商户v3密钥
+	CSerialNo          string // 序列号
+	CNotifyUrl         string // 支付回调地址
+	SpMchid            string // 服务商商户号
+	SpAppid            string // 服务商appid
+	SubMchId           string // 特约商户
+	APIv3Key           string // 收款商户v3密钥
+	SerialNo           string // 序列号
+	NotifyUrl          string // 支付回调地址
+	PayType            string // 支付模式
+	MpName             string // 公众号名称
+	WxAppId            string // 公众号appId
+	WxSecret           string // 微信secret
+	IsWpNotice         string // 公众号通知
 }
 
 // baseSysSettingColumns holds the columns for the table base_sys_setting.

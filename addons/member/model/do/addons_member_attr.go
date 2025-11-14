@@ -17,7 +17,6 @@ type AddonsMemberAttr struct {
 	UpdateTime     *gtime.Time // 更新时间
 	DeletedAt      *gtime.Time //
 	Type           interface{} // 类型:1=公众号,2=小程序
-	UserId         interface{} // 用户ID
 	Unionid        interface{} // UnionID
 	Notify         interface{} // 微信通知:1=是,0=否
 	Openid         interface{} // openid
@@ -36,4 +35,5 @@ type AddonsMemberAttr struct {
 	SubscribeScene interface{} // 关注来源
 	QrScene        interface{} // 扫码场景
 	QrSceneStr     interface{} // 扫码场景描述
+	MemberId       interface{} // 会员ID
 }

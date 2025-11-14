@@ -17,7 +17,6 @@ type AddonsMemberManage struct {
 	AvatarUrl     string      `json:"avatarUrl"     orm:"avatarUrl"     ` // 头像
 	Password      string      `json:"password"      orm:"password"      ` // 会员密码
 	PasswordV     int         `json:"passwordV"     orm:"passwordV"     ` //
-	Username      string      `json:"username"      orm:"username"      ` // 会员账号
 	Nickname      string      `json:"nickname"      orm:"nickname"      ` // 会员昵称
 	LevelName     string      `json:"levelName"     orm:"levelName"     ` // 等级名称
 	Level         int         `json:"level"         orm:"level"         ` // 等级
@@ -35,4 +34,6 @@ type AddonsMemberManage struct {
 	Remark        string      `json:"remark"        orm:"remark"        ` // 备注
 	Status        int64       `json:"status"        orm:"status"        ` //
 	Description   string      `json:"description"   orm:"description"   ` // 描述
+	UserId        string      `json:"userId"        orm:"user_id"       ` // 多租户从属 id
+	MemberName    string      `json:"memberName"    orm:"member_name"   ` // 会员
 }
