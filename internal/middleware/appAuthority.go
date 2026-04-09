@@ -39,10 +39,10 @@ func AppAuthorityMiddleware(r *ghttp.Request) {
 
 	tokenString := r.GetHeader("Authorization")
 	token, err := jwt.ParseWithClaims(tokenString, &dzhcore.AppClaims{}, func(token *jwt.Token) (any, error) {
-		return []byte(config.Cfg.Jwt.Secret), nil
+		return []byte(config.Cfg.Modules.Base.JWT.Secret), nil
 	})
 	if err != nil {
-		g.Log().Error(ctx, "BaseAuthorityMiddleware", err)
+		g.Log().Error(ctx, "AppAuthorityMiddleware", "jwt parse failed, token:", tokenString, "error:", err)
 		statusCode = 401
 		r.Response.WriteStatusExit(statusCode, g.Map{
 			"code":    1001,
@@ -50,7 +50,7 @@ func AppAuthorityMiddleware(r *ghttp.Request) {
 		})
 	}
 	if !token.Valid {
-		// g.Log().Error(ctx, "BaseAuthorityMiddleware", "token invalid")
+		g.Log().Error(ctx, "AppAuthorityMiddleware", "token invalid")
 		statusCode = 401
 		r.Response.WriteStatusExit(statusCode, g.Map{
 			"code":    1001,
@@ -67,6 +67,7 @@ func AppAuthorityMiddleware(r *ghttp.Request) {
 	rtoken := cachetoken.String()
 
 	if tokenString != rtoken {
+		g.Log().Error(ctx, "AppAuthorityMiddleware", "token mismatch, memberId:", member.MemberId, "cachedToken:", rtoken, "requestToken:", tokenString)
 		statusCode = 401
 		r.Response.WriteStatusExit(statusCode, g.Map{
 			"code":    1001,

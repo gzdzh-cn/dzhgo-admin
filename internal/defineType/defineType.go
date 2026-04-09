@@ -8,7 +8,7 @@ import (
 type WxConfig struct {
 	Appid     string `json:"appid"`
 	Secret    string `json:"secret"`
-	GrantType string `json:"grant_type"`
+	GrantType string `json:"grantType"`
 }
 
 type AutoPhone struct {
@@ -18,7 +18,7 @@ type AutoPhone struct {
 
 type AccessToken struct {
 	RequestUrl string `json:"requestUrl"`
-	GrantType  string `json:"grant_type"`
+	GrantType  string `json:"grantType"`
 	Appid      string `json:"appid"`
 	Secret     string `json:"secret"`
 }
@@ -28,7 +28,7 @@ type MinConfig struct {
 	RequestUrl string `json:"requestUrl"`
 	Appid      string `json:"appid"`
 	Secret     string `json:"secret"`
-	GrantType  string `json:"grant_type"`
+	GrantType  string `json:"grantType"`
 }
 
 // 运行日志

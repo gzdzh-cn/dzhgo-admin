@@ -27,7 +27,7 @@ func (*BaseSysMenu) TableName() string {
 	return TableNameBaseSysMenu
 }
 
-// NewBaseSysMenu create a new BaseSysMenu
+// NewBaseSysMenu 创建一个新的 BaseSysMenu 实例
 func NewBaseSysMenu() *BaseSysMenu {
 	return &BaseSysMenu{
 		Model: dzhcore.NewModel(),

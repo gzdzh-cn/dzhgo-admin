@@ -16,7 +16,7 @@ func (*BaseSysConf) TableName() string {
 	return TableNameBaseSysConf
 }
 
-// NewBaseSysConf 创建实例
+// NewBaseSysConf 创建一个新的 BaseSysConf 实例
 func NewBaseSysConf() *BaseSysConf {
 	return &BaseSysConf{
 		Model: dzhcore.NewModel(),

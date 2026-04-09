@@ -2,10 +2,12 @@ package internal
 
 import (
 	"dzhgo/internal/model"
+	"dzhgo/internal/service"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gzdzh-cn/dzhcore"
+	"github.com/gzdzh-cn/dzhcore/coreconfig"
 
 	dictModel "dzhgo/addons/dict/model"
 
@@ -40,6 +42,12 @@ func NewInit() {
 	dzhcore.FillInitData(ctx, "base", &model.BaseSysAddonsTypes{})
 	dzhcore.FillInitData(ctx, "base", &dictModel.DictType{})
 	dzhcore.FillInitData(ctx, "base", &dictModel.DictInfo{})
+
+	if coreconfig.Config.Core.Notice.Enable {
+		g.Log().Info(ctx, "Redis队列消费者开始启动")
+		// 启动队列消费者
+		service.BaseSysNoticeService().StartQueue()
+	}
 
 	g.Log().Debug(ctx, "------------ base init end ...")
 }

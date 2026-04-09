@@ -27,7 +27,7 @@ func (*BaseSysAddonsTypes) GroupName() string {
 	return "default"
 }
 
-// NewBaseSysAddonsTypes create a new BaseSysAddonsTypes
+// NewBaseSysAddonsTypes 创建一个新的 BaseSysAddonsTypes 实例
 func NewBaseSysAddonsTypes() *BaseSysAddonsTypes {
 	return &BaseSysAddonsTypes{
 		Model: dzhcore.NewModel(),

@@ -19,7 +19,7 @@ func (*BaseSysParam) TableName() string {
 	return TableNameBaseSysParam
 }
 
-// NewBaseSysParam 创建一个新的BaseSysParam
+// NewBaseSysParam 创建一个新的 BaseSysParam 实例
 func NewBaseSysParam() *BaseSysParam {
 	return &BaseSysParam{
 		Model: dzhcore.NewModel(),

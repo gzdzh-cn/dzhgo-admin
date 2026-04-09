@@ -16,7 +16,7 @@ func (*BaseSysRoleDepartment) TableName() string {
 	return TableNameBaseSysRoleDepartment
 }
 
-// NewBaseSysRoleDepartment create a new BaseSysRoleDepartment
+// NewBaseSysRoleDepartment 创建一个新的 BaseSysRoleDepartment 实例
 func NewBaseSysRoleDepartment() *BaseSysRoleDepartment {
 	return &BaseSysRoleDepartment{
 		Model: dzhcore.NewModel(),

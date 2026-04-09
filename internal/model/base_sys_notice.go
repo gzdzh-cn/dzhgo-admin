@@ -6,20 +6,20 @@ import (
 
 const TableNameBaseSysNotice = "base_sys_notice"
 
-// BaseSysNotice 模型，映射表 <base_sys_notice>
+// BaseSysNotice mapped from table <base_sys_notice>
 type BaseSysNotice struct {
 	*dzhcore.Model
 	Title  string  `gorm:"column:title;type:varchar(255);not null" json:"title"`        // 标题
-	NoType string  `gorm:"column:noType;type:varchar(100);default:info" json:"no_type"` // 通知类型
+	NoType string  `gorm:"column:noType;type:varchar(100);default:info" json:"noType"` // 通知类型
 	Remark *string `gorm:"column:remark;type:varchar(255)" json:"remark"`               // 备注
 }
 
-// TableName BaseSysNotice 的表名
+// TableName BaseSysNotice's table name
 func (*BaseSysNotice) TableName() string {
 	return TableNameBaseSysNotice
 }
 
-// GroupName BaseSysNotice 的表分组
+// GroupName BaseSysNotice's table group
 func (*BaseSysNotice) GroupName() string {
 	return "default"
 }
@@ -31,7 +31,8 @@ func NewBaseSysNotice() *BaseSysNotice {
 	}
 }
 
-// init 注册模型
+// init 创建表
 func init() {
+	// dzhcore.CreateTable(&BaseSysNotice{})
 	dzhcore.AddModel(&BaseSysNotice{})
 }

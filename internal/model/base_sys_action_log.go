@@ -6,7 +6,7 @@ import (
 
 const TableNameBaseSysActionLog = "base_sys_action_log"
 
-// Base_sys_action_log 模型，映射表 <addons_base_sys_action_log>
+// BaseSysActionLog mapped from table <base_sys_action_log>
 type BaseSysActionLog struct {
 	*dzhcore.Model
 	UserID string  `gorm:"column:user_id;index,priority:1" json:"userId"`                 // 用户ID
@@ -15,24 +15,25 @@ type BaseSysActionLog struct {
 	Remark *string `gorm:"column:remark;type:varchar(255)" json:"remark"`                 // 备注
 }
 
-// TableName Base_sys_action_log 的表名
+// TableName BaseSysActionLog's table name
 func (*BaseSysActionLog) TableName() string {
 	return TableNameBaseSysActionLog
 }
 
-// GroupName Base_sys_action_log 的表分组
+// GroupName BaseSysActionLog's table group
 func (*BaseSysActionLog) GroupName() string {
 	return "default"
 }
 
-// NewBase_sys_action_log 创建一个新的 Base_sys_action_log 实例
+// NewBaseSysActionLog 创建一个新的 BaseSysActionLog 实例
 func NewBaseSysActionLog() *BaseSysActionLog {
 	return &BaseSysActionLog{
 		Model: dzhcore.NewModel(),
 	}
 }
 
-// init 注册模型
+// init 创建表
 func init() {
+	// dzhcore.CreateTable(&BaseSysActionLog{})
 	dzhcore.AddModel(&BaseSysActionLog{})
 }

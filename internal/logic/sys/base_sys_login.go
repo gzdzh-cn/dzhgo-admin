@@ -115,10 +115,15 @@ func (*sBaseSysLoginService) Logout(ctx context.Context) (err error) {
 	}
 
 	userId := admin.UserId
-	dzhcore.CacheManager.Remove(ctx, "admin:department:"+gconv.String(userId))
-	dzhcore.CacheManager.Remove(ctx, "admin:perms:"+gconv.String(userId))
-	dzhcore.CacheManager.Remove(ctx, "admin:token:"+gconv.String(userId))
-	dzhcore.CacheManager.Remove(ctx, "admin:token:refresh:"+gconv.String(userId))
+	// dzhcore.CacheManager.Remove(ctx, "admin:department:"+gconv.String(userId))
+	// dzhcore.CacheManager.Remove(ctx, "admin:perms:"+gconv.String(userId))
+	// dzhcore.CacheManager.Remove(ctx, "admin:token:"+gconv.String(userId))
+	// dzhcore.CacheManager.Remove(ctx, "admin:token:refresh:"+gconv.String(userId))
+	// dzhcore.CacheManager.Remove(ctx, "admin:passwordVersion:"+gconv.String(userId))
+	err = service.BaseSysUserService().DeleteCache(ctx, userId)
+	if err != nil {
+		return
+	}
 	return
 }
 
@@ -127,7 +132,7 @@ func (s *sBaseSysLoginService) RefreshToken(ctx context.Context, token string) (
 
 	g.Log().Debugf(ctx, "RefreshToken")
 	tokenClaims, err := jwt.ParseWithClaims(token, &dzhcore.Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(config.Cfg.Jwt.Secret), nil
+		return []byte(config.Cfg.Modules.Base.JWT.Secret), nil
 	})
 	if err != nil {
 		return
@@ -170,10 +175,6 @@ func (s *sBaseSysLoginService) RefreshToken(ctx context.Context, token string) (
 
 // generateToken  生成token
 func (*sBaseSysLoginService) generateToken(ctx context.Context, user *model.BaseSysUser, roleIds []string, exprire uint, isRefresh bool) (token string) {
-	err := dzhcore.CacheManager.Set(ctx, "admin:passwordVersion:"+gconv.String(user.ID), gconv.String(user.PasswordV), 0)
-	if err != nil {
-		g.Log().Error(ctx, "生成token失败", err)
-	}
 
 	claims := &dzhcore.Claims{
 		IsRefresh:       isRefresh,
@@ -188,7 +189,7 @@ func (*sBaseSysLoginService) generateToken(ctx context.Context, user *model.Base
 	}
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	token, err = tokenClaims.SignedString([]byte(config.Cfg.Jwt.Secret))
+	token, err := tokenClaims.SignedString([]byte(config.Cfg.Modules.Base.JWT.Secret))
 	if err != nil {
 		g.Log().Error(ctx, "生成token失败", err)
 	}
@@ -208,17 +209,19 @@ func (s *sBaseSysLoginService) GenerateTokenByUser(ctx context.Context, user *mo
 
 	// 生成token
 	result = &v1.TokenRes{}
-	result.Expire = config.Cfg.Jwt.Token.Expire
-	result.RefreshExpire = config.Cfg.Jwt.Token.RefreshExpire
+	result.Expire = config.Cfg.Modules.Base.JWT.Token.Expire
+	result.RefreshExpire = config.Cfg.Modules.Base.JWT.Token.RefreshExpire
 	result.Token = s.generateToken(ctx, user, roleIds, result.Expire, false)
 	result.RefreshToken = s.generateToken(ctx, user, roleIds, result.RefreshExpire, true)
 	// 将用户相关信息保存到缓存
 	perms := service.BaseSysMenuService().GetPerms(roleIds)
 	departments := service.BaseSysDepartmentService().GetByRoleIds(roleIds)
-	dzhcore.CacheManager.Set(ctx, "admin:department:"+gconv.String(user.ID), departments, 0)
-	dzhcore.CacheManager.Set(ctx, "admin:perms:"+gconv.String(user.ID), perms, 0)
-	dzhcore.CacheManager.Set(ctx, "admin:token:"+gconv.String(user.ID), result.Token, 0)
-	dzhcore.CacheManager.Set(ctx, "admin:token:refresh:"+gconv.String(user.ID), result.RefreshToken, 0)
+	duration := time.Duration(result.Expire) * time.Second
+	dzhcore.CacheManager.Set(ctx, "admin:department:"+gconv.String(user.ID), departments, duration)
+	dzhcore.CacheManager.Set(ctx, "admin:perms:"+gconv.String(user.ID), perms, duration)
+	dzhcore.CacheManager.Set(ctx, "admin:token:"+gconv.String(user.ID), result.Token, duration)
+	dzhcore.CacheManager.Set(ctx, "admin:token:refresh:"+gconv.String(user.ID), result.RefreshToken, duration)
+	dzhcore.CacheManager.Set(ctx, "admin:passwordVersion:"+gconv.String(user.ID), gconv.String(user.PasswordV), duration)
 
 	return
 }

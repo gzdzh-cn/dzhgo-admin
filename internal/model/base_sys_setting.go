@@ -78,7 +78,7 @@ func (*BaseSysSetting) GroupName() string {
 	return "default"
 }
 
-// NewBaseSysSetting create a new BaseSysSetting
+// NewBaseSysSetting 创建一个新的 BaseSysSetting 实例
 func NewBaseSysSetting() *BaseSysSetting {
 	return &BaseSysSetting{
 		Model: dzhcore.NewModel(),

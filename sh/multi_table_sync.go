@@ -152,6 +152,10 @@ func (s *MultiTableSync) FullSync(ctx context.Context) error {
 
 	// 创建索引
 	_, err = s.esClient.CreateIndex(s.indexName).BodyString(`{
+		"settings": {
+			"number_of_replicas": 0,
+			"number_of_shards": 1
+		},
 		"mappings": {
 			"properties": {
 				"id": {"type": "keyword"},

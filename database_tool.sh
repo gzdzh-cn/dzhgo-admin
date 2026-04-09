@@ -4,10 +4,10 @@
 # 使用方法：./database_tool.sh
 
 # 设置变量
-DB_NAME="dzh3163_go"
+DB_NAME="dzhcrm_go"
 DB_USER="root"
 DB_PASSWORD="dzh123456"
-CONTAINER_NAME="mysql-canal"
+CONTAINER_NAME="dzh_mysql57"
 BACKUP_DIR="/home/backup"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
@@ -37,7 +37,7 @@ export_complete() {
     echo "正在导出完整数据库到容器内 ${BACKUP_FILE}..."
     
     # 在容器内执行导出到BACKUP_DIR
-    docker exec ${CONTAINER_NAME} bash -c "mysqldump -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME} > ${BACKUP_FILE}"
+    docker exec ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysqldump -u ${DB_USER} ${DB_NAME} > ${BACKUP_FILE}"
     
     if [ $? -eq 0 ]; then
         echo "✅ 完整数据库导出成功！"
@@ -60,7 +60,7 @@ export_structure() {
     echo "正在导出表结构到容器内 ${BACKUP_FILE}..."
     
     # 在容器内执行导出到BACKUP_DIR
-    docker exec ${CONTAINER_NAME} bash -c "mysqldump -u ${DB_USER} -p${DB_PASSWORD} --no-data ${DB_NAME} > ${BACKUP_FILE}"
+    docker exec ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysqldump -u ${DB_USER} --no-data ${DB_NAME} > ${BACKUP_FILE}"
     
     if [ $? -eq 0 ]; then
         echo "✅ 表结构导出成功！"
@@ -77,7 +77,7 @@ export_data() {
     echo "正在导出数据到容器内 ${BACKUP_FILE}..."
     
     # 在容器内执行导出到BACKUP_DIR
-    docker exec ${CONTAINER_NAME} bash -c "mysqldump -u ${DB_USER} -p${DB_PASSWORD} --no-create-info ${DB_NAME} > ${BACKUP_FILE}"
+    docker exec ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysqldump -u ${DB_USER} --no-create-info ${DB_NAME} > ${BACKUP_FILE}"
     
     if [ $? -eq 0 ]; then
         echo "✅ 数据导出成功！"
@@ -112,7 +112,7 @@ export_table() {
     
     for table in $TABLE_NAMES; do
         # 检查表是否存在
-        if docker exec ${CONTAINER_NAME} mysql -u ${DB_USER} -p${DB_PASSWORD} -e "USE ${DB_NAME}; SHOW TABLES LIKE '${table}';" | grep -q "${table}"; then
+        if docker exec ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} -e \"USE ${DB_NAME}; SHOW TABLES LIKE '${table}';\" | grep -q '${table}'"; then
             VALID_TABLES="$VALID_TABLES $table"
         else
             INVALID_TABLES="$INVALID_TABLES $table"
@@ -156,7 +156,7 @@ export_table() {
     echo "正在导出表到容器内 ${BACKUP_FILE}..."
     
     # 构建mysqldump命令
-    DUMP_CMD="mysqldump -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME} $VALID_TABLES"
+    DUMP_CMD="MYSQL_PWD=${DB_PASSWORD} mysqldump -u ${DB_USER} ${DB_NAME} $VALID_TABLES"
     
     # 在容器内执行导出到BACKUP_DIR
     docker exec ${CONTAINER_NAME} bash -c "$DUMP_CMD > ${BACKUP_FILE}"
@@ -180,7 +180,7 @@ export_table() {
 show_tables() {
     echo "数据库 ${DB_NAME} 中的所有表："
     echo "=========================================="
-    docker exec ${CONTAINER_NAME} mysql -u ${DB_USER} -p${DB_PASSWORD} -e "SHOW TABLES FROM ${DB_NAME};"
+    docker exec ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} -e \"SHOW TABLES FROM ${DB_NAME};\""
     echo "=========================================="
 }
 
@@ -221,7 +221,7 @@ import_directory() {
                 
                 for sql_file in $SQL_FILES; do
                     echo "正在导入: $(basename "$sql_file")"
-                    if docker exec ${CONTAINER_NAME} bash -c "mysql -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME} < ${sql_file}"; then
+                    if docker exec ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} ${DB_NAME} < ${sql_file}"; then
                         echo "✅ 导入成功: $(basename "$sql_file")"
                         SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
                     else
@@ -273,7 +273,7 @@ import_directory() {
                 
                 for sql_file in $SQL_FILES; do
                     echo "正在导入: $(basename "$sql_file")"
-                    if docker exec ${CONTAINER_NAME} bash -c "mysql -u ${DB_USER} -p${DB_PASSWORD} ${TARGET_DB} < ${sql_file}"; then
+                    if docker exec ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} ${TARGET_DB} < ${sql_file}"; then
                         echo "✅ 导入成功: $(basename "$sql_file")"
                         SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
                     else
@@ -326,7 +326,7 @@ import_sql() {
             
             if [[ "$SQL_FILE" == *.gz ]]; then
                 # 如果是gzip压缩文件，先解压再导入
-                gunzip -c "$SQL_FILE" | docker exec -i ${CONTAINER_NAME} mysql -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME}
+                gunzip -c "$SQL_FILE" | docker exec -i ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} ${DB_NAME}"
                                 elif [[ "$SQL_FILE" == *.zip ]]; then
                         # 如果是zip文件，先解压再导入
                         echo "检测到zip文件，正在解压..."
@@ -365,7 +365,7 @@ import_sql() {
                                                 # 如果找到匹配的文件，只导入它
                             if [ -n "$MATCHED_FILE" ]; then
                                 echo "正在导入匹配的SQL文件: $MATCHED_FILE"
-                                docker exec -i ${CONTAINER_NAME} mysql -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME} < "$MATCHED_FILE"
+                                docker exec -i ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} ${DB_NAME}" < "$MATCHED_FILE"
                             else
                                 echo "❌ 未找到匹配的SQL文件！"
                                 echo "期望找到包含 '$ZIP_BASE_NAME' 的SQL文件"
@@ -382,7 +382,7 @@ import_sql() {
                 rm -rf "$TEMP_DIR"
             else
                 # 直接导入
-                docker exec -i ${CONTAINER_NAME} mysql -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME} < "$SQL_FILE"
+                docker exec -i ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} ${DB_NAME}" < "$SQL_FILE"
             fi
             
             if [ $? -eq 0 ]; then
@@ -393,12 +393,19 @@ import_sql() {
             ;;
         2)
             # 从容器内导入到默认数据库
-            echo -n "请输入容器内 ${BACKUP_DIR} 目录中的 SQL 文件名: "
+            echo -n "请输入容器内 SQL 文件路径 (绝对路径或 ${BACKUP_DIR} 下的相对路径): "
             read SQL_FILE
             
+            # 如果是绝对路径直接使用，否则拼接BACKUP_DIR
+            if [[ "$SQL_FILE" == /* ]]; then
+                FULL_SQL_PATH="${SQL_FILE}"
+            else
+                FULL_SQL_PATH="${BACKUP_DIR}/${SQL_FILE}"
+            fi
+            
             # 检查容器内文件是否存在
-            if ! docker exec ${CONTAINER_NAME} test -f "${BACKUP_DIR}/${SQL_FILE}"; then
-                echo "❌ 文件不存在: 容器内 ${BACKUP_DIR}/${SQL_FILE}"
+            if ! docker exec ${CONTAINER_NAME} test -f "${FULL_SQL_PATH}"; then
+                echo "❌ 文件不存在: 容器内 ${FULL_SQL_PATH}"
                 return
             fi
             
@@ -406,7 +413,7 @@ import_sql() {
             
             if [[ "$SQL_FILE" == *.gz ]]; then
                 # 如果是gzip压缩文件，先解压再导入
-                docker exec ${CONTAINER_NAME} bash -c "gunzip -c ${BACKUP_DIR}/${SQL_FILE} | mysql -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME}"
+                docker exec ${CONTAINER_NAME} bash -c "gunzip -c ${FULL_SQL_PATH} | MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} ${DB_NAME}"
             elif [[ "$SQL_FILE" == *.zip ]]; then
                 # 如果是zip文件，先解压再导入
                 echo "检测到zip文件，正在解压..."
@@ -467,7 +474,7 @@ import_sql() {
                     # 如果找到匹配的文件，只导入它
                     if [ -n "$MATCHED_FILE" ]; then
                         echo "正在导入匹配的SQL文件: $MATCHED_FILE"
-                        docker exec ${CONTAINER_NAME} bash -c "mysql -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME} < ${BACKUP_DIR}/${MATCHED_FILE#./}"
+                        docker exec ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} ${DB_NAME} < $(dirname ${FULL_SQL_PATH})/${MATCHED_FILE#./}"
                     else
                         echo "❌ 未找到匹配的SQL文件！"
                         echo "期望找到包含 '$ZIP_BASE_NAME' 的SQL文件"
@@ -481,7 +488,7 @@ import_sql() {
                 fi
             else
                 # 直接导入
-                docker exec ${CONTAINER_NAME} bash -c "mysql -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME} < ${BACKUP_DIR}/${SQL_FILE}"
+                docker exec ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} ${DB_NAME} < ${FULL_SQL_PATH}"
             fi
             
             if [ $? -eq 0 ]; then
@@ -522,7 +529,7 @@ import_sql() {
                     
                     if [[ "$SQL_FILE" == *.gz ]]; then
                         # 如果是gzip压缩文件，先解压再导入
-                        gunzip -c "$SQL_FILE" | docker exec -i ${CONTAINER_NAME} mysql -u ${DB_USER} -p${DB_PASSWORD} ${TARGET_DB}
+                        gunzip -c "$SQL_FILE" | docker exec -i ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} ${TARGET_DB}"
                     elif [[ "$SQL_FILE" == *.zip ]]; then
                         # 如果是zip文件，先解压再导入
                         echo "检测到zip文件，正在解压..."
@@ -559,7 +566,7 @@ import_sql() {
                             # 如果找到匹配的文件，只导入它
                             if [ -n "$MATCHED_FILE" ]; then
                                 echo "正在导入匹配的SQL文件: $MATCHED_FILE"
-                                docker exec -i ${CONTAINER_NAME} mysql -u ${DB_USER} -p${DB_PASSWORD} ${TARGET_DB} < "$MATCHED_FILE"
+                                docker exec -i ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} ${TARGET_DB}" < "$MATCHED_FILE"
                             else
                                 echo "❌ 未找到匹配的SQL文件！"
                                 echo "期望找到包含 '$ZIP_BASE_NAME' 的SQL文件"
@@ -576,7 +583,7 @@ import_sql() {
                         rm -rf "$TEMP_DIR"
                     else
                         # 直接导入
-                        docker exec -i ${CONTAINER_NAME} mysql -u ${DB_USER} -p${DB_PASSWORD} ${TARGET_DB} < "$SQL_FILE"
+                        docker exec -i ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} ${TARGET_DB}" < "$SQL_FILE"
                     fi
                     ;;
                 2)
@@ -594,7 +601,7 @@ import_sql() {
                     
                     if [[ "$SQL_FILE" == *.gz ]]; then
                         # 如果是gzip压缩文件，先解压再导入
-                        docker exec ${CONTAINER_NAME} bash -c "gunzip -c ${SQL_FILE} | mysql -u ${DB_USER} -p${DB_PASSWORD} ${TARGET_DB}"
+                        docker exec ${CONTAINER_NAME} bash -c "gunzip -c ${SQL_FILE} | MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} ${TARGET_DB}"
                     elif [[ "$SQL_FILE" == *.zip ]]; then
                         # 如果是zip文件，先解压再导入
                         echo "检测到zip文件，正在解压..."
@@ -655,7 +662,7 @@ import_sql() {
                             # 如果找到匹配的文件，只导入它
                             if [ -n "$MATCHED_FILE" ]; then
                                 echo "正在导入匹配的SQL文件: $MATCHED_FILE"
-                                docker exec ${CONTAINER_NAME} bash -c "mysql -u ${DB_USER} -p${DB_PASSWORD} ${TARGET_DB} < $(dirname ${SQL_FILE})/${MATCHED_FILE#./}"
+                                docker exec ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} ${TARGET_DB} < $(dirname ${SQL_FILE})/${MATCHED_FILE#./}"
                             else
                                 echo "❌ 未找到匹配的SQL文件！"
                                 echo "期望找到包含 '$ZIP_BASE_NAME' 的SQL文件"
@@ -669,7 +676,7 @@ import_sql() {
                         fi
                     else
                         # 直接导入
-                        docker exec ${CONTAINER_NAME} bash -c "mysql -u ${DB_USER} -p${DB_PASSWORD} ${TARGET_DB} < ${SQL_FILE}"
+                        docker exec ${CONTAINER_NAME} bash -c "MYSQL_PWD=${DB_PASSWORD} mysql -u ${DB_USER} ${TARGET_DB} < ${SQL_FILE}"
                     fi
                     ;;
                 *)

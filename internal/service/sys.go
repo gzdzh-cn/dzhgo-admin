@@ -89,6 +89,7 @@ type (
 		GetMenus(roleIds []string) (result gdb.Result)
 	}
 	IBaseSysNoticeService interface {
+		StartQueue()
 		ServiceInfo(ctx context.Context, req *dzhcore.InfoReq) (data any, err error)
 		// 更新阅读状态
 		ServiceUpdate(ctx context.Context, req *dzhcore.UpdateReq) (data any, err error)

@@ -10,10 +10,10 @@ func init() {
 
 	var s = g.Server()
 	//路由鉴权开启
-	if config.Cfg.Middleware.Authority.Enable {
+	if config.Cfg.Modules.Base.Middleware.Authority.Enable {
 
 		// 开启跨域
-		if config.Cfg.Middleware.Cors {
+		if config.Cfg.Modules.Base.Middleware.CORS {
 			s.BindMiddleware("/app/*", AddonAuthorityMiddleware)
 			s.BindMiddleware("/admin/*", AddonAuthorityMiddleware)
 		}
@@ -30,12 +30,13 @@ func init() {
 
 		s.BindMiddleware("/admin/*", BaseAuthorityMiddleware)
 		s.BindMiddleware("/app/*", AppAuthorityMiddleware)
+
 		s.BindMiddleware("/admin/*", AutoI18n)  //
 		s.BindMiddleware("/admin/*", Exception) //异常抛出捕获
 	}
 
 	//请求日志记录到数据库开启
-	if config.Cfg.Middleware.Log.Enable {
+	if config.Cfg.Modules.Base.Middleware.Log.Enable {
 		s.BindMiddleware("/admin/*", BaseLog)
 		// s.BindMiddleware("/app/*", BaseLog)
 	}

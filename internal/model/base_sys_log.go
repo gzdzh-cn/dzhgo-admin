@@ -19,7 +19,7 @@ func (*BaseSysLog) TableName() string {
 	return TableNameBaseSysLog
 }
 
-// NewBaseSysLog 创建实例
+// NewBaseSysLog 创建一个新的 BaseSysLog 实例
 func NewBaseSysLog() *BaseSysLog {
 	return &BaseSysLog{
 		Model: dzhcore.NewModel(),

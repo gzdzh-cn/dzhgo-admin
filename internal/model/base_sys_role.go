@@ -19,7 +19,7 @@ func (*BaseSysRole) TableName() string {
 	return TableNameBaseSysRole
 }
 
-// NewBaseSysRole create a new BaseSysRole
+// NewBaseSysRole 创建一个新的 BaseSysRole 实例
 func NewBaseSysRole() *BaseSysRole {
 	return &BaseSysRole{
 		Model: dzhcore.NewModel(),

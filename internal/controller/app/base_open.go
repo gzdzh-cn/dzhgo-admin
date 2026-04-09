@@ -61,10 +61,11 @@ func (c *BaseOpenController) Upload(ctx context.Context, req *v1.BaseCommUploadR
 	// 如果是oss模式，cdn域名存在就替换
 	mode, _ := dzhcore.File().GetMode()
 	if gconv.Map(mode)["type"] == "oss" {
-		setting := gconv.Map(config.Cfg.Setting)
-		if setting["cdnUrl"] != "" {
+		// setting := gconv.Map(config.Cfg.Setting)
+		cdnUrl := config.Cfg.Modules.Base.Img.CDNUrl
+		if cdnUrl != "" {
 			re := regexp.MustCompile(`^(https://[^/]+)`)
-			resultURL := re.ReplaceAllString(data, gconv.String(setting["cdnUrl"]))
+			resultURL := re.ReplaceAllString(data, gconv.String(cdnUrl))
 			data = resultURL
 		}
 	}

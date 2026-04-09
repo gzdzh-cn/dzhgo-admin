@@ -27,7 +27,7 @@ func (*BaseSysUser) TableName() string {
 	return TableNameBaseSysUser
 }
 
-// NewBaseSysUser 创建一个新的BaseSysUser
+// NewBaseSysUser 创建一个新的 BaseSysUser 实例
 func NewBaseSysUser() *BaseSysUser {
 	return &BaseSysUser{
 		Model: dzhcore.NewModel(),

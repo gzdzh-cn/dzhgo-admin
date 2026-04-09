@@ -39,7 +39,7 @@ func AppAuthorityMiddleware(r *ghttp.Request) {
 
 	tokenString := r.GetHeader("Authorization")
 	token, err := jwt.ParseWithClaims(tokenString, &dzhcore.AppClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(config.Cfg.Jwt.Secret), nil
+		return []byte(config.Cfg.Modules.Base.JWT.Secret), nil
 	})
 	if err != nil {
 		g.Log().Error(ctx, "BaseAuthorityMiddleware", err)

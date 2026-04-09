@@ -632,24 +632,20 @@ func (s *sMemberManageService) GenerateTokenByUser(ctx g.Ctx, member *entity.Add
 
 	// 生成token
 	result = &v1.TokenRes{}
-	result.Expire = config.Cfg.Jwt.Token.Expire
-	result.RefreshExpire = config.Cfg.Jwt.Token.RefreshExpire
+	result.Expire = config.Cfg.Modules.Base.JWT.Token.Expire
+	result.RefreshExpire = config.Cfg.Modules.Base.JWT.Token.RefreshExpire
 	result.Token = s.generateToken(ctx, member, roleIds, result.Expire, false)
 	result.RefreshToken = s.generateToken(ctx, member, roleIds, result.RefreshExpire, true)
 	// 将用户相关信息保存到缓存
-
-	dzhcore.CacheManager.Set(ctx, "member:token:"+gconv.String(member.Id), result.Token, 0)
-	dzhcore.CacheManager.Set(ctx, "member:token:refresh:"+gconv.String(member.Id), result.RefreshToken, 0)
-
+	duration := time.Duration(result.Expire) * time.Second
+	dzhcore.CacheManager.Set(ctx, "member:token:"+gconv.String(member.Id), result.Token, duration)
+	dzhcore.CacheManager.Set(ctx, "member:token:refresh:"+gconv.String(member.Id), result.RefreshToken, duration)
+	dzhcore.CacheManager.Set(ctx, "member:passwordVersion:"+gconv.String(member.Id), gconv.String(member.PasswordV), duration)
 	return
 }
 
 // generateToken  生成token
 func (s *sMemberManageService) generateToken(ctx g.Ctx, member *entity.AddonsMemberManage, roleIds []string, expire uint, isRefresh bool) (token string) {
-	err := dzhcore.CacheManager.Set(ctx, "member:passwordVersion:"+gconv.String(member.Id), gconv.String(member.PasswordV), 0)
-	if err != nil {
-		g.Log().Error(ctx, "生成token失败", err)
-	}
 
 	passwordVersion := gconv.Int32(member.PasswordV)
 	claims := &dzhcore.AppClaims{
@@ -665,7 +661,7 @@ func (s *sMemberManageService) generateToken(ctx g.Ctx, member *entity.AddonsMem
 		},
 	}
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	token, err = tokenClaims.SignedString([]byte(config.Cfg.Jwt.Secret))
+	token, err := tokenClaims.SignedString([]byte(config.Cfg.Modules.Base.JWT.Secret))
 	if err != nil {
 		g.Log().Error(ctx, "生成token失败", err)
 		return

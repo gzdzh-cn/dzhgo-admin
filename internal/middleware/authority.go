@@ -46,12 +46,30 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 		r.Middleware.Next()
 		return
 	}
-
+	// g.Log().Debugf(ctx, "url %v", url)
 	tokenString := r.GetHeader("Authorization")
+
+	// 检查 token 是否为空
+	if tokenString == "" {
+		g.Log().Error(ctx, "BaseAuthorityMiddleware", "token is empty")
+		// 打印请求的ip
+		g.Log().Debugf(ctx, "ip %v", r.GetClientIp())
+
+		statusCode = 401
+		r.Response.WriteStatusExit(statusCode, g.Map{
+			"code":    1001,
+			"message": "登陆失效～",
+		})
+		return
+	}
+
 	token, err := jwt.ParseWithClaims(tokenString, &dzhcore.Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(config.Cfg.Jwt.Secret), nil
+		return []byte(config.Cfg.Modules.Base.JWT.Secret), nil
 	})
 	if err != nil {
+		// 打印会员token
+		g.Log().Debugf(ctx, "token %v", tokenString)
+
 		g.Log().Error(ctx, "BaseAuthorityMiddleware", err)
 		statusCode = 401
 		r.Response.WriteStatusExit(statusCode, g.Map{
@@ -59,8 +77,11 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 			"message": "登陆失效～",
 		})
 	}
+
 	if !token.Valid {
-		// g.Log().Error(ctx, "BaseAuthorityMiddleware", "token invalid")
+		g.Log().Error(ctx, "BaseAuthorityMiddleware", "token invalid")
+		// 打印会员token
+		g.Log().Debugf(ctx, "token %v", tokenString)
 		statusCode = 401
 		r.Response.WriteStatusExit(statusCode, g.Map{
 			"code":    1001,
@@ -69,7 +90,7 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 	}
 
 	admin := token.Claims.(*dzhcore.Claims)
-	//g.Log().Debugf(ctx, "admin %v", gconv.String(admin))
+	// g.Log().Debugf(ctx, "admin %v", gconv.String(admin))
 	// 将用户信息放入上下文
 	r.SetCtxVar("admin", admin)
 
@@ -81,8 +102,8 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 	if roleIds.Contains("1") && !admin.IsRefresh {
 
 		//超管开启sso无效
-		if tokenString != rtoken && config.Cfg.Jwt.Sso {
-			// g.Log().Error(ctx, "BaseAuthorityMiddleware", "token invalid")
+		if tokenString != rtoken && config.Cfg.Modules.Base.JWT.SSO {
+			g.Log().Error(ctx, "BaseAuthorityMiddleware", "token invalid")
 			statusCode = 401
 			r.Response.WriteStatusExit(statusCode, g.Map{
 				"code":    1001,
@@ -118,6 +139,11 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 		passwordV, _ := dzhcore.CacheManager.Get(ctx, "admin:passwordVersion:"+gconv.String(admin.UserId))
 		if passwordV.Int32() != *admin.PasswordVersion {
 			g.Log().Error(ctx, "BaseAuthorityMiddleware", "passwordV invalid")
+			g.Log().Debugf(ctx, "BaseAuthorityMiddleware admin %v", admin)
+			g.Log().Debugf(ctx, "BaseAuthorityMiddleware passwordV %v", passwordV.Int32())
+			g.Log().Debugf(ctx, "BaseAuthorityMiddleware admin.PasswordVersion %v", admin.PasswordVersion)
+			g.Log().Debugf(ctx, "BaseAuthorityMiddleware *admin.PasswordVersion %v", *admin.PasswordVersion)
+
 			statusCode = 401
 			r.Response.WriteStatusExit(statusCode, g.Map{
 				"code":    1001,
@@ -135,14 +161,18 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 		}
 
 		// 如果rtoken不等于token 且 sso 未开启
-		if tokenString != rtoken && !config.Cfg.Jwt.Sso {
+		if tokenString != rtoken && !config.Cfg.Modules.Base.JWT.SSO {
 			g.Log().Error(ctx, "BaseAuthorityMiddleware", "token invalid")
+			g.Log().Debugf(ctx, "BaseAuthorityMiddleware tokenString %v", tokenString)
+			g.Log().Debugf(ctx, "BaseAuthorityMiddleware rtoken %v", rtoken)
+
 			statusCode = 401
 			r.Response.WriteStatusExit(statusCode, g.Map{
 				"code":    1001,
 				"message": "登陆失效～",
 			})
 		}
+
 		// 从缓存获取perms
 		permsCache, _ := dzhcore.CacheManager.Get(ctx, "admin:perms:"+gconv.String(admin.UserId))
 		// 转换为数组
@@ -152,6 +182,7 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 		// 如果perms为空
 		if perms.Len() == 0 {
 			g.Log().Error(ctx, "BaseAuthorityMiddleware", "perms invalid")
+
 			statusCode = 403
 			r.Response.WriteStatusExit(statusCode, g.Map{
 				"code":    1001,
@@ -172,6 +203,7 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 		// 如果perms中不包含url 则无权限
 		if !perms.ContainsI(url) {
 			g.Log().Error(ctx, "BaseAuthorityMiddleware", "perms invalid")
+
 			statusCode = 403
 			r.Response.WriteStatusExit(statusCode, g.Map{
 				"code":    1001,

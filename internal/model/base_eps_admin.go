@@ -26,7 +26,7 @@ func (*BaseEpsAdmin) GroupName() string {
 	return "default"
 }
 
-// NewBaseEpsAdmin create a new BaseEpsAdmin
+// NewBaseEpsAdmin 创建一个新的 BaseEpsAdmin 实例
 func NewBaseEpsAdmin() *BaseEpsAdmin {
 	return &BaseEpsAdmin{}
 }

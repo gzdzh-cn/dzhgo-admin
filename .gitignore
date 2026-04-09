@@ -47,5 +47,8 @@ frontend/dist/
 frontend/node_modules/
 
 
-docker/mysql/data
-docker/mysql/backup
+docker/docker-data/
+dzhgo-admin-vue
+.codebuddy
+.vscode
+public/excel

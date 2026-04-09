@@ -26,7 +26,7 @@ func (*BaseEpsApp) GroupName() string {
 	return "default"
 }
 
-// NewBaseEpsApp create a new BaseEpsApp
+// NewBaseEpsApp 创建一个新的 BaseEpsApp 实例
 func NewBaseEpsApp() *BaseEpsApp {
 	return &BaseEpsApp{}
 }

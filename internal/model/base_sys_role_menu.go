@@ -16,10 +16,10 @@ func (*BaseSysRoleMenu) TableName() string {
 	return TableNameBaseSysRoleMenu
 }
 
-// NewBaseSysRoleMenu create a new BaseSysRoleMenu
+// NewBaseSysRoleMenu 创建一个新的 BaseSysRoleMenu 实例
 func NewBaseSysRoleMenu() *BaseSysRoleMenu {
 	return &BaseSysRoleMenu{
-		Model: &dzhcore.Model{},
+		Model: dzhcore.NewModel(),
 	}
 }
 

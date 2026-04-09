@@ -26,7 +26,12 @@ import (
 func init() {
 	service.RegisterBaseSysNoticeService(&sBaseSysNoticeService{})
 	// 启动队列消费者，确保测试过程中队列消息能被处理
-	startQueue()
+	// if coreconfig.Config.Core.Notice.Enable {
+	// 	startQueue()
+	// }
+	// if g.Cfg().MustGet(gctx.GetInitCtx(), "core.notice.enable").Bool() {
+	// 	startQueue()
+	// }
 	// 启动连接清理任务
 	// NoticeConnectionManager.TaskCleanupInactiveConnections()
 }
@@ -167,11 +172,18 @@ func NewBaseSysNoticeService() *sBaseSysNoticeService {
 	}
 }
 
-func startQueue() {
+func (s *sBaseSysNoticeService) StartQueue() {
 	// 使用全局上下文，确保队列消费者能够持续运行
+	newCtx := gctx.New()
 
 	// 延迟启动，等待Redis连接初始化完成
-	go func() {
+	go func(ctx context.Context) {
+		defer func() {
+			if r := recover(); r != nil {
+				g.Log().Errorf(ctx, "Redis连接初始化发生 panic: %v", r)
+			}
+		}()
+
 		// 等待Redis连接初始化
 		for i := 0; i < 30; i++ { // 最多等待30秒
 			if dzhcore.Redis != nil {
@@ -184,7 +196,7 @@ func startQueue() {
 			time.Sleep(1 * time.Second)
 		}
 		g.Log().Error(ctx, "Redis连接初始化超时，队列消费者启动失败")
-	}()
+	}(newCtx)
 }
 
 func (s *sBaseSysNoticeService) ServiceInfo(ctx context.Context, req *dzhcore.InfoReq) (data any, err error) {
@@ -446,6 +458,14 @@ func (s *sBaseSysNoticeService) pushToRedisQueue(ctx context.Context, messageByt
 
 // 从 Redis 队列消费消息
 func (s *sBaseSysNoticeService) consumeFromRedisQueue(ctx context.Context) error {
+
+	// 检查Redis是否启用
+	if !dzhcore.IsRedisMode {
+		g.Log().Debug(ctx, "Redis未启用，跳过队列消费")
+		// 延迟后继续，避免无限循环
+		// time.Sleep(5 * time.Second)
+		return nil
+	}
 
 	redis := dzhcore.Redis
 	if redis == nil {

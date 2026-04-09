@@ -12,10 +12,10 @@ database:
   default:
       type: "mysql"
       host: "127.0.0.1" # mac本地docker运行写host.docker.internal，可以读取宿主机mysql
-      port: "33306"
+      port: "13308"
       user: "root"
       pass: "dzh123456"
-      name: "dzhgo_go" #dzhgo_go
+      name: "dzh3136_go" #dzhgo_go
       charset: "utf8mb4"
       timezone: "Asia/Shanghai"
       createdAt: "createTime"
@@ -35,15 +35,22 @@ database:
 # Redis 配置示例
 redis:
   enable: true # 开启 redis 缓存
-  core:
+  cfRedis:
     address: "127.0.0.1:16379"  # mac本地docker运行写host.docker.internal，可以读取宿主机mysql
-    db: 0
-    pass: ""
+    db: 1
+    pass: "335566"
+    expire: 1296000 # 24*3600*15 过期时间，单位毫秒
   dbRedis:
+    address: "127.0.0.1:16379"  # mac本地docker运行写host.docker.internal，可以读取宿主机mysql
     enable: false ##开启 sql 查询后缓存到 redis
-    expire: 60000, # 60*1000 
+    expire: 60000 # 60*1000 过期时间，单位毫秒
     db: 9
 
+elasticsearch:
+  enable: true # 开启 es 搜索功能
+  host: "http://127.0.0.1:9200" # es 地址
+  username: "" # es 用户名
+  password: "" # es 密码
 
 core:
   appName: "dzhgo" # 桌面端使用，给生产环境时，生成日志路径使用，macos会在系统 /Users/****/Library/Application Support/ 目录下建一个 dzhgo 目录
@@ -51,12 +58,8 @@ core:
   isProd: false # 桌面端才设置指定是否是生产模式，生产模式的日志路径为系统目录，下面日志的路径参数在生产模式下会失效
   autoMigrate: true #自动建表
   eps: true # 生成前端请求路由
-  es:
-    enable: false # 开启 es 搜索功能
-    host: "http://127.0.0.1:9200" # es 地址
-    username: "" # es 用户名
-    password: "" # es 密码
   notice:
+    enable: true # 开启通知队列功能
     send: 5 # 发送时间，单位秒，60秒发送一次数据
     cleanup: 2 # 清理时间，单位秒，定时检查一次连接状态
     expire: 10 # 过期时间，单位秒，超过此时间，连接将被清理
@@ -65,7 +68,7 @@ core:
     path: "./data/logs/sql"
     file: "sql-{Y-m-d}.log"
     level: "all"
-    stdout: false # 控制台打印sql
+    stdout: true # 控制台打印sql
   # gf自带的log日志配置
   gfLogger:
     path: "./data/logs/" #服务器端，如果不写此参数，开发环境和生产环境默认路径：./data/logs/run/，如果是桌面端，不写此参数，开发环境默认是./data/logs/run/，生产环境此参数失效，默认是系统 appdata 或 Library 目录里面
