@@ -22,7 +22,6 @@ logs/
 public/uploads/
 gf
 lock.json
-*.sum
 go.work
 data/logs
 other
@@ -52,3 +51,4 @@ dzhgo-admin-vue
 .codebuddy
 .vscode
 public/excel
+cmd

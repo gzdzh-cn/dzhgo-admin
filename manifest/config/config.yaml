@@ -46,11 +46,15 @@ redis:
     expire: 60000 # 60*1000 过期时间，单位毫秒
     db: 9
 
-elasticsearch:
-  enable: true # 开启 es 搜索功能
-  host: "http://127.0.0.1:9200" # es 地址
-  username: "" # es 用户名
-  password: "" # es 密码
+# ClickHouse 配置
+clickhouse:
+  host: "127.0.0.1"
+  port: 8123
+  user: "default"
+  password: "dzh123456"
+  database: "dzh3136_go"
+  timeout: 30  # 请求超时时间（秒）
+
 
 core:
   appName: "dzhgo" # 桌面端使用，给生产环境时，生成日志路径使用，macos会在系统 /Users/****/Library/Application Support/ 目录下建一个 dzhgo 目录

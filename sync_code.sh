@@ -3,7 +3,7 @@
 # 检查参数数量
 if [ $# -ne 2 ]; then
     echo "用法: $0 <源路径> <目标路径>"
-    echo "示例: $0 /Volumes/disk/site/go/dzhgo/dzhgo-admin/addons/customer_pro /Volumes/disk/site/go/dzhgo/extend/customer_pro/ "
+    echo "示例: $0 /Volumes/disk/site/go/dzhgo/dzhgo-admin/addons/customer_pro/ /Volumes/disk/site/go/dzhgo/extend/customer_pro/ "
     exit 1
 fi
 

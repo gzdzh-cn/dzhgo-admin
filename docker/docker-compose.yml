@@ -2,7 +2,7 @@
 services:
   customer_pro:
     container_name: customer_pro
-    image: registry.cn-heyuan.aliyuncs.com/gzdzh/customer_pro:v1.1.99993
+    image: registry.cn-heyuan.aliyuncs.com/gzdzh/customer_pro:v1.2.8
     restart: always
     ports:
       - 3136:3136
@@ -18,127 +18,128 @@ services:
     networks:
       - dzh3136-network
 
-  # MySQL 数据库
-  # mysql80:
-  #   image: j0y60snygwu8b60dmu.xuanyuan.run/mysql:8.0
-  #   container_name: mysql80
-  #   restart: always
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: dzh123456
-  #     MYSQL_DATABASE: dzhgo_go
-  #   ports:
-  #     - "13308:3306"
-  #   volumes:
-  #     - ./docker-data/mysql/conf/my.cnf:/etc/mysql/conf.d/my.cnf
-  #     - ./docker-data/mysql/data:/var/lib/mysql
-  #     - ./docker-data/mysql/backup:/home/backup
-  #     - ./docker-data/mysql/init:/docker-entrypoint-initdb.d
-  #   command: --default-authentication-plugin=mysql_native_password
-  #   healthcheck:
-  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pdzh123456"]
-  #     timeout: 20s
-  #     retries: 10
-  #     interval: 10s
-  #     start_period: 30s
-  #   networks:
-  #     - dzh3136-network
-
-  # Elasticsearch
-  elasticsearch:
-    image: j0y60snygwu8b60dmu.xuanyuan.run/elasticsearch:8.1.0
-    container_name: elasticsearch
+  # ============================================================
+  # ClickHouse 服务（OLAP 查询数据库）
+  # ============================================================
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.3
+    container_name: clickhouse
     restart: always
-    environment:
-      - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - xpack.security.enabled=false
-      - xpack.security.transport.ssl.enabled=false
-      - xpack.security.http.ssl.enabled=false
-    deploy:
-      replicas: 1
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - "8123:8123"  # HTTP 接口（用于 HTTP 查询）
+      - "9000:9000"  # Native 接口（用于 ClickHouse Client）
+    environment:
+      TZ: Asia/Shanghai  # 时区设置
+      CLICKHOUSE_DB: dzh3136_go  # 数据库名
+      CLICKHOUSE_USER: default  # 用户名
+      CLICKHOUSE_PASSWORD: dzh123456  # 密码
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1  # 允许默认管理
+      CLICKHOUSE_MAX_MEMORY_USAGE: 0.6  # 最大内存使用（60%）
+      CLICKHOUSE_MAX_SERVER_MEMORY_USAGE: 0.6  # 最大服务器内存使用（60%）
+      CLICKHOUSE_MAX_THREADS: 16  # 最大线程数
+      CLICKHOUSE_MAX_CONCURRENT_QUERIES: 32  # 最大并发查询数
     volumes:
-      - ./docker-data/elasticsearch/data:/usr/share/elasticsearch/data
+      - ./docker-data/clickhouse/data:/var/lib/clickhouse
+      - ./docker-data/clickhouse/logs:/var/log/clickhouse-server
+      - ./docker-data/clickhouse/config:/etc/clickhouse-server/config.d
+      - ./docker-data/clickhouse/user-files:/var/lib/clickhouse/user_files
+      - ./docker-data/clickhouse/tmp:/tmp/clickhouse-server
     ulimits:
+      # 文件句柄限制（ClickHouse 推荐配置）
+      nofile:
+        soft: 65536
+        hard: 65536
+      # 内存限制（根据服务器配置调整）
       memlock:
-        soft: -1
-        hard: -1
+        soft: 8589934592  # 8GB
+        hard: 12884901888  # 12GB
     networks:
-      - dzh3136-network
+      - dzh-mysql-network
+    healthcheck:
+      test: ["CMD-SHELL", "clickhouse-client --user default --password dzh123456 -q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  # Kibana (可选，用于ES管理)
-  kibana:
-    image: j0y60snygwu8b60dmu.xuanyuan.run/kibana:8.1.0
-    container_name: kibana
+  # ============================================================
+  # Canal Server（读取 MySQL binlog）
+  # ============================================================
+  canal-server:
+    image: canal/canal-server:v1.1.7
+    container_name: canal-server
     restart: always
     depends_on:
-      - elasticsearch
+      - clickhouse
     ports:
-      - "5601:5601"
-    volumes:
-      - ./docker-data/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - "11111:11111"  # Canal Server 端口
     environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      TZ: Asia/Shanghai
+      canal.instance.master.address: mysql80:3306
+      canal.instance.dbUsername: root
+      canal.instance.dbPassword: dzh123456
+      canal.instance.connectionCharset: UTF-8
+      canal.instance.filter.regex: dzh3136_go\\.addons_customer_pro_clues
+      canal.mq.servers: canal-adapter:11111
+    volumes:
+      - ./docker-data/canal-server/conf:/home/admin/canal-server/conf
+      - ./docker-data/canal-server/logs:/home/admin/canal-server/logs
     networks:
-      - dzh3136-network
+      - dzh-mysql-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://127.0.0.1:11111 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
-  # redis:
-  #   image: j0y60snygwu8b60dmu.xuanyuan.run/redis:7
-  #   container_name: redis
-  #   restart: always
-  #   volumes:
-  #     - ./docker-data/redis:/data
-  #     - ./docker-data/redis/redis.conf:/etc/redis/redis.conf  # 映射配置文件
-  #   networks:
-  #     - dzh3136-network
-  #   ports:
-  #     - "16379:6379"
-  #   command: redis-server /etc/redis/redis.conf  # 使用配置文件启动
-  #   environment:
-  #     TZ: Asia/Shanghai
-   
-
-  # Logstash
-  # logstash:
-  #   image: logstash:8.1.0
-  #   container_name: logstash
-  #   restart: always
-  #   depends_on:
-  #     - elasticsearch
-  #   ports:
-  #     - "5044:5044"   # Beats input
-  #     - "5000:5000"   # TCP input
-  #     - "9600:9600"   # Logstash API
-  #   volumes:
-  #     - ./docker-data/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
-  #     - ./docker-data/logstash/pipeline:/usr/share/logstash/pipeline:ro
-  #     - ./docker-data/logstash/logs:/usr/share/logstash/logs
-  #   environment:
-  #     LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-  #   networks:
-  #     - dzh3136-network
-
-  # Filebeat (可选，用于收集应用日志)
-  # filebeat:
-  #   image: elastic/filebeat:7.17.0
-  #   container_name: filebeat
-  #   restart: always
-  #   depends_on:
-  #     - logstash
-  #   volumes:
-  #     - ./docker-data/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-  #     - ./docker-data/filebeat/logs:/var/log/app-logs:ro
-  #     - /var/lib/docker/containers:/var/lib/docker/containers:ro
-  #     - /var/run/docker.sock:/var/run/docker.sock:ro
-  #   user: root
-  #   networks:
-  #     - dzh3136-network
+  # ============================================================
+  # Canal Adapter（写入 ClickHouse）
+  # ============================================================
+  canal-adapter:
+    image: canal/canal-adapter:v1.1.7
+    container_name: canal-adapter
+    restart: always
+    depends_on:
+      - canal-server
+      - clickhouse
+    ports:
+      - "8081:8081"  # Adapter 管理端口
+    volumes:
+      - ./docker-data/canal-adapter/conf:/opt/canal-adapter/conf
+    networks:
+      - dzh-mysql-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://127.0.0.1:8081 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
 
+  # ============================================================
+  # MySQL to ClickHouse 同步服务
+  # ============================================================
+  mysql_to_clickhouse:
+    image: registry.cn-heyuan.aliyuncs.com/gzdzh/mysql_to_clickhouse:v1.0.0
+    container_name: mysql_to_clickhouse
+    restart: always
+    depends_on:
+      - clickhouse
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./docker-data/mysql_to_clickhouse/config:/app/config
+      - ./docker-data/mysql_to_clickhouse/logs:/app/logs
+    networks:
+      - dzh-mysql-network
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep sync-service || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
 
 networks:
-  dzh3136-network:
+  dzh-mysql-network:
     external: true
-    name: dzh3136-go-network
+    name: dzh-dzh-mysql-network

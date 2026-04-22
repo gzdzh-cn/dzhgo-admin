@@ -1,4 +1,4 @@
-FROM loads/alpine:3.8
+FROM j0y60snygwu8b60dmu.xuanyuan.run/loads/alpine:3.8
 
 ###############################################################################
 #                                INSTALLATION
