@@ -51,4 +51,5 @@ dzhgo-admin-vue
 .codebuddy
 .vscode
 public/excel
-cmd
+manifest/test_cmd
+hack/config.yaml

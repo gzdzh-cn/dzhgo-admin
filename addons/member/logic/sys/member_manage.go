@@ -550,10 +550,6 @@ func (s *sMemberManageService) GetWxAccessToken(ctx context.Context, code string
 	postData := fmt.Sprintf(`appid=%v&secret=%v&code=%v&grant_type=%v`, wxConfig.Appid, wxConfig.Secret, code, wxConfig.GrantType)
 	if wxConfig.Appid == "" || wxConfig.Secret == "" || code == "" {
 		err = gerror.New("缺少配置参数")
-		if err != nil {
-			g.Log().Error(ctx, err)
-			return nil, err
-		}
 		g.Log().Error(ctx, err)
 		return nil, err
 	}
