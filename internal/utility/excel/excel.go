@@ -5,12 +5,10 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/xuri/excelize/v2"
-	"sync"
 )
 
 var (
-	ctx       = gctx.GetInitCtx()
-	sheetName string
+	ctx = gctx.GetInitCtx()
 )
 
 // 表sheet数据
@@ -24,6 +22,7 @@ type Excel struct {
 	File       *excelize.File
 	ExcelSheet []*ExcelSheet
 	Sw         *excelize.StreamWriter
+	sheetName  string
 }
 
 // 实例化数据
@@ -34,7 +33,7 @@ func NewExcel() *Excel {
 
 // 设置sheet名
 func (e *Excel) SetSheet(sheet string) *Excel {
-	sheetName = sheet
+	e.sheetName = sheet
 	// 创建一个工作表
 	_, err := e.File.NewSheet(sheet)
 	if err != nil {
@@ -51,6 +50,7 @@ func (e *Excel) SetSheetSteam(sheet string) *Excel {
 		return nil
 	}
 	e.Sw = sw
+	e.sheetName = sheet
 	return e
 }
 
@@ -76,13 +76,13 @@ func (e *Excel) SetStyle(len int) {
 	}
 
 	//设置加粗
-	err = e.File.SetRowStyle(sheetName, 1, 1, styleHeadInt)
+	err = e.File.SetRowStyle(e.sheetName, 1, 1, styleHeadInt)
 	if err != nil {
 		g.Log().Error(ctx, err)
 		return
 	}
 
-	err = e.File.SetColWidth(sheetName, "A", columnName, 18)
+	err = e.File.SetColWidth(e.sheetName, "A", columnName, 18)
 	if err != nil {
 		g.Log().Error(ctx, err)
 		return
@@ -98,7 +98,7 @@ func (e *Excel) SetCellHead(dataHead []interface{}) *Excel {
 				g.Log().Error(ctx, err)
 				return nil
 			}
-			err = e.File.SetCellValue(sheetName, fmt.Sprintf("%v%v", columnName, 1), v)
+			err = e.File.SetCellValue(e.sheetName, fmt.Sprintf("%v%v", columnName, 1), v)
 			if err != nil {
 				g.Log().Error(ctx, err)
 				return nil
@@ -149,7 +149,7 @@ func (e *Excel) SetCellRow(data [][]interface{}, startNum int) *Excel {
 					g.Log().Error(ctx, err)
 					return nil
 				}
-				err = e.File.SetCellValue(sheetName, fmt.Sprintf("%v%v", columnName, rowIndex), v)
+				err = e.File.SetCellValue(e.sheetName, fmt.Sprintf("%v%v", columnName, rowIndex), v)
 				if err != nil {
 					g.Log().Error(ctx, err)
 					return nil
@@ -162,7 +162,9 @@ func (e *Excel) SetCellRow(data [][]interface{}, startNum int) *Excel {
 				break
 			}
 			err = e.Sw.SetRow(cell, rowValue)
-			g.Log().Infof(ctx, "Wrote rows from:%v", rowIndex)
+			if err != nil {
+				g.Log().Error(ctx, err)
+			}
 		}
 	}
 
@@ -198,51 +200,13 @@ func (e *Excel) SetCellRowsBatch(data [][]interface{}, startNum int, batchSize i
 	return e
 }
 
-// 设置表单数据 分块协程写入
-func (e *Excel) WriteData(data [][]interface{}) *Excel {
-	// 每个 goroutine 写入的数据行数
-	chunkSize := 1000
-	var wg sync.WaitGroup
-	// 分块并发写入数据
-	for index := 0; index < len(data); index += chunkSize {
-		wg.Add(1)
-		end := index + chunkSize
-		if end > len(data) {
-			end = len(data)
-		}
-		go func(startRow int, numRows int) {
-			defer wg.Done()
-			for i := 0; i < numRows; i++ {
-				row := startRow + i
-				for colIndex, value := range data[row] {
-					// 计算当前单元格的位置
-					cell, err := excelize.CoordinatesToCellName(colIndex+1, row+2)
-					if err != nil {
-						fmt.Printf("生成单元格名称时出错:%v\n", err)
-						return
-					}
-					// 设置单元格的值
-					e.File.SetCellValue(sheetName, cell, value)
-				}
-			}
-		}(index, end-index)
-	}
-	// 等待所有 goroutine 完成
-	wg.Wait()
-	return e
-}
-
 // 设置批量表格数据
-func (e *Excel) SetExcelSheetData(excelValue []*ExcelSheet, async bool) *Excel {
+func (e *Excel) SetExcelSheetData(excelValue []*ExcelSheet) *Excel {
 	e.ExcelSheet = excelValue
 	for _, v := range e.ExcelSheet {
 		e.SetSheet(v.SheetName)
 		e.SetCellHead(v.SheetHead)
-		if async {
-			e.WriteData(v.SheetList)
-		} else {
-			e.SetCellRow(v.SheetList, 1)
-		}
+		e.SetCellRow(v.SheetList, 1)
 	}
 	return e
 }
@@ -255,12 +219,18 @@ func (e *Excel) SaveExcel(path string, fileName string) (pathFileName string) {
 			g.Log().Error(ctx, err)
 			return
 		}
+		e.Sw = nil
 		g.Log().Info(ctx, "Flush 结束")
 	}
 
 	pathFileName = fmt.Sprintf("%v%v.xlsx", path, fileName)
 	// 根据指定路径保存文件
 	if err := e.File.SaveAs(pathFileName); err != nil {
+		g.Log().Error(ctx, err)
+	}
+
+	// 关闭文件释放资源
+	if err := e.File.Close(); err != nil {
 		g.Log().Error(ctx, err)
 	}
 

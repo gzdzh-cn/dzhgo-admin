@@ -6,6 +6,7 @@ import (
 	logic "dzhgo/internal/logic/sys"
 	"dzhgo/internal/service"
 
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gzdzh-cn/dzhcore"
 )
 
@@ -17,7 +18,7 @@ func init() {
 	var baseSysUserController = &BaseSysUserController{
 		&dzhcore.Controller{
 			Prefix:  "/admin/base/sys/user",
-			Api:     []string{"Add", "Delete", "Update", "Info", "List", "Page", "Move"},
+			Api:     []string{"Add", "Delete", "Update", "Info", "List", "Page", "Move", "Count", "OnlineCount"},
 			Service: logic.NewsBaseSysUserService(),
 		},
 	}
@@ -29,5 +30,25 @@ func init() {
 func (c *BaseSysUserController) Move(ctx context.Context, req *v1.UserMoveReq) (res *dzhcore.BaseRes, err error) {
 	err = service.BaseSysUserService().Move(ctx)
 	res = dzhcore.Ok(nil)
+	return
+}
+
+// 获取用户总数
+func (c *BaseSysUserController) Count(ctx context.Context, req *v1.UserCountReq) (res *dzhcore.BaseRes, err error) {
+	count, err := service.BaseSysUserService().Count(ctx)
+	if err != nil {
+		return
+	}
+	res = dzhcore.Ok(g.Map{"count": count})
+	return
+}
+
+// 获取在线用户数
+func (c *BaseSysUserController) OnlineCount(ctx context.Context, req *v1.UserOnlineCountReq) (res *dzhcore.BaseRes, err error) {
+	count, err := service.BaseSysUserService().OnlineCount(ctx)
+	if err != nil {
+		return
+	}
+	res = dzhcore.Ok(g.Map{"count": count})
 	return
 }

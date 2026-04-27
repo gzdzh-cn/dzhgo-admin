@@ -12,11 +12,11 @@ import (
 // BaseSysDepartment is the golang structure of table base_sys_department for DAO operations like Where/Data.
 type BaseSysDepartment struct {
 	g.Meta     `orm:"table:base_sys_department, do:true"`
-	Id         interface{} //
+	Id         any         //
 	CreateTime *gtime.Time // 创建时间
 	UpdateTime *gtime.Time // 更新时间
 	DeletedAt  *gtime.Time //
-	Name       interface{} //
-	ParentId   interface{} //
-	OrderNum   interface{} //
+	Name       any         //
+	ParentId   any         //
+	OrderNum   any         //
 }

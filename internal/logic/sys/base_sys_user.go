@@ -525,6 +525,10 @@ func (s *sBaseSysUserService) DeleteCache(ctx context.Context, userId string) (e
 	if err != nil {
 		return err
 	}
+	_, err = dzhcore.CacheManager.Remove(ctx, fmt.Sprintf("admin:online:%v", userId))
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -538,4 +542,30 @@ func (s *sBaseSysUserService) Move(ctx g.Ctx) (err error) {
 	_, err = s.Dao.Ctx(ctx).Where("`id` IN(?)", userIds).Data(g.Map{"departmentId": departmentId}).Update()
 
 	return
+}
+
+// Count 获取用户总数
+func (s *sBaseSysUserService) Count(ctx context.Context) (count int, err error) {
+	count, err = s.Dao.Ctx(ctx).Count()
+	if err != nil {
+		g.Log().Error(ctx, err.Error())
+		return 0, err
+	}
+	return count, nil
+}
+
+// OnlineCount 获取在线用户数
+func (s *sBaseSysUserService) OnlineCount(ctx context.Context) (count int, err error) {
+	// 通过扫描 admin:online:* 键来统计在线用户数
+	keys, err := dzhcore.CacheManager.KeyStrings(ctx)
+	if err != nil {
+		g.Log().Error(ctx, err.Error())
+		return 0, err
+	}
+	for _, key := range keys {
+		if len(key) > 13 && key[:13] == "admin:online:" {
+			count++
+		}
+	}
+	return count, nil
 }

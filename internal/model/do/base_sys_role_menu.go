@@ -12,10 +12,10 @@ import (
 // BaseSysRoleMenu is the golang structure of table base_sys_role_menu for DAO operations like Where/Data.
 type BaseSysRoleMenu struct {
 	g.Meta     `orm:"table:base_sys_role_menu, do:true"`
-	Id         interface{} //
+	Id         any         //
 	CreateTime *gtime.Time // 创建时间
 	UpdateTime *gtime.Time // 更新时间
 	DeletedAt  *gtime.Time //
-	RoleId     interface{} //
-	MenuId     interface{} //
+	RoleId     any         //
+	MenuId     any         //
 }

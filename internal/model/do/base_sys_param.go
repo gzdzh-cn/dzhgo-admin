@@ -12,13 +12,13 @@ import (
 // BaseSysParam is the golang structure of table base_sys_param for DAO operations like Where/Data.
 type BaseSysParam struct {
 	g.Meta     `orm:"table:base_sys_param, do:true"`
-	Id         interface{} //
+	Id         any         //
 	CreateTime *gtime.Time // 创建时间
 	UpdateTime *gtime.Time // 更新时间
 	DeletedAt  *gtime.Time //
-	KeyName    interface{} //
-	Name       interface{} //
-	Data       interface{} //
-	DataType   interface{} //
-	Remark     interface{} //
+	KeyName    any         //
+	Name       any         //
+	Data       any         //
+	DataType   any         //
+	Remark     any         //
 }

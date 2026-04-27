@@ -12,12 +12,12 @@ import (
 // BaseSysNoticeUserRead is the golang structure of table base_sys_notice_user_read for DAO operations like Where/Data.
 type BaseSysNoticeUserRead struct {
 	g.Meta     `orm:"table:base_sys_notice_user_read, do:true"`
-	Id         interface{} //
+	Id         any         //
 	CreateTime *gtime.Time // 创建时间
 	UpdateTime *gtime.Time // 更新时间
 	DeletedAt  *gtime.Time //
-	UserId     interface{} //
-	NoticeId   interface{} //
-	Status     interface{} // 状态
+	UserId     any         //
+	NoticeId   any         //
+	Status     any         // 状态
 	ReadTime   *gtime.Time //
 }

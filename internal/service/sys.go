@@ -43,6 +43,17 @@ type (
 	IBaseSysAddonsTypesService interface {
 		Show(ctx context.Context) (data interface{}, err error)
 	}
+	IBaseSysAnnouncementService interface {
+		Test(ctx context.Context) (err error)
+		// ServiceList 重写父方法，返回公告列表 + 未读数量
+		ServiceList(ctx context.Context, req *dzhcore.ListReq) (data any, err error)
+		// MarkRead 标记公告为已读
+		MarkRead(ctx context.Context, announcementId string) (err error)
+		// ModifyAfter 监听Update操作，当前端传read=1时标记已读
+		ModifyAfter(ctx context.Context, method string, param g.MapStrAny) (err error)
+		// MarkAllRead 标记所有公告为已读
+		MarkAllRead(ctx context.Context) (err error)
+	}
 	IBaseSysConfService interface {
 		// UpdateValue 更新配置值
 		UpdateValue(cKey string, cValue string) error
@@ -130,6 +141,13 @@ type (
 		// RefreshPerms refreshPerms(userId)
 		RefreshPerms(ctx context.Context, userId string) (err error)
 	}
+	IBaseSysQuickMenuService interface {
+		// ServiceList 重写父结构体的ServiceList方法，返回当前用户的快捷菜单
+		ServiceList(ctx context.Context, req *dzhcore.ListReq) (data any, err error)
+		// QuickMenuList 获取用户有权限的菜单列表（用于前端选择添加快捷菜单）
+		QuickMenuList(ctx context.Context, roleIds []string) (data interface{}, err error)
+		Test(ctx context.Context) (err error)
+	}
 	IBaseSysRoleService interface {
 		// ModifyAfter modify after
 		ModifyAfter(ctx context.Context, method string, param g.MapStrAny) (err error)
@@ -153,25 +171,31 @@ type (
 		DeleteCache(ctx context.Context, userId string) (err error)
 		// Move 移动用户部门
 		Move(ctx g.Ctx) (err error)
+		// Count 获取用户总数
+		Count(ctx context.Context) (count int, err error)
+		// OnlineCount 获取在线用户数
+		OnlineCount(ctx context.Context) (count int, err error)
 	}
 )
 
 var (
-	localBaseOpenService           IBaseOpenService
-	localBaseSysActionLogService   IBaseSysActionLogService
-	localBaseSysAddonsService      IBaseSysAddonsService
-	localBaseSysAddonsTypesService IBaseSysAddonsTypesService
-	localBaseSysConfService        IBaseSysConfService
-	localBaseSysDepartmentService  IBaseSysDepartmentService
-	localBaseSysFeedbackService    IBaseSysFeedbackService
-	localBaseSysLogService         IBaseSysLogService
-	localBaseSysLoginService       IBaseSysLoginService
-	localBaseSysMenuService        IBaseSysMenuService
-	localBaseSysNoticeService      IBaseSysNoticeService
-	localBaseSysParamService       IBaseSysParamService
-	localBaseSysPermsService       IBaseSysPermsService
-	localBaseSysRoleService        IBaseSysRoleService
-	localBaseSysUserService        IBaseSysUserService
+	localBaseOpenService            IBaseOpenService
+	localBaseSysActionLogService    IBaseSysActionLogService
+	localBaseSysAddonsService       IBaseSysAddonsService
+	localBaseSysAddonsTypesService  IBaseSysAddonsTypesService
+	localBaseSysAnnouncementService IBaseSysAnnouncementService
+	localBaseSysConfService         IBaseSysConfService
+	localBaseSysDepartmentService   IBaseSysDepartmentService
+	localBaseSysFeedbackService     IBaseSysFeedbackService
+	localBaseSysLogService          IBaseSysLogService
+	localBaseSysLoginService        IBaseSysLoginService
+	localBaseSysMenuService         IBaseSysMenuService
+	localBaseSysNoticeService       IBaseSysNoticeService
+	localBaseSysParamService        IBaseSysParamService
+	localBaseSysPermsService        IBaseSysPermsService
+	localBaseSysQuickMenuService    IBaseSysQuickMenuService
+	localBaseSysRoleService         IBaseSysRoleService
+	localBaseSysUserService         IBaseSysUserService
 )
 
 func BaseOpenService() IBaseOpenService {
@@ -216,6 +240,17 @@ func BaseSysAddonsTypesService() IBaseSysAddonsTypesService {
 
 func RegisterBaseSysAddonsTypesService(i IBaseSysAddonsTypesService) {
 	localBaseSysAddonsTypesService = i
+}
+
+func BaseSysAnnouncementService() IBaseSysAnnouncementService {
+	if localBaseSysAnnouncementService == nil {
+		panic("implement not found for interface IBaseSysAnnouncementService, forgot register?")
+	}
+	return localBaseSysAnnouncementService
+}
+
+func RegisterBaseSysAnnouncementService(i IBaseSysAnnouncementService) {
+	localBaseSysAnnouncementService = i
 }
 
 func BaseSysConfService() IBaseSysConfService {
@@ -315,6 +350,17 @@ func BaseSysPermsService() IBaseSysPermsService {
 
 func RegisterBaseSysPermsService(i IBaseSysPermsService) {
 	localBaseSysPermsService = i
+}
+
+func BaseSysQuickMenuService() IBaseSysQuickMenuService {
+	if localBaseSysQuickMenuService == nil {
+		panic("implement not found for interface IBaseSysQuickMenuService, forgot register?")
+	}
+	return localBaseSysQuickMenuService
+}
+
+func RegisterBaseSysQuickMenuService(i IBaseSysQuickMenuService) {
+	localBaseSysQuickMenuService = i
 }
 
 func BaseSysRoleService() IBaseSysRoleService {

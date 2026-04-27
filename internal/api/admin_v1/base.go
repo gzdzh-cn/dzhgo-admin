@@ -4,24 +4,24 @@ import "github.com/gogf/gf/v2/frame/g"
 
 // 接口请求参数
 type BaseCommPersonReq struct {
-	g.Meta        `path:"/person" method:"GET"`
-	Authorization string `json:"Authorization" in:"header"`
+	g.Meta `path:"/person" method:"GET"`
+	// Authorization string `json:"Authorization" in:"header"`
 }
 
 // BaseCommPermmenuReq 接口请求参数
 type BaseCommPermmenuReq struct {
-	g.Meta        `path:"/permmenu" method:"GET"`
-	Authorization string `json:"Authorization" in:"header"`
+	g.Meta `path:"/permmenu" method:"GET"`
+	// Authorization string `json:"Authorization" in:"header"`
 }
 
 type BaseCommLogoutReq struct {
-	g.Meta        `path:"/logout" method:"POST"`
-	Authorization string `json:"Authorization" in:"header"`
+	g.Meta `path:"/logout" method:"POST"`
+	// Authorization string `json:"Authorization" in:"header"`
 }
 
 type BaseCommUploadModeReq struct {
-	g.Meta        `path:"/uploadMode" method:"GET"`
-	Authorization string `json:"Authorization" in:"header"`
+	g.Meta `path:"/uploadMode" method:"GET"`
+	// Authorization string `json:"Authorization" in:"header"`
 }
 
 type BaseCommUploadReq struct {
@@ -30,8 +30,8 @@ type BaseCommUploadReq struct {
 }
 
 type PersonUpdateReq struct {
-	g.Meta        `path:"/personUpdate" method:"POST"`
-	Authorization string `json:"Authorization" in:"header"`
+	g.Meta `path:"/personUpdate" method:"POST"`
+	// Authorization string `json:"Authorization" in:"header"`
 }
 
 // eps 接口请求
@@ -47,8 +47,8 @@ type RefreshTokenReq struct {
 
 // 接口请求参数
 type OrderReq struct {
-	g.Meta        `path:"/order" method:"GET"`
-	Authorization string `json:"Authorization" in:"header"`
+	g.Meta `path:"/order" method:"GET"`
+	// Authorization string `json:"Authorization" in:"header"`
 }
 
 // 获取保留天数
@@ -68,8 +68,25 @@ type BaseSysParamHtmlReq struct {
 }
 
 type UserMoveReq struct {
-	g.Meta        `path:"/move" method:"GET"`
-	Authorization string `json:"Authorization" in:"header"`
+	g.Meta `path:"/move" method:"GET"`
+	// Authorization string `json:"Authorization" in:"header"`
+}
+
+// 获取用户总数
+type UserCountReq struct {
+	g.Meta `path:"/count" method:"GET"`
+	// Authorization string `json:"Authorization" in:"header"`
+}
+
+// 获取在线用户数
+type UserOnlineCountReq struct {
+	g.Meta `path:"/onlineCount" method:"GET"`
+	// Authorization string `json:"Authorization" in:"header"`
+}
+
+// 获取用户有权限的快捷菜单列表
+type QuickMenuListReq struct {
+	g.Meta `path:"/quickMenuList" method:"GET"`
 }
 
 // eps 接口请求
@@ -95,4 +112,15 @@ type NoticeSseCheckedReq struct {
 // 一键已阅
 type NoticeReadAllReq struct {
 	g.Meta `path:"/noticeReadAll" method:"POST"`
+}
+
+// 标记公告为已读
+type AnnouncementMarkReadReq struct {
+	g.Meta `path:"/announcementMarkRead" method:"POST" summary:"标记公告已读" tags:"系统公告"`
+	Id     string `json:"id" v:"required#公告ID不能为空"`
+}
+
+// 一键已阅所有公告
+type AnnouncementMarkAllReadReq struct {
+	g.Meta `path:"/announcementMarkAllRead" method:"POST" summary:"一键已阅所有公告" tags:"系统公告"`
 }

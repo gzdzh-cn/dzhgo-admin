@@ -12,11 +12,11 @@ import (
 // BaseSysNotice is the golang structure of table base_sys_notice for DAO operations like Where/Data.
 type BaseSysNotice struct {
 	g.Meta     `orm:"table:base_sys_notice, do:true"`
-	Id         interface{} //
+	Id         any         //
 	CreateTime *gtime.Time // 创建时间
 	UpdateTime *gtime.Time // 更新时间
 	DeletedAt  *gtime.Time //
-	Title      interface{} //
-	NoType     interface{} //
-	Remark     interface{} //
+	Title      any         //
+	NoType     any         //
+	Remark     any         //
 }

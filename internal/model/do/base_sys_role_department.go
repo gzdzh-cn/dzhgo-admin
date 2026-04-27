@@ -12,10 +12,10 @@ import (
 // BaseSysRoleDepartment is the golang structure of table base_sys_role_department for DAO operations like Where/Data.
 type BaseSysRoleDepartment struct {
 	g.Meta       `orm:"table:base_sys_role_department, do:true"`
-	Id           interface{} //
+	Id           any         //
 	CreateTime   *gtime.Time // 创建时间
 	UpdateTime   *gtime.Time // 更新时间
 	DeletedAt    *gtime.Time //
-	RoleId       interface{} //
-	DepartmentId interface{} //
+	RoleId       any         //
+	DepartmentId any         //
 }

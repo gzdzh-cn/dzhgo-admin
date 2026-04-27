@@ -12,13 +12,13 @@ import (
 // BaseSysRole is the golang structure of table base_sys_role for DAO operations like Where/Data.
 type BaseSysRole struct {
 	g.Meta     `orm:"table:base_sys_role, do:true"`
-	Id         interface{} //
+	Id         any         //
 	CreateTime *gtime.Time // 创建时间
 	UpdateTime *gtime.Time // 更新时间
 	DeletedAt  *gtime.Time //
-	UserId     interface{} //
-	Name       interface{} //
-	Label      interface{} //
-	Remark     interface{} //
-	Relevance  interface{} //
+	UserId     any         //
+	Name       any         //
+	Label      any         //
+	Remark     any         //
+	Relevance  any         //
 }

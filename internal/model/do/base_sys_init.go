@@ -11,8 +11,8 @@ import (
 // BaseSysInit is the golang structure of table base_sys_init for DAO operations like Where/Data.
 type BaseSysInit struct {
 	g.Meta `orm:"table:base_sys_init, do:true"`
-	Id     interface{} //
-	Module interface{} //
-	Tables interface{} //
-	Group  interface{} //
+	Id     any //
+	Module any //
+	Tables any //
+	Group  any //
 }

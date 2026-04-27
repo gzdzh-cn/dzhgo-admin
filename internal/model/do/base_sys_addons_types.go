@@ -12,14 +12,14 @@ import (
 // BaseSysAddonsTypes is the golang structure of table base_sys_addons_types for DAO operations like Where/Data.
 type BaseSysAddonsTypes struct {
 	g.Meta     `orm:"table:base_sys_addons_types, do:true"`
-	Id         interface{} //
+	Id         any         //
 	CreateTime *gtime.Time // 创建时间
 	UpdateTime *gtime.Time // 更新时间
 	DeletedAt  *gtime.Time //
-	Name       interface{} // 标题
-	Image      interface{} // 图片
-	Link       interface{} // 跳转
-	Remark     interface{} // 备注
-	Status     interface{} // 状态
-	OrderNum   interface{} // 排序
+	Name       any         // 标题
+	Image      any         // 图片
+	Link       any         // 跳转
+	Remark     any         // 备注
+	Status     any         // 状态
+	OrderNum   any         // 排序
 }

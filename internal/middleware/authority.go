@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"dzhgo/internal/config"
+	"time"
 
 	"github.com/gogf/gf/v2/container/garray"
 	"github.com/gogf/gf/v2/frame/g"
@@ -94,6 +95,11 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 	// 将用户信息放入上下文
 	r.SetCtxVar("admin", admin)
 
+	// 更新用户在线状态（5分钟过期，非refreshToken才记录）
+	if !admin.IsRefresh {
+		_ = dzhcore.CacheManager.Set(ctx, "admin:online:"+gconv.String(admin.UserId), "1", 5*time.Minute)
+	}
+
 	cachetoken, _ := dzhcore.CacheManager.Get(ctx, "admin:token:"+gconv.String(admin.UserId))
 	rtoken := cachetoken.String()
 
@@ -109,12 +115,10 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 				"code":    1001,
 				"message": "登陆失效～",
 			})
+		} else {
+			r.Middleware.Next()
+			return
 		}
-		//else {
-		//
-		//	r.Middleware.Next()
-		//	return
-		//}
 	}
 
 	// 只验证登录不验证权限的接口
@@ -179,10 +183,10 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 		permsVar := permsCache.Strings()
 		// 转换为garray
 		perms := garray.NewStrArrayFrom(permsVar)
+		// g.Log().Debugf(ctx, "[perms-check] userId=%d, perms=%v", admin.UserId, permsVar)
 		// 如果perms为空
 		if perms.Len() == 0 {
 			g.Log().Error(ctx, "BaseAuthorityMiddleware", "perms invalid")
-
 			statusCode = 403
 			r.Response.WriteStatusExit(statusCode, g.Map{
 				"code":    1001,
@@ -200,6 +204,7 @@ func BaseAuthorityMiddleware(r *ghttp.Request) {
 		urls = urls[2:]
 		// 以冒号连接成新字符串url
 		url = gstr.Join(urls, ":")
+		// g.Log().Debugf(ctx, "[perms-check] targetPerm=%s, match=%v", url, perms.ContainsI(url))
 		// 如果perms中不包含url 则无权限
 		if !perms.ContainsI(url) {
 			g.Log().Error(ctx, "BaseAuthorityMiddleware", "perms invalid")
